@@ -4,7 +4,7 @@ import { Info } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Progress } from "@/components/ui/progress";
 
-import { AtsChecklistPanel } from "./ats-checklist-panel";
+
 
 interface AtsScoreHeaderProps {
     score: number;
