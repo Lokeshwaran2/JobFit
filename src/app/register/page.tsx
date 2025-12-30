@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { registerUser } from "@/actions/register";
-import { useState, useTransition } from "react";
+import { useState, useTransition, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import {
     Form,
@@ -20,7 +20,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner"; // Assuming sonner is installed as per package.json
+import { toast } from "sonner";
 
 const RegisterSchema = z.object({
     name: z.string().min(2, "Name is required"),
@@ -28,7 +28,7 @@ const RegisterSchema = z.object({
     password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-export default function RegisterPage() {
+function RegisterContent() {
     const [error, setError] = useState<string | undefined>("");
     const [success, setSuccess] = useState<string | undefined>("");
     const [isPending, startTransition] = useTransition();
@@ -135,5 +135,17 @@ export default function RegisterPage() {
                 </CardFooter>
             </Card>
         </div>
+    );
+}
+
+export default function RegisterPage() {
+    return (
+        <Suspense fallback={
+            <div className="flex h-screen w-full items-center justify-center bg-gray-50 dark:bg-gray-900">
+                <Loader2 className="h-8 w-8 animate-spin text-slate-500" />
+            </div>
+        }>
+            <RegisterContent />
+        </Suspense>
     );
 }

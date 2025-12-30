@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { login } from "@/actions/login";
-import { useState, useTransition } from "react";
+import { useState, useTransition, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import {
     Form,
@@ -26,7 +26,7 @@ const LoginSchema = z.object({
     password: z.string().min(1, "Password is required"),
 });
 
-export default function LoginPage() {
+function LoginContent() {
     const [error, setError] = useState<string | undefined>("");
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
@@ -46,19 +46,11 @@ export default function LoginPage() {
             formData.append("email", values.email);
             formData.append("password", values.password);
 
-            // This relies on the server action catching errors. 
-            // Note: SignIng credentials usually throws error on fail in V5 server actions unless caught.
-            // My action catches it.
             const res = await login(undefined, formData);
             if (res) {
                 setError(res);
             } else {
-                // Success (redirect handled by middleware or action usually throws if not caught)
-                // But since my action returns string on error, null usually means success/redirect happening via NextAuth internals or we should manually redirect
-                // Actually, standard login action with signIn("credentials") redirects by default.
-                // If it returns, it means error if redirect: false, but default is true.
-                // Wait, standard signIn throws error if redirect happens (NEXT_REDIRECT).
-                // My action catches AuthError but re-throws others.
+                // Success
             }
         });
     };
@@ -119,5 +111,17 @@ export default function LoginPage() {
                 </CardFooter>
             </Card>
         </div>
+    );
+}
+
+export default function LoginPage() {
+    return (
+        <Suspense fallback={
+            <div className="flex h-screen w-full items-center justify-center bg-gray-50 dark:bg-gray-900">
+                <Loader2 className="h-8 w-8 animate-spin text-slate-500" />
+            </div>
+        }>
+            <LoginContent />
+        </Suspense>
     );
 }
