@@ -40,7 +40,7 @@ export function ResumeBuilder({
                 </div>
             </div>
 
-            <ResizablePanelGroup direction="horizontal" className="min-h-0 flex-1 rounded-lg border">
+            <ResizablePanelGroup orientation="horizontal" className="min-h-0 flex-1 rounded-lg border">
 
                 {/* Left Panel: Editor */}
                 <ResizablePanel defaultSize={50} minSize={30}>
@@ -58,7 +58,7 @@ export function ResumeBuilder({
 
                 {/* Right Panel: Preview (PDF) */}
                 <ResizablePanel defaultSize={50} minSize={30}>
-                    <div className="h-full p-1 bg-slate-100 dark:bg-slate-900 flex flex-col">
+                    <div className="h-full p-4 bg-slate-100 dark:bg-slate-900 flex flex-col">
                         <div className="mb-2 flex justify-between items-center px-2">
                             <span className="text-sm font-medium text-muted-foreground">Live PDF Preview</span>
                             <DownloadResumeButton data={resumeData} fileName="JobFit_Resume.pdf" isPro={isPro} credits={credits} />
