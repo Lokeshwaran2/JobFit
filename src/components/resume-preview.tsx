@@ -18,12 +18,12 @@ const BlobProvider = dynamic(
     }
 );
 
-export function ResumePreview({ data }: { data: any }) {
+export function ResumePreview({ data, isMobile }: { data: any, isMobile?: boolean }) {
     // Estimate PDF height to force scrollable container
     const contentHeight = Math.max(1150, 1000 + ((data.experience?.length || 0) * 180) + ((data.projects?.length || 0) * 120));
 
     return (
-        <div className="h-full w-full overflow-hidden rounded-lg border bg-background shadow-sm">
+        <div className={`${isMobile ? 'h-auto min-h-[600px]' : 'h-full'} w-full overflow-hidden rounded-lg border bg-background shadow-sm`}>
             <BlobProvider document={<ResumeDocument data={data} />} key={JSON.stringify(data)}>
                 {({ url, loading, error }) => {
                     if (loading) {

@@ -47,7 +47,7 @@ export function ResumeCard({ resume }: ResumeCardProps) {
                         <Button
                             variant="ghost"
                             size="icon"
-                            className="h-8 w-8 text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity absolute right-4 top-4 bg-white/80 backdrop-blur-sm sm:bg-transparent"
+                            className="h-8 w-8 text-muted-foreground hover:text-destructive opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity absolute right-4 top-4 bg-white/80 backdrop-blur-sm sm:bg-transparent"
                             onClick={() => setOpen(true)}
                             disabled={isPending}
                             title="Delete Resume"

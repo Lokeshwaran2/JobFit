@@ -56,25 +56,26 @@ export function ResumeBuilder({
                             </TabsList>
                         </div>
 
-                        <TabsContent value="editor" className="flex-1 mt-0 h-full overflow-hidden">
-                            <div className="h-full p-4 overflow-y-auto bg-white">
+                        <TabsContent value="editor" className="flex-1 mt-0">
+                            <div className="p-4 bg-white">
                                 <ResumeEditor
                                     initialData={resumeData}
                                     onUpdate={(newData) => setResumeData(newData)}
                                     missingSkills={missingSkills || []}
                                     improvements={improvements}
                                     resumeId={resumeId}
+                                    isMobile={true}
                                 />
                             </div>
                         </TabsContent>
 
-                        <TabsContent value="preview" className="flex-1 mt-0 h-full overflow-hidden">
-                            <div className="h-full p-4 bg-slate-100 dark:bg-slate-900 flex flex-col">
+                        <TabsContent value="preview" className="flex-1 mt-0">
+                            <div className="p-4 bg-slate-100 dark:bg-slate-900 flex flex-col min-h-[500px]">
                                 <div className="mb-2 flex justify-between items-center px-2">
                                     <span className="text-sm font-medium text-muted-foreground">Live PDF Preview</span>
                                     <DownloadResumeButton data={resumeData} fileName="JobFit_Resume.pdf" isPro={isPro} credits={credits} />
                                 </div>
-                                <ResumePreview data={resumeData} />
+                                <ResumePreview data={resumeData} isMobile={true} />
                             </div>
                         </TabsContent>
                     </Tabs>
