@@ -107,22 +107,34 @@ export default async function Home() {
       <main className="flex-1">
 
         {/* H1: Hero Section */}
-        <section className="space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32">
-          <div className="container mx-auto flex max-w-[64rem] flex-col items-center gap-4 text-center px-4">
-            <div className="rounded-2xl bg-muted px-4 py-1.5 text-sm font-medium">
-              #1 Rated by Job Seekers
+        <section className="relative space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32 overflow-hidden">
+          {/* Background Gradient/Grid */}
+          <div className="absolute inset-0 -z-10 h-full w-full bg-white dark:bg-black bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]">
+            <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-fuchsia-400 opacity-20 blur-[100px]"></div>
+          </div>
+
+          <div className="container mx-auto flex max-w-[64rem] flex-col items-center gap-4 text-center px-4 relative">
+            <div className="rounded-full border bg-white/50 backdrop-blur-sm px-4 py-1.5 text-sm font-medium shadow-sm text-muted-foreground animate-in fade-in slide-in-from-bottom-3 duration-1000">
+              <span className="mr-1">🏆</span> #1 Rated by Job Seekers
             </div>
-            <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
-              ATS Resume Builder <br className="hidden md:block" /> Based on Job Description
+            <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-primary animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-150">
+              <span className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-600 bg-clip-text text-transparent dark:from-white dark:via-gray-200 dark:to-gray-400">
+                ATS Resume Builder
+              </span>
+              <br className="hidden md:block" />
+              {" "}
+              <span className="text-foreground">Based on Job Description</span>
             </h1>
-            <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
-              Don't let a bot reject your hard work. Create a resume that mirrors the job description and passes the Applicant Tracking System (ATS) every time.
+            <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8 animate-in fade-in slide-in-from-bottom-5 duration-1000 delay-300">
+              Don't let a bot reject your hard work. Create a resume that mirrors the job description and passes the <span className="font-semibold text-foreground">Applicant Tracking System (ATS)</span> every time.
             </p>
-            <div className="space-x-4">
-              <Button size="lg" asChild>
-                <Link href={dbUser ? ((dbUser.credits > 0 || dbUser.isPro) ? "/builder/new" : "/subscription") : "/dashboard"}>Generate ATS Resume Free <ArrowRight className="ml-2 h-4 w-4" /></Link>
+            <div className="flex flex-col sm:flex-row gap-4 items-center animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-500">
+              <Button size="lg" asChild className="h-12 px-8 text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300">
+                <Link href={dbUser ? ((dbUser.credits > 0 || dbUser.isPro) ? "/builder/new" : "/subscription") : "/dashboard"}>
+                  Generate ATS Resume Free <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
               </Button>
-              <Button variant="outline" size="lg" asChild>
+              <Button variant="outline" size="lg" asChild className="h-12 px-8 text-lg bg-white/50 backdrop-blur-sm hover:bg-white/80 transition-all">
                 <Link href="#steps">How it Works</Link>
               </Button>
             </div>
