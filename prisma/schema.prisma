@@ -19,7 +19,7 @@ model User {
 
   createdAt        DateTime @default(now())
   isPro            Boolean  @default(false)
-  credits          Int      @default(1) // Free tier: 1 credit
+  credits          Int      @default(3) // Free tier: 3 credits
   
   stripeCustomerId       String?   @unique
   stripeSubscriptionId   String?   @unique

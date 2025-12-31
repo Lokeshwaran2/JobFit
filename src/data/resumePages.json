@@ -1,0 +1,447 @@
+[
+    {
+        "slug": "fresher",
+        "role": "Fresher",
+        "company": null
+    },
+    {
+        "slug": "software-engineer-fresher",
+        "role": "Software Engineer Fresher",
+        "company": null
+    },
+    {
+        "slug": "java-developer-fresher",
+        "role": "Java Developer Fresher",
+        "company": null
+    },
+    {
+        "slug": "python-developer-fresher",
+        "role": "Python Developer Fresher",
+        "company": null
+    },
+    {
+        "slug": "frontend-developer-fresher",
+        "role": "Frontend Developer Fresher",
+        "company": null
+    },
+    {
+        "slug": "backend-developer-fresher",
+        "role": "Backend Developer Fresher",
+        "company": null
+    },
+    {
+        "slug": "full-stack-developer-fresher",
+        "role": "Full Stack Developer Fresher",
+        "company": null
+    },
+    {
+        "slug": "web-developer-fresher",
+        "role": "Web Developer Fresher",
+        "company": null
+    },
+    {
+        "slug": "data-analyst-fresher",
+        "role": "Data Analyst Fresher",
+        "company": null
+    },
+    {
+        "slug": "devops-engineer-fresher",
+        "role": "DevOps Engineer Fresher",
+        "company": null
+    },
+    {
+        "slug": "cloud-engineer-fresher",
+        "role": "Cloud Engineer Fresher",
+        "company": null
+    },
+    {
+        "slug": "qa-engineer-fresher",
+        "role": "QA Engineer Fresher",
+        "company": null
+    },
+    {
+        "slug": "automation-tester-fresher",
+        "role": "Automation Tester Fresher",
+        "company": null
+    },
+    {
+        "slug": "manual-tester-fresher",
+        "role": "Manual Tester Fresher",
+        "company": null
+    },
+    {
+        "slug": "bpo-fresher",
+        "role": "BPO Fresher",
+        "company": null
+    },
+    {
+        "slug": "it-fresher",
+        "role": "IT Fresher",
+        "company": null
+    },
+    {
+        "slug": "graduate-fresher",
+        "role": "Graduate Fresher",
+        "company": null
+    },
+    {
+        "slug": "mca-fresher",
+        "role": "MCA Fresher",
+        "company": null
+    },
+    {
+        "slug": "mba-fresher",
+        "role": "MBA Fresher",
+        "company": null
+    },
+    {
+        "slug": "bba-fresher",
+        "role": "BBA Fresher",
+        "company": null
+    },
+    {
+        "slug": "java-developer",
+        "role": "Java Developer",
+        "company": null
+    },
+    {
+        "slug": "python-developer",
+        "role": "Python Developer",
+        "company": null
+    },
+    {
+        "slug": "react-developer",
+        "role": "React Developer",
+        "company": null
+    },
+    {
+        "slug": "angular-developer",
+        "role": "Angular Developer",
+        "company": null
+    },
+    {
+        "slug": "nodejs-developer",
+        "role": "NodeJS Developer",
+        "company": null
+    },
+    {
+        "slug": "software-engineer",
+        "role": "Software Engineer",
+        "company": null
+    },
+    {
+        "slug": "full-stack-developer",
+        "role": "Full Stack Developer",
+        "company": null
+    },
+    {
+        "slug": "frontend-developer",
+        "role": "Frontend Developer",
+        "company": null
+    },
+    {
+        "slug": "backend-developer",
+        "role": "Backend Developer",
+        "company": null
+    },
+    {
+        "slug": "web-developer",
+        "role": "Web Developer",
+        "company": null
+    },
+    {
+        "slug": "devops-engineer",
+        "role": "DevOps Engineer",
+        "company": null
+    },
+    {
+        "slug": "cloud-engineer",
+        "role": "Cloud Engineer",
+        "company": null
+    },
+    {
+        "slug": "qa-engineer",
+        "role": "QA Engineer",
+        "company": null
+    },
+    {
+        "slug": "automation-tester",
+        "role": "Automation Tester",
+        "company": null
+    },
+    {
+        "slug": "manual-tester",
+        "role": "Manual Tester",
+        "company": null
+    },
+    {
+        "slug": "data-analyst",
+        "role": "Data Analyst",
+        "company": null
+    },
+    {
+        "slug": "data-engineer",
+        "role": "Data Engineer",
+        "company": null
+    },
+    {
+        "slug": "business-analyst",
+        "role": "Business Analyst",
+        "company": null
+    },
+    {
+        "slug": "product-manager",
+        "role": "Product Manager",
+        "company": null
+    },
+    {
+        "slug": "ui-ux-designer",
+        "role": "UI/UX Designer",
+        "company": null
+    },
+    {
+        "slug": "android-developer",
+        "role": "Android Developer",
+        "company": null
+    },
+    {
+        "slug": "ios-developer",
+        "role": "iOS Developer",
+        "company": null
+    },
+    {
+        "slug": "flutter-developer",
+        "role": "Flutter Developer",
+        "company": null
+    },
+    {
+        "slug": "mobile-app-developer",
+        "role": "Mobile App Developer",
+        "company": null
+    },
+    {
+        "slug": "accountant",
+        "role": "Accountant",
+        "company": null
+    },
+    {
+        "slug": "hr-executive",
+        "role": "HR Executive",
+        "company": null
+    },
+    {
+        "slug": "sales-executive",
+        "role": "Sales Executive",
+        "company": null
+    },
+    {
+        "slug": "marketing-executive",
+        "role": "Marketing Executive",
+        "company": null
+    },
+    {
+        "slug": "digital-marketing",
+        "role": "Digital Marketing Executive",
+        "company": null
+    },
+    {
+        "slug": "customer-support",
+        "role": "Customer Support Executive",
+        "company": null
+    },
+    {
+        "slug": "call-center",
+        "role": "Call Center Executive",
+        "company": null
+    },
+    {
+        "slug": "teacher",
+        "role": "Teacher",
+        "company": null
+    },
+    {
+        "slug": "nurse",
+        "role": "Nurse",
+        "company": null
+    },
+    {
+        "slug": "banker",
+        "role": "Banker",
+        "company": null
+    },
+    {
+        "slug": "software-engineer-at-tcs",
+        "role": "Software Engineer",
+        "company": "TCS"
+    },
+    {
+        "slug": "java-developer-at-tcs",
+        "role": "Java Developer",
+        "company": "TCS"
+    },
+    {
+        "slug": "data-analyst-at-tcs",
+        "role": "Data Analyst",
+        "company": "TCS"
+    },
+    {
+        "slug": "test-engineer-at-tcs",
+        "role": "Test Engineer",
+        "company": "TCS"
+    },
+    {
+        "slug": "web-developer-at-tcs",
+        "role": "Web Developer",
+        "company": "TCS"
+    },
+    {
+        "slug": "software-engineer-at-infosys",
+        "role": "Software Engineer",
+        "company": "Infosys"
+    },
+    {
+        "slug": "java-developer-at-infosys",
+        "role": "Java Developer",
+        "company": "Infosys"
+    },
+    {
+        "slug": "data-analyst-at-infosys",
+        "role": "Data Analyst",
+        "company": "Infosys"
+    },
+    {
+        "slug": "test-engineer-at-infosys",
+        "role": "Test Engineer",
+        "company": "Infosys"
+    },
+    {
+        "slug": "software-engineer-at-wipro",
+        "role": "Software Engineer",
+        "company": "Wipro"
+    },
+    {
+        "slug": "data-analyst-at-wipro",
+        "role": "Data Analyst",
+        "company": "Wipro"
+    },
+    {
+        "slug": "software-engineer-at-cognizant",
+        "role": "Software Engineer",
+        "company": "Cognizant"
+    },
+    {
+        "slug": "test-engineer-at-cognizant",
+        "role": "Test Engineer",
+        "company": "Cognizant"
+    },
+    {
+        "slug": "software-engineer-at-accenture",
+        "role": "Software Engineer",
+        "company": "Accenture"
+    },
+    {
+        "slug": "data-analyst-at-accenture",
+        "role": "Data Analyst",
+        "company": "Accenture"
+    },
+    {
+        "slug": "software-engineer-at-zoho",
+        "role": "Software Engineer",
+        "company": "Zoho"
+    },
+    {
+        "slug": "backend-developer-at-zoho",
+        "role": "Backend Developer",
+        "company": "Zoho"
+    },
+    {
+        "slug": "frontend-developer-at-zoho",
+        "role": "Frontend Developer",
+        "company": "Zoho"
+    },
+    {
+        "slug": "qa-engineer-at-zoho",
+        "role": "QA Engineer",
+        "company": "Zoho"
+    },
+    {
+        "slug": "software-engineer-at-amazon",
+        "role": "Software Engineer",
+        "company": "Amazon"
+    },
+    {
+        "slug": "sde-at-amazon",
+        "role": "SDE",
+        "company": "Amazon"
+    },
+    {
+        "slug": "backend-developer-at-amazon",
+        "role": "Backend Developer",
+        "company": "Amazon"
+    },
+    {
+        "slug": "frontend-developer-at-amazon",
+        "role": "Frontend Developer",
+        "company": "Amazon"
+    },
+    {
+        "slug": "data-analyst-at-amazon",
+        "role": "Data Analyst",
+        "company": "Amazon"
+    },
+    {
+        "slug": "product-manager-at-amazon",
+        "role": "Product Manager",
+        "company": "Amazon"
+    },
+    {
+        "slug": "software-engineer-at-google",
+        "role": "Software Engineer",
+        "company": "Google"
+    },
+    {
+        "slug": "data-analyst-at-google",
+        "role": "Data Analyst",
+        "company": "Google"
+    },
+    {
+        "slug": "software-engineer-at-microsoft",
+        "role": "Software Engineer",
+        "company": "Microsoft"
+    },
+    {
+        "slug": "ats-resume-for-freshers",
+        "role": "ATS Resume",
+        "company": "Freshers"
+    },
+    {
+        "slug": "ats-resume-for-india",
+        "role": "ATS Resume",
+        "company": "India"
+    },
+    {
+        "slug": "ats-resume-for-software-engineer",
+        "role": "ATS Resume",
+        "company": "Software Engineer"
+    },
+    {
+        "slug": "ats-resume-for-data-analyst",
+        "role": "ATS Resume",
+        "company": "Data Analyst"
+    },
+    {
+        "slug": "resume-for-naukri",
+        "role": "Resume for Naukri",
+        "company": null
+    },
+    {
+        "slug": "resume-for-indeed",
+        "role": "Resume for Indeed",
+        "company": null
+    },
+    {
+        "slug": "resume-for-linkedin",
+        "role": "Resume for LinkedIn",
+        "company": null
+    }
+]

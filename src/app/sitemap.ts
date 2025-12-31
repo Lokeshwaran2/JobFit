@@ -1,4 +1,5 @@
 import { MetadataRoute } from 'next';
+import resumePages from '@/data/resumePages.json';
 
 export default function sitemap(): MetadataRoute.Sitemap {
     const baseUrl = 'https://jobfit.co.in';
@@ -35,5 +36,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
             changeFrequency: 'weekly',
             priority: 0.8,
         },
+
+        ...resumePages.map((page) => ({
+            url: `${baseUrl}/resume-for/${page.slug}`,
+            lastModified,
+            changeFrequency: 'weekly' as const,
+            priority: 0.7,
+        })),
     ];
 }

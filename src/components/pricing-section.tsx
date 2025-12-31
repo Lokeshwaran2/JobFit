@@ -55,7 +55,7 @@ export function PricingSection({ userId, isPro, credits }: PricingSectionProps) 
                         </CardContent>
                         <CardFooter>
                             <Button className="w-full" variant="outline" disabled={true}>
-                                {credits > 0 ? "1 Free Credit Available" : "Check My ATS Score"}
+                                {credits > 0 ? `${credits} Free Credit${credits > 1 ? 's' : ''} Available` : "Check My ATS Score"}
                             </Button>
                         </CardFooter>
                     </Card>
