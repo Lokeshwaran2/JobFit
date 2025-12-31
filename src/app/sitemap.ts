@@ -1,51 +1,39 @@
-
 import { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
     const baseUrl = 'https://jobfit.co.in';
+    const lastModified = new Date().toISOString();
 
     return [
         {
-            url: baseUrl,
-            lastModified: new Date(),
+            url: `${baseUrl}/`,
+            lastModified,
             changeFrequency: 'daily',
-            priority: 1,
+            priority: 1.0,
         },
         {
             url: `${baseUrl}/builder`,
-            lastModified: new Date(),
+            lastModified,
             changeFrequency: 'weekly',
             priority: 0.8,
         },
         {
             url: `${baseUrl}/ats-resume-checker`,
-            lastModified: new Date(),
+            lastModified,
             changeFrequency: 'weekly',
             priority: 0.9,
         },
         {
             url: `${baseUrl}/resume-based-on-job-description`,
-            lastModified: new Date(),
+            lastModified,
             changeFrequency: 'weekly',
             priority: 0.9,
         },
         {
             url: `${baseUrl}/job-fit-resume`,
-            lastModified: new Date(),
+            lastModified,
             changeFrequency: 'weekly',
             priority: 0.8,
-        },
-        {
-            url: `${baseUrl}/register`,
-            lastModified: new Date(),
-            changeFrequency: 'monthly',
-            priority: 0.5,
-        },
-        {
-            url: `${baseUrl}/login`,
-            lastModified: new Date(),
-            changeFrequency: 'monthly',
-            priority: 0.5,
         },
     ];
 }

@@ -12,7 +12,7 @@ export default function RefundPolicy() {
                     <section>
                         <h2 className="text-lg font-semibold text-foreground mb-2">1. No Refunds Integration</h2>
                         <p>
-                            Due to the digital nature of our product (JobFit.ai), all sales are final. Once credits are purchased or a subscription is activated, we do not offer refunds, exchanges, or cancellations, except as required by Indian law.
+                            Due to the digital nature of our product (JobFit), all sales are final. Once credits are purchased or a subscription is activated, we do not offer refunds, exchanges, or cancellations, except as required by Indian law.
                         </p>
                     </section>
 

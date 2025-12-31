@@ -11,18 +11,25 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Check, AlertTriangle, Sparkles, Trash2 } from "lucide-react";
 
+import { updateResume } from "@/actions/resume";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
+
 export function ResumeEditor({
     initialData,
     onUpdate,
     missingSkills = [],
-    improvements = {}
+    improvements = {},
+    resumeId
 }: {
     initialData: any;
     onUpdate: (data: any) => void;
     missingSkills?: string[];
     improvements?: any;
+    resumeId: string;
 }) {
     const [data, setData] = useState(initialData);
+    const [isSaving, setIsSaving] = useState(false);
 
     // Debounce updates to the parent (preview)
     useEffect(() => {
@@ -32,12 +39,29 @@ export function ResumeEditor({
         return () => clearTimeout(timer);
     }, [data, onUpdate]);
 
+    const handleSave = async () => {
+        setIsSaving(true);
+        try {
+            await updateResume(resumeId, data);
+            toast.success("Resume saved successfully!");
+        } catch (error) {
+            console.error("Failed to save resume:", error);
+            toast.error("Failed to save resume.");
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    // ... existing helpers ...
+
     const handleRemoveExperience = (index: number) => {
         setData((prev: any) => {
             const newData = { ...prev };
             if (newData.experience && Array.isArray(newData.experience)) {
                 newData.experience = newData.experience.filter((_: any, idx: number) => idx !== index);
             }
+            // Auto-save on crucial structure changes? Maybe not, keep manual for now or debounced auto-save later.
+            // Let's stick to manual save button as requested/implied by "check save changes".
             return newData;
         });
     };
@@ -64,7 +88,10 @@ export function ResumeEditor({
         <div className="flex h-full flex-col gap-4">
             <div className="flex items-center justify-between px-1">
                 <h2 className="text-lg font-semibold">Edit Resume</h2>
-                <Button size="sm" variant="outline" onClick={() => console.log("Save")}>Save Changes</Button>
+                <Button size="sm" variant="outline" onClick={handleSave} disabled={isSaving}>
+                    {isSaving && <Loader2 className="mr-2 h-3 w-3 animate-spin" />}
+                    {isSaving ? "Saving..." : "Save Changes"}
+                </Button>
             </div>
 
             <ScrollArea className="h-[calc(100vh-200px)]">

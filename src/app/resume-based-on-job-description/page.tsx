@@ -21,9 +21,12 @@ export default async function ResumeBasedOnJobDescription() {
     return (
         <div className="flex min-h-screen flex-col">
             <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                <div className="container mx-auto flex h-14 items-center justify-between">
+                <div className="container mx-auto flex h-14 items-center justify-between px-4">
                     <div className="flex items-center gap-2 font-bold text-xl">
-                        <Link href="/"><span>JobFit.ai</span></Link>
+                        <Link href="/" className="flex items-center gap-2">
+                            <img src="/logo.png" alt="JobFit" className="h-8 w-8" />
+                            <span>JobFit</span>
+                        </Link>
                     </div>
                     <nav className="flex items-center gap-4">
                         <Button asChild>
@@ -36,7 +39,7 @@ export default async function ResumeBasedOnJobDescription() {
             <main className="flex-1">
                 {/* Hero */}
                 <section className="space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32">
-                    <div className="container mx-auto flex max-w-[64rem] flex-col items-center gap-4 text-center">
+                    <div className="container mx-auto flex max-w-[64rem] flex-col items-center gap-4 text-center px-4">
                         <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight">
                             Resume Based on <span className="text-primary">Job Description</span>
                         </h1>
@@ -52,7 +55,7 @@ export default async function ResumeBasedOnJobDescription() {
                 </section>
 
                 {/* Introduction: Why Context Matters */}
-                <section className="container max-w-4xl py-12 space-y-8">
+                <section className="container max-w-4xl py-12 space-y-8 px-4">
                     <div className="prose dark:prose-invert max-w-none">
                         <p className="text-lg leading-loose">
                             In today's competitive job market, sending a generic "one-size-fits-all" resume is the fastest way to the rejection pile.
@@ -68,7 +71,7 @@ export default async function ResumeBasedOnJobDescription() {
 
                 {/* Why Generic Resumes Fail */}
                 <section className="bg-slate-50 dark:bg-slate-900/50 py-16">
-                    <div className="container max-w-5xl">
+                    <div className="container max-w-5xl px-4">
                         <h2 className="text-3xl font-bold text-center mb-12">Why Generic Resumes Fail</h2>
                         <div className="grid md:grid-cols-2 gap-12 items-center">
                             <div className="space-y-6">
@@ -246,9 +249,9 @@ export default async function ResumeBasedOnJobDescription() {
 
             </main>
             <footer className="border-t py-6 md:py-0">
-                <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+                <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row px-4">
                     <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
-                        © 2025 JobFit.ai
+                        © 2025 JobFit
                     </p>
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
                         <Link href="/privacy" className="hover:underline">Privacy</Link>

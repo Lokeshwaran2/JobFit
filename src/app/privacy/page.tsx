@@ -10,7 +10,7 @@ export default function PrivacyPolicy() {
                 </CardHeader>
                 <CardContent className="space-y-6 text-sm text-muted-foreground leading-relaxed">
                     <p>
-                        Welcome to JobFit.ai. We respect your privacy and are committed to protecting your personal data. This privacy policy explains how we look after your personal data when you visit our website and use our AI resume services.
+                        Welcome to JobFit. We respect your privacy and are committed to protecting your personal data. This privacy policy explains how we look after your personal data when you visit our website and use our AI resume services.
                     </p>
 
                     <section>

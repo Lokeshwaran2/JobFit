@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Plus, FileText, Calendar, ArrowRight } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Plus, FileText } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { Resume } from "@prisma/client";
+import { ResumeCard } from "@/components/dashboard/resume-card";
 
 export default async function DashboardPage() {
     const session = await auth();
@@ -57,25 +58,7 @@ export default async function DashboardPage() {
             ) : (
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {resumes.map((resume: Resume) => (
-                        <Card key={resume.id} className="hover:border-primary/50 transition-colors">
-                            <CardHeader>
-                                <CardTitle className="line-clamp-1">{resume.title}</CardTitle>
-                                <CardDescription className="flex items-center gap-1 text-xs">
-                                    <Calendar className="h-3 w-3" />
-                                    {new Date(resume.createdAt).toLocaleDateString()}
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="flex justify-between items-center mt-2">
-                                    <div className="text-sm font-medium">
-                                        Score: <span className={resume.atsScore > 80 ? "text-green-600" : "text-yellow-600"}>{resume.atsScore}</span>
-                                    </div>
-                                    <Button variant="ghost" size="sm" asChild>
-                                        <Link href={`/builder/${resume.id}`}>Open <ArrowRight className="ml-1 h-3 w-3" /></Link>
-                                    </Button>
-                                </div>
-                            </CardContent>
-                        </Card>
+                        <ResumeCard key={resume.id} resume={resume} />
                     ))}
                 </div>
             )}

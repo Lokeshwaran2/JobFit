@@ -50,7 +50,7 @@ function CheckoutContent() {
                 key: data.keyId,
                 amount: data.amount,
                 currency: data.currency,
-                name: "JobFit.ai",
+                name: "JobFit",
                 description: selectedPlan.name,
                 order_id: data.orderId,
                 handler: async function (response: any) {

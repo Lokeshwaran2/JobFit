@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ResumeEditor } from "./resume-editor";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { ResumePreview } from "./resume-preview";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { DownloadResumeButton } from "./download-resume-button";
@@ -29,6 +30,7 @@ export function ResumeBuilder({
     credits: number;
 }) {
     const [resumeData, setResumeData] = useState(initialData);
+    const isDesktop = useMediaQuery("(min-width: 768px)");
 
     return (
         <div className="h-full w-full flex flex-col">
@@ -40,7 +42,11 @@ export function ResumeBuilder({
                 </div>
             </div>
 
-            <ResizablePanelGroup orientation="horizontal" className="min-h-0 flex-1 rounded-lg border">
+            <ResizablePanelGroup
+                orientation={isDesktop ? "horizontal" : "vertical"}
+                className="min-h-0 flex-1 rounded-lg border"
+                style={{ height: isDesktop ? "100%" : "150%" }}
+            >
 
                 {/* Left Panel: Editor */}
                 <ResizablePanel defaultSize={50} minSize={30}>
@@ -50,6 +56,7 @@ export function ResumeBuilder({
                             onUpdate={(newData) => setResumeData(newData)}
                             missingSkills={missingSkills || []}
                             improvements={improvements}
+                            resumeId={resumeId}
                         />
                     </div>
                 </ResizablePanel>

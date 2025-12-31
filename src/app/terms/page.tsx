@@ -12,7 +12,7 @@ export default function TermsAndConditions() {
                     <section>
                         <h2 className="text-lg font-semibold text-foreground mb-2">1. Introduction</h2>
                         <p>
-                            These Terms & Conditions govern your use of JobFit.ai. By accessing or using our website, you agree to be bound by these terms. If you disagree with any part of these terms, you may not access the service.
+                            These Terms & Conditions govern your use of JobFit. By accessing or using our website, you agree to be bound by these terms. If you disagree with any part of these terms, you may not access the service.
                         </p>
                     </section>
 
@@ -40,7 +40,7 @@ export default function TermsAndConditions() {
                     <section>
                         <h2 className="text-lg font-semibold text-foreground mb-2">5. Limitation of Liability</h2>
                         <p>
-                            In no event shall JobFit.ai, nor its directors, employees, or partners, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses.
+                            In no event shall JobFit, nor its directors, employees, or partners, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses.
                         </p>
                     </section>
 
