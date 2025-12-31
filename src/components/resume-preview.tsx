@@ -46,14 +46,16 @@ export function ResumePreview({ data, isMobile }: { data: any, isMobile?: boolea
                             <div style={{ height: `${contentHeight}px`, width: '100%' }} className="relative">
                                 <iframe
                                     src={`${url}#view=FitH&toolbar=0&navpanes=0&scrollbar=0`}
-                                    className="w-full h-full border-none pointer-events-none"
+                                    className={`w-full h-full border-none ${isMobile ? '' : 'pointer-events-none'}`}
                                     title="Resume Preview"
                                 />
-                                {/* Overlay to block interactions */}
-                                <div
-                                    className="absolute inset-0 z-10 bg-transparent"
-                                    onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                                />
+                                {/* Overlay to block interactions - Desktop only */}
+                                {!isMobile && (
+                                    <div
+                                        className="absolute inset-0 z-10 bg-transparent"
+                                        onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                                    />
+                                )}
                             </div>
                         </div>
                     );
