@@ -26,9 +26,9 @@ export const metadata: Metadata = {
     description: "Tailor your resume to any job description and improve ATS score instantly.",
   },
   icons: {
-    icon: "/logo.png",
-    shortcut: "/logo.png",
-    apple: "/icon-512.png",
+    icon: "/logo.png?v=2",
+    shortcut: "/logo.png?v=2",
+    apple: "/icon-512.png?v=2",
   },
 };
 
