@@ -192,6 +192,14 @@ export default async function ResumeForPage({ params }: PageProps) {
                         </Button>
                     </div>
                 </section>
+
+                <section className="py-8 bg-slate-50 dark:bg-black border-t">
+                    <div className="container px-4 mx-auto text-center">
+                        <p className="text-muted-foreground">
+                            Browse more guides → <Link href="/resume-for" className="text-primary hover:underline font-medium">View all resume guides</Link>
+                        </p>
+                    </div>
+                </section>
             </main>
         </div>
     );
