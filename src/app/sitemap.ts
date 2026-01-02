@@ -1,6 +1,8 @@
 import { MetadataRoute } from 'next';
 import resumePages from '@/data/resumePages.json';
 
+export const revalidate = 60;
+
 export default function sitemap(): MetadataRoute.Sitemap {
     const baseUrl = 'https://jobfit.co.in';
     const lastModified = new Date().toISOString();
