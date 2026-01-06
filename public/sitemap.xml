@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>https://jobfit.co.in/</loc>
+    <lastmod>2026-01-05T14:31:50.891Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://jobfit.co.in/builder</loc>
+    <lastmod>2026-01-05T14:31:50.891Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://jobfit.co.in/ats-resume-checker</loc>
+    <lastmod>2026-01-05T14:31:50.891Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://jobfit.co.in/resume-based-on-job-description</loc>
+    <lastmod>2026-01-05T14:31:50.891Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://jobfit.co.in/job-fit-resume</loc>
+    <lastmod>2026-01-05T14:31:50.891Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ===== Resume For - Freshers ===== -->
+
+  <url><loc>https://jobfit.co.in/resume-for/fresher</loc><lastmod>2026-01-05T14:31:50.891Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/software-engineer-fresher</loc><lastmod>2026-01-05T14:31:50.891Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/java-developer-fresher</loc><lastmod>2026-01-05T14:31:50.891Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/python-developer-fresher</loc><lastmod>2026-01-05T14:31:50.891Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/frontend-developer-fresher</loc><lastmod>2026-01-05T14:31:50.891Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/backend-developer-fresher</loc><lastmod>2026-01-05T14:31:50.891Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/full-stack-developer-fresher</loc><lastmod>2026-01-05T14:31:50.891Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/web-developer-fresher</loc><lastmod>2026-01-05T14:31:50.891Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/data-analyst-fresher</loc><lastmod>2026-01-05T14:31:50.891Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/devops-engineer-fresher</loc><lastmod>2026-01-05T14:31:50.891Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/cloud-engineer-fresher</loc><lastmod>2026-01-05T14:31:50.891Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/qa-engineer-fresher</loc><lastmod>2026-01-05T14:31:50.891Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/automation-tester-fresher</loc><lastmod>2026-01-05T14:31:50.891Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/manual-tester-fresher</loc><lastmod>2026-01-05T14:31:50.891Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/bpo-fresher</loc><lastmod>2026-01-05T14:31:50.891Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/it-fresher</loc><lastmod>2026-01-05T14:31:50.891Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/graduate-fresher</loc><lastmod>2026-01-05T14:31:50.891Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/mca-fresher</loc><lastmod>2026-01-05T14:31:50.891Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/mba-fresher</loc><lastmod>2026-01-05T14:31:50.891Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/bba-fresher</loc><lastmod>2026-01-05T14:31:50.891Z</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+
+  <!-- ===== Resume For - Professionals ===== -->
+
+  <url><loc>https://jobfit.co.in/resume-for/java-developer</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/python-developer</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/react-developer</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/angular-developer</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/nodejs-developer</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/software-engineer</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/full-stack-developer</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/frontend-developer</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/backend-developer</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/web-developer</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/devops-engineer</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/cloud-engineer</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/qa-engineer</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/automation-tester</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/manual-tester</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/data-analyst</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/data-engineer</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/business-analyst</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/product-manager</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/ui-ux-designer</loc><priority>0.7</priority></url>
+
+  <url><loc>https://jobfit.co.in/resume-for/android-developer</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/ios-developer</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/flutter-developer</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/mobile-app-developer</loc><priority>0.7</priority></url>
+
+  <url><loc>https://jobfit.co.in/resume-for/accountant</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/hr-executive</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/sales-executive</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/marketing-executive</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/digital-marketing</loc><priority>0.7</priority></url>
+
+  <url><loc>https://jobfit.co.in/resume-for/customer-support</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/call-center</loc><priority>0.7</priority></url>
+
+  <url><loc>https://jobfit.co.in/resume-for/teacher</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/nurse</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/banker</loc><priority>0.7</priority></url>
+
+  <!-- ===== ATS + Job Board ===== -->
+
+  <url><loc>https://jobfit.co.in/resume-for/ats-resume-for-freshers</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/ats-resume-for-india</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/ats-resume-for-software-engineer</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/ats-resume-for-data-analyst</loc><priority>0.7</priority></url>
+
+  <url><loc>https://jobfit.co.in/resume-for/resume-for-naukri</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/resume-for-indeed</loc><priority>0.7</priority></url>
+  <url><loc>https://jobfit.co.in/resume-for/resume-for-linkedin</loc><priority>0.7</priority></url>
+
+</urlset>
