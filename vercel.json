@@ -1,7 +1,7 @@
 {
     "headers": [
         {
-            "source": "/sitemap.xml",
+            "source": "^/sitemap\\.xml$",
             "headers": [
                 {
                     "key": "Content-Type",
@@ -10,7 +10,7 @@
             ]
         },
         {
-            "source": "/robots.txt",
+            "source": "^/robots\\.txt$",
             "headers": [
                 {
                     "key": "Content-Type",
