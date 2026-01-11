@@ -1,12 +1,22 @@
-
-import { MetadataRoute } from 'next';
+import { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
     return {
-        rules: {
-            userAgent: '*',
-            allow: '/',
-        },
-        sitemap: 'https://jobfit.co.in/sitemap.xml',
+        rules: [
+            {
+                userAgent: "*",
+                allow: "/",
+                disallow: [
+                    "/login",
+                    "/register",
+                    "/dashboard",
+                    "/checkout",
+                    "/subscription",
+                    "/builder",
+                    "/api",
+                ],
+            },
+        ],
+        sitemap: "https://jobfit.co.in/sitemap.xml",
     };
 }

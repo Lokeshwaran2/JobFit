@@ -24,6 +24,18 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      {
+        source: "/login",
+        headers: [
+          { key: "X-Robots-Tag", value: "noindex, nofollow" },
+        ],
+      },
+      {
+        source: "/register",
+        headers: [
+          { key: "X-Robots-Tag", value: "noindex, nofollow" },
+        ],
+      },
     ];
   },
 
