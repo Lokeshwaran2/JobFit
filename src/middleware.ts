@@ -5,6 +5,6 @@ export default NextAuth(authConfig).auth;
 
 export const config = {
     matcher: [
-        '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|resume-for).*)',
+        "/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml).*)",
     ],
 };
