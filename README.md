@@ -1,82 +1,180 @@
 # JobFit 🚀
 
-> **AI-Powered ATS Resume Builder & Job Description Matching Engine**
+> AI-powered resume optimization platform that helps job seekers tailor their resumes to specific job descriptions.
 
-JobFit is a full-stack SaaS application built with **Next.js 15** designed to help job seekers bypass Applicant Tracking Systems (ATS). By analyzing job descriptions in real-time, JobFit extracts top keywords, identifies skill gaps, rewrites experience bullets using Google's proven **X-Y-Z formula**, and generates ATS-optimized resumes guaranteed to hit **95+ match scores**.
+[![Live Demo](https://img.shields.io/badge/Live_Demo-jobfit--mu.vercel.app-blue?style=for-the-badge&logo=vercel)](https://jobfit-mu.vercel.app)
+[![Status](https://img.shields.io/badge/Status-🟢_Live-success?style=for-the-badge)]()
+[![License](https://img.shields.io/badge/License-Proprietary-red?style=for-the-badge)]()
 
 ---
 
-## 🌟 Key Features
+## 🌐 Live Demo
 
-- 📄 **Multi-Format Resume Parsing**: Upload existing resumes in `.pdf` or `.docx` format. Extracts structured candidate profile data using `pdf-parse` and `mammoth`.
-- 🎯 **Job Description Targeting**: Input any target job description. The AI engine analyzes required skills, top 20 keywords, core responsibilities, and seniority level.
-- ⚡ **AI Bullet-Point Optimization**: Automatically rewrites experience bullet points following Google’s **X-Y-Z Formula** (*"Accomplished [X], as measured by [Y], by doing [Z]"*) with quantified metrics and action verbs.
-- 📊 **10-Point ATS Score Calculator**: Calculates a real-time match score based on 10 critical checks (Title Alignment, Keyword Placement, Quantified Impact, Action Verbs, Skill Synonyms, Tools & Environment, Tech Stack, Soft Skills, Location, Section Order).
-- ✏️ **Interactive Resume Editor**: Customize summary, experience, skills (hard, soft, tools), projects, and education with live validation.
-- 📥 **ATS-Safe PDF Export**: One-click PDF generation using `@react-pdf/renderer` with clean, single/multi-page, machine-readable layouts.
-- 🔒 **Authentication & User Dashboard**: Secure authentication via NextAuth.js v5 with Credentials provider and Prisma PostgreSQL adapter. Track past resumes and score improvements.
-- 💳 **Credit & Subscription Billing**: Integrated payment gateway with Razorpay API for purchasing credits and upgrading to pro plans.
+👉 **[Try JobFit Live](https://jobfit-mu.vercel.app)**  
+**Status:** 🟢 Live Production
+
+---
+
+## 🎯 The Problem
+
+Most job seekers submit the exact same resume to dozens of different applications. As a result:
+- **Keyword Mismatch**: Resumes fail to incorporate the specific terminology required by modern Applicant Tracking Systems (ATS).
+- **Unquantified Impact**: Bullet points describe daily tasks instead of measurable achievements.
+- **Low Callback Rates**: Candidates are filtered out by screening tools before a hiring manager ever reads their application.
+
+---
+
+## 💡 What JobFit Does
+
+JobFit analyzes a candidate's resume against a target job description to:
+
+- **Extract Relevant Skills & Keywords**: Parses unstructured JDs to identify top 20 keywords, required skills, and core responsibilities.
+- **Identify Missing Skills**: Highlights missing or underrepresented technical and soft skills.
+- **Evaluate Resume-to-Job Alignment**: Calculates an AI-assisted 0–100 match score across 10 evaluation dimensions.
+- **Improve Bullet Points**: Rewrites experience bullets using an X-Y-Z style achievement framework with action-oriented and measurable outcomes.
+- **Generate ATS-Friendly Resumes**: Produces clean, machine-readable resumes exported as PDFs.
+- **Manage Tailored Resumes**: Enables users to save and track multiple resume versions inside a personal dashboard.
 
 ---
 
 ## 🛠️ Technology Stack
 
 | Category | Technology |
-| :--- | :--- |
-| **Framework** | [Next.js 15](https://nextjs.org/) (App Router, Server Actions, TypeScript) |
-| **UI & Styling** | [Tailwind CSS v4](https://tailwindcss.com/), Radix UI Primitives, Lucide Icons, `next-themes` |
-| **Database & ORM** | [PostgreSQL](https://www.postgresql.org/) (Neon DB) with [Prisma ORM](https://www.prisma.io/) |
-| **Authentication** | [NextAuth.js v5](https://authjs.dev/) (`@auth/prisma-adapter`, `bcryptjs`) |
-| **AI / LLM Engine** | [Groq SDK](https://groq.com/) (`llama-3.1-8b-instant`) |
-| **Document Parsing** | `pdf-parse`, `mammoth` |
-| **PDF Generation** | `@react-pdf/renderer`, `react-pdf`, `@napi-rs/canvas` |
-| **Payments** | [Razorpay](https://razorpay.com/) API Integration |
+|---|---|
+| **Framework** | Next.js 15 (App Router, Server Actions, TypeScript) |
+| **UI & Styling** | Tailwind CSS v4, Radix UI, Lucide Icons, next-themes |
+| **Database & ORM** | PostgreSQL (Neon), Prisma ORM |
+| **Authentication** | NextAuth.js v5, Prisma Adapter, bcryptjs |
+| **AI Engine** | Groq SDK, Llama 3.1 8B Instant |
+| **Document Processing** | pdf-parse, Mammoth (DOCX) |
+| **PDF Generation** | @react-pdf/renderer, react-pdf |
+| **Payments** | Razorpay |
+| **Deployment** | Vercel |
+
+---
+
+## 📸 Screenshots
+
+### Landing Page
+![JobFit Landing Page](./docs/images/landing-page.png)
+
+### Resume Analysis & JD Matching
+![Resume Analysis](./docs/images/resume-analysis.png)
+
+### Resume Builder & Editor
+![Resume Builder](./docs/images/resume-builder.png)
+
+### ATS Match Score Engine
+![ATS Score](./docs/images/ats-score.png)
+
+### Candidate Dashboard
+![Dashboard](./docs/images/dashboard.png)
+
+---
+
+## 🏗️ Architecture
+
+```text
+                    ┌─────────────────────┐
+                    │      Next.js        │
+                    │   Web Application   │
+                    └──────────┬──────────┘
+                               │
+             ┌─────────────────┼─────────────────┐
+             │                 │                 │
+             ▼                 ▼                 ▼
+        Authentication     Resume APIs       Payments
+          NextAuth          Server Actions    Razorpay
+             │                 │
+             │                 ▼
+             │            AI Service
+             │                 │
+             │          ┌──────┴──────┐
+             │          │             │
+             │       Resume         JD
+             │      Analysis      Analysis
+             │          │             │
+             │          └──────┬──────┘
+             │                 ▼
+             │          Match Analysis
+             │                 │
+             └────────────┬────┘
+                          ▼
+                     PostgreSQL
+                       + Prisma
+```
+
+---
+
+## 🧠 Responsible AI Architecture
+
+The AI service (`src/lib/ai-service.ts`) uses structured LLM outputs via Groq (`llama-3.1-8b-instant`):
+
+1. **Document Normalization**: Converts raw PDF/DOCX text into typed JSON schema (`personalInfo`, `skills`, `experience`, `projects`, `education`).
+2. **JD Requirement Extraction**: Identifies target job title, top 20 ATS keywords, required skills, and core responsibilities from job descriptions.
+3. **Targeted Bullet Improvement**: Rewrites experience bullet points using action-oriented language and encourages measurable outcomes when supported by the candidate's original information.
+4. **Terminology Alignment**: Evaluates job-title alignment and suggests relevant terminology when appropriate without fabricating candidate experience.
+5. **0–100 ATS Match Scoring**: Evaluates candidate resumes against 10 dimensions (Title Alignment, Keyword Placement, Impact Metrics, Action Verbs, Skill Synonyms, Tools Section, Tech Stack, Soft Skills, Location, Section Order).
+
+---
+
+## 🧠 Engineering Challenges
+
+### 1. Resume → Structured Data
+Resumes vary drastically in structure and format. JobFit converts extracted document text from `.pdf` and `.docx` files into a normalized candidate schema before analysis.
+
+### 2. Job Description → Structured Requirements
+The system processes unstructured job posts to extract title, technical skills, soft skills, keywords, and seniority levels for deterministic matching.
+
+### 3. AI Output Reliability
+LLM outputs are constrained into structured JSON formats so that downstream scoring and resume generation remain predictable and schema-safe.
+
+### 4. Machine-Readable PDF Generation
+Generated resumes preserve machine-readable text and standard section hierarchy required by automated Applicant Tracking Systems while maintaining visual layout consistency using `@react-pdf/renderer`.
+
+### 5. Usage & Billing State
+User credit balances and subscription states are validated server-side through Razorpay order and payment verification flows.
 
 ---
 
 ## 📁 Project Structure
 
-```
+```text
 JobFit/
 ├── prisma/
 │   └── schema.prisma         # Prisma ORM Schema (User, Account, Session, Resume)
-├── public/                    # Static assets (logos, images)
+├── public/                    # Public static assets & branding
 ├── src/
 │   ├── actions/               # Next.js Server Actions
-│   │   ├── login.ts           # Credentials authentication action
-│   │   ├── register.ts        # User registration action
+│   │   ├── login.ts           # Authentication action
+│   │   ├── register.ts        # Registration action
 │   │   ├── resume.ts          # Resume CRUD actions
 │   │   └── update-profile.ts  # User profile update action
-│   ├── app/                   # App Router Pages & API Routes
-│   │   ├── (auth)/            # Login & Registration pages
-│   │   ├── api/               # REST API endpoints
-│   │   │   ├── auth/          # NextAuth handlers
-│   │   │   ├── razorpay/      # Payment order creation & verification
-│   │   │   └── resume/        # Resume analysis & parsing endpoint
-│   │   ├── ats-resume-checker/
+│   ├── app/                   # App Router Pages & API Endpoints
+│   │   ├── (auth)/            # Auth routes (Login, Register)
+│   │   ├── api/               # API endpoints (Auth, Resume, Razorpay)
 │   │   ├── builder/           # Multi-step resume builder interface
-│   │   ├── dashboard/         # Candidate dashboard
-│   │   ├── subscription/      # Billing & credit purchase page
-│   │   ├── globals.css        # Tailwind v4 styles & theme tokens
-│   │   ├── layout.tsx         # Root layout with providers
-│   │   └── page.tsx           # SEO Landing page with JSON-LD schema
-│   ├── components/            # React Components
-│   │   ├── ats-score-header.tsx    # Visual score badge & progress bar
-│   │   ├── improvement-summary.tsx # AI improvement metrics breakdown
+│   │   ├── dashboard/         # User dashboard & resume history
+│   │   ├── subscription/      # Billing & credit purchase interface
+│   │   ├── layout.tsx         # Root application layout
+│   │   └── page.tsx           # SEO Landing page with FAQ schema
+│   ├── components/            # UI Components
+│   │   ├── ats-score-header.tsx    # ATS score indicator
+│   │   ├── improvement-summary.tsx # AI rewrite statistics
 │   │   ├── pricing-section.tsx     # Razorpay pricing table
-│   │   ├── resume-builder.tsx      # Main upload/analyze/edit workflow
-│   │   ├── resume-editor.tsx       # Form fields for candidate details
-│   │   ├── resume-preview.tsx      # PDF canvas preview
-│   │   ├── resume-document.tsx     # @react-pdf document template
+│   │   ├── resume-builder.tsx      # Main state machine workflow
+│   │   ├── resume-editor.tsx       # Field-by-field resume form
+│   │   ├── resume-preview.tsx      # Interactive PDF previewer
+│   │   ├── resume-document.tsx     # @react-pdf layout document
 │   │   └── ui/                     # Radix UI primitive wrappers
 │   ├── lib/                   # Utility modules & Services
-│   │   ├── ai-service.ts      # Groq AI prompt logic & score evaluation
-│   │   ├── file-parser.ts     # Document text extractor dispatcher
-│   │   ├── pdf-parser.ts      # PDF parse wrapper
+│   │   ├── ai-service.ts      # Groq AI prompts & ATS match scoring
+│   │   ├── file-parser.ts     # Document text extractor
+│   │   ├── pdf-parser.ts      # PDF parse handler
 │   │   ├── prisma.ts          # Singleton Prisma Client
-│   │   └── razorpay.ts        # Razorpay SDK initializer
-│   └── middleware.ts          # Route protection middleware
-├── .env                       # Environment variables (do not commit)
+│   │   └── razorpay.ts        # Razorpay SDK initialization
+│   └── middleware.ts          # Authentication middleware
+├── env-example.txt            # Environment variable template
 ├── next.config.ts             # Next.js configuration
 ├── package.json               # Dependencies & scripts
 └── tsconfig.json              # TypeScript configuration
@@ -84,109 +182,101 @@ JobFit/
 
 ---
 
-## 🗄️ Database Schema Summary
+## 🗄️ Database Design
 
-Managed via **Prisma** (`prisma/schema.prisma`):
+Managed via **Prisma ORM** (`prisma/schema.prisma`):
 
-- **User**: Stores user profile, authentication credentials, pro status (`isPro`), credit balance (`credits`), and customer payment references.
+- **User**: Authentication details, `isPro` status, credit balance (`credits`), and customer payment references.
 - **Account**: NextAuth account provider linking.
-- **Session** & **VerificationToken**: Session tokens for authenticated states.
-- **Resume**: Stores parsed resume title, raw text, uploaded file URL, target job description, computed `atsScore`, `keywordMatch`, `missingSkills` array, `improvements` JSON, and full `structuredData` JSON object (personal info, summary, experience, skills, projects, education).
+- **Session** & **VerificationToken**: NextAuth session tokens.
+- **Resume**: Parsed resume title, raw text, file URL, target job description, computed `atsScore`, `keywordMatch`, `missingSkills` list, `improvements` summary, and full `structuredData` JSON.
 
 ---
 
-## 🤖 AI Prompting & Scoring Engine
+## 🔐 Security
 
-The AI service (`src/lib/ai-service.ts`) executes three core LLM steps powered by Groq (`llama-3.1-8b-instant`):
-
-1. **Extraction (`extractResumeFromText`)**: Converts raw text into normalized JSON format (personal info, skills categorized into hard/soft/tools, experience, projects, education).
-2. **JD Analysis (`analyzeJobDescription`)**: Identifies target job title, top 20 ATS keywords, required skills, core responsibilities, and seniority level.
-3. **Resume Rewrite & Scoring (`rewriteResume`)**:
-   - Forces job title alignment for maximum ATS match.
-   - Rewrites experience bullets with quantified metrics (percentages, numbers, time savings).
-   - Evaluates a 10-point checklist to output a reliable 95+ score.
+- **Environment Secret Isolation**: Secrets and API keys are stored outside the repository in `.env` files.
+- **Authentication**: User access control is enforced via NextAuth.js v5.
+- **Route Protection**: Protected application routes require valid user session authentication.
+- **Server-Side Payment Verification**: Razorpay order HMAC signatures are verified server-side before granting credits or pro access.
+- **Database Query Safety**: Database access is handled through Prisma's parameterized query APIs, reducing exposure to SQL injection risks.
 
 ---
 
-## 🚀 Getting Started
+## 💳 Billing & Monetization
 
-### Prerequisites
+- **Free Tier**: 3 initial credits upon registration to test resume analysis.
+- **Credit Purchases & Subscriptions**: Integrated with Razorpay order creation (`/api/razorpay/order`) and server-side signature verification (`/api/razorpay/verify`) endpoints.
 
+---
+
+## ☁️ Deployment
+
+| Component | Platform |
+|---|---|
+| **Frontend / Web Application** | Vercel |
+| **Database** | Neon PostgreSQL |
+| **AI Provider** | Groq |
+| **Payments** | Razorpay |
+
+### Production Site
+👉 **[Open JobFit Live](https://jobfit-mu.vercel.app)**
+
+---
+
+## 📊 Project Highlights
+
+- 🚀 Live production deployment
+- 📄 PDF/DOCX resume processing
+- 🤖 AI-assisted match scoring & targeted bullet improvement
+- 💳 Active Razorpay subscription & credit monetization
+
+---
+
+## 🚀 Local Development Setup
+
+### 1. Prerequisites
 - **Node.js**: v18.x or higher
-- **npm**, **pnpm**, or **yarn**
-- **PostgreSQL Database** (e.g. [Neon](https://neon.tech/), Supabase, or local PostgreSQL)
+- **PostgreSQL Database** (e.g., Neon PostgreSQL or local PostgreSQL instance)
 
-### 1. Clone the Repository
+### 2. Installation & Setup
 
 ```bash
+# Clone the repository
 git clone https://github.com/Lokeshwaran2/JobFit.git
 cd JobFit
-```
 
-### 2. Install Dependencies
-
-```bash
+# Install dependencies
 npm install
+
+# Setup environment variables
+cp env-example.txt .env
 ```
 
-### 3. Configure Environment Variables
-
-Create a `.env` file in the root directory and configure the following variables:
-
+Configure `.env`:
 ```env
-# Database Connection (PostgreSQL)
 DATABASE_URL="postgresql://user:password@localhost:5432/jobfit?schema=public"
-
-# NextAuth Configuration
 AUTH_SECRET="your_nextauth_secret_here"
-
-# AI Service (Groq)
-GROQ_API_KEY="gsk_your_groq_api_key_here"
-
-# Razorpay Payments
+GROQ_API_KEY="gsk_your_groq_api_key"
 RAZORPAY_KEY_ID="rzp_test_..."
 RAZORPAY_KEY_SECRET="your_razorpay_secret"
 ```
 
-### 4. Database Setup & Prisma Generation
-
 ```bash
-# Push schema to database
+# Push database schema & generate client
 npx prisma db push
-
-# Generate Prisma Client
 npx prisma generate
-```
 
-### 5. Run Development Server
-
-```bash
+# Start development server
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser to start using JobFit.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## 📜 Available Scripts
+## 📜 License
 
-- `npm run dev`: Starts the Next.js development server.
-- `npm run build`: Generates Prisma Client and builds the production bundle.
-- `npm run start`: Runs the built production server.
-- `npm run lint`: Runs ESLint check across all TypeScript and React files.
+This repository is publicly available for viewing and educational/reference purposes.
 
----
-
-## 🌐 Deployment
-
-JobFit is designed for seamless deployment on **Vercel**:
-
-1. Connect your GitHub repository to [Vercel](https://vercel.com).
-2. Add your environment variables (`DATABASE_URL`, `AUTH_SECRET`, `GROQ_API_KEY`, `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`) in the Vercel dashboard.
-3. The build step automatically runs `prisma generate && next build`.
-
----
-
-## 📄 License
-
-This project is private and proprietary. All rights reserved.
+The source code is proprietary. No permission is granted to copy, modify, distribute, or use the software commercially without explicit permission from the author.
