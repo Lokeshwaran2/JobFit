@@ -66,7 +66,7 @@ export class AiService {
     `;
 
     const response = await groq.chat.completions.create({
-      model: "llama-3.1-8b-instant", // Modified to bypass rate limit (original: llama-3.3-70b-versatile)
+      model: "qwen/qwen3.6-27b", // Modified to bypass rate limit (original: llama-3.3-70b-versatile)
       messages: [{ role: "system", content: "You are an API that outputs strictly valid JSON. Do not output anything else. Do not wrap in markdown code blocks. Start your response with '{'." }, { role: "user", content: prompt }],
       temperature: 0,
     });
@@ -97,7 +97,7 @@ export class AiService {
     `;
 
     const response = await groq.chat.completions.create({
-      model: "llama-3.1-8b-instant",
+      model: "qwen/qwen3.6-27b",
       messages: [{ role: "system", content: "You are an API that outputs strictly valid JSON. Do not output anything else. Do not wrap in markdown code blocks. Start your response with '{'." }, { role: "user", content: prompt }],
       temperature: 0,
     });
@@ -204,7 +204,7 @@ export class AiService {
     `;
 
     const response = await groq.chat.completions.create({
-      model: "llama-3.1-8b-instant",
+      model: "qwen/qwen3.6-27b",
       messages: [{ role: "system", content: "You are an expert resume writer API. Output strictly valid JSON. Do not output anything else. Do not wrap in markdown code blocks. Start your response with '{'." }, { role: "user", content: prompt }],
       temperature: 0,
     });
