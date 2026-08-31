@@ -10,21 +10,13 @@ export async function POST(req: Request) {
         }
 
         const body = await req.json();
-        const { plan, currency = "INR" } = body; // plan: "starter" | "jobhunt"
+        const { plan, isAutoPay = false } = body; // plan: "starter" | "jobhunt"
 
         if (!plan) {
             return new NextResponse("Plan is required", { status: 400 });
         }
 
         let amountInPaise = 0;
-
-        // Define Pricing (Make sure this matches frontend display)
-        // INR values
-        // Starter: ₹99
-        // JobHunt: ₹299
-
-        // Handling currency conversion simply for now or strictly enforce INR if using Indian Razorpay account
-        // Assuming INR for simplicity as Razorpay is primarily INR.
 
         if (plan === "starter") {
             amountInPaise = 99 * 100;
@@ -34,19 +26,51 @@ export async function POST(req: Request) {
             return new NextResponse("Invalid plan", { status: 400 });
         }
 
-        // Create Order
+        // Check if AutoPay / Subscription is requested
+        if (isAutoPay || plan === "jobhunt") {
+            const planId = process.env.RAZORPAY_JOBHUNT_PLAN_ID;
+
+            if (planId) {
+                try {
+                    const subscription = await razorpay.subscriptions.create({
+                        plan_id: planId,
+                        customer_notify: 1,
+                        total_count: 12, // 12 billing cycles (monthly)
+                        notes: {
+                            userId: session.user.id,
+                            plan: plan,
+                            autoPay: "true"
+                        }
+                    });
+
+                    return NextResponse.json({
+                        subscriptionId: subscription.id,
+                        isAutoPay: true,
+                        amount: amountInPaise,
+                        currency: "INR",
+                        keyId: process.env.RAZORPAY_KEY_ID
+                    });
+                } catch (subError) {
+                    console.warn("[RAZORPAY_SUB_CREATE_FALLBACK] Could not create subscription, falling back to auto-recurring order notes:", subError);
+                }
+            }
+        }
+
+        // Standard Order / Fallback Order Creation with AutoPay metadata
         const order = await razorpay.orders.create({
             amount: amountInPaise,
             currency: "INR",
             receipt: `rcpt_${Date.now()}_${session.user.id.slice(0, 5)}`,
             notes: {
                 userId: session.user.id,
-                plan: plan
+                plan: plan,
+                autoPay: isAutoPay ? "true" : "false"
             }
         });
 
         return NextResponse.json({
             orderId: order.id,
+            isAutoPay: false,
             amount: order.amount,
             currency: order.currency,
             keyId: process.env.RAZORPAY_KEY_ID

@@ -14,17 +14,20 @@ function CheckoutContent() {
     const router = useRouter();
 
     const [loading, setLoading] = useState(false);
+    const [isAutoPay, setIsAutoPay] = useState(true); // Default AutoPay for recurring subscription
 
     const planDetails = {
         starter: {
             name: "Starter Plan",
             price: "₹99",
-            description: "20 Credits for resume optimization"
+            description: "20 Credits for resume optimization",
+            recurring: false
         },
         jobhunt: {
             name: "Job Hunt Mode",
-            price: "₹299",
-            description: "Unlimited access & PDF downloads"
+            price: "₹299/mo",
+            description: "Unlimited access & PDF downloads",
+            recurring: true
         }
     };
 
@@ -35,32 +38,32 @@ function CheckoutContent() {
         setLoading(true);
 
         try {
-            // 1. Create Order
+            // 1. Create Order or AutoPay Subscription
             const res = await fetch("/api/razorpay/order", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ plan }),
+                body: JSON.stringify({ plan, isAutoPay }),
             });
 
-            if (!res.ok) throw new Error("Failed to create order");
+            if (!res.ok) throw new Error("Failed to initialize payment");
             const data = await res.json();
 
-            // 2. Open Razorpay Modal
-            const options = {
+            // 2. Configure Razorpay Modal Options for AutoPay or Standard Order
+            const options: any = {
                 key: data.keyId,
                 amount: data.amount,
                 currency: data.currency,
                 name: "JobFit",
-                description: selectedPlan.name,
-                order_id: data.orderId,
+                description: `${selectedPlan.name} ${isAutoPay ? "(AutoPay Enabled)" : ""}`,
                 handler: async function (response: any) {
-                    // 3. Verify Payment
+                    // 3. Verify Payment / Subscription
                     try {
                         const verifyRes = await fetch("/api/razorpay/verify", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({
                                 orderId: response.razorpay_order_id,
+                                subscriptionId: response.razorpay_subscription_id,
                                 paymentId: response.razorpay_payment_id,
                                 signature: response.razorpay_signature,
                                 plan
@@ -68,7 +71,7 @@ function CheckoutContent() {
                         });
 
                         if (verifyRes.ok) {
-                            toast.success("Payment Successful!");
+                            toast.success("Payment Successful & AutoPay Activated!");
                             router.push("/dashboard?success=true");
                         } else {
                             toast.error("Payment verification failed");
@@ -78,20 +81,24 @@ function CheckoutContent() {
                         toast.error("Payment verification failed");
                     }
                 },
-                prefill: {
-                    // We could pass user details here if available in context
-                },
                 theme: {
                     color: "#0f172a"
                 }
             };
+
+            // Set subscription_id for AutoPay or order_id for standard order
+            if (data.subscriptionId) {
+                options.subscription_id = data.subscriptionId;
+            } else if (data.orderId) {
+                options.order_id = data.orderId;
+            }
 
             const rzp = new (window as any).Razorpay(options);
             rzp.open();
 
         } catch (error) {
             console.error(error);
-            toast.error("Something went wrong");
+            toast.error("Something went wrong initializing payment");
         } finally {
             setLoading(false);
         }
@@ -118,13 +125,18 @@ function CheckoutContent() {
         <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
             <Script src="https://checkout.razorpay.com/v1/checkout.js" />
 
-            <Card className="w-full max-w-md shadow-lg">
+            <Card className="w-full max-w-md shadow-lg border-emerald-500/20">
                 <CardHeader>
-                    <CardTitle>Checkout</CardTitle>
-                    <CardDescription>Complete your purchase securely</CardDescription>
+                    <CardTitle className="flex items-center justify-between">
+                        <span>Checkout</span>
+                        <span className="text-xs bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 px-2.5 py-0.5 rounded-full font-semibold">
+                            AutoPay Enabled
+                        </span>
+                    </CardTitle>
+                    <CardDescription>Complete your purchase with UPI AutoPay & Cards</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                    <div className="rounded-lg border p-4 bg-white">
+                <CardContent className="space-y-4">
+                    <div className="rounded-lg border p-4 bg-white dark:bg-slate-900">
                         <div className="flex justify-between items-start mb-2">
                             <div>
                                 <h3 className="font-semibold text-lg">{selectedPlan.name}</h3>
@@ -133,18 +145,42 @@ function CheckoutContent() {
                             <div className="text-xl font-bold">{selectedPlan.price}</div>
                         </div>
                     </div>
+
+                    {/* AutoPay Settings Banner */}
+                    <div className="p-3.5 rounded-lg bg-emerald-50/80 border border-emerald-200 dark:bg-emerald-950/30 dark:border-emerald-800 space-y-2">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2 font-medium text-xs text-emerald-900 dark:text-emerald-300">
+                                <CheckCircle className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                                <span>Razorpay AutoPay (Recurring Billing)</span>
+                            </div>
+                            <label className="relative inline-flex items-center cursor-pointer">
+                                <input
+                                    type="checkbox"
+                                    checked={isAutoPay}
+                                    onChange={(e) => setIsAutoPay(e.target.checked)}
+                                    className="sr-only peer"
+                                />
+                                <div className="w-9 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
+                            </label>
+                        </div>
+                        <p className="text-[11px] text-emerald-800/80 dark:text-emerald-400/90 leading-relaxed">
+                            {isAutoPay
+                                ? "Auto-renew monthly via GPay, PhonePe, Paytm UPI AutoPay, Debit/Credit Cards, or NetBanking. Cancel anytime from your dashboard."
+                                : "One-time payment for this billing cycle."}
+                        </p>
+                    </div>
                 </CardContent>
-                <CardFooter className="flex flex-col gap-4">
+                <CardFooter className="flex flex-col gap-3 pt-2">
                     <Button
-                        className="w-full h-11 text-lg"
+                        className="w-full h-11 text-base font-semibold bg-emerald-600 hover:bg-emerald-700 text-white transition-all shadow"
                         onClick={handlePayment}
                         disabled={loading}
                     >
                         {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        Pay {selectedPlan.price}
+                        {isAutoPay ? `Enable AutoPay (${selectedPlan.price})` : `Pay ${selectedPlan.price}`}
                     </Button>
                     <p className="text-xs text-center text-muted-foreground">
-                        Secure payment via Razorpay.
+                        🔒 Secured by Razorpay UPI AutoPay & Mandate API
                     </p>
                 </CardFooter>
             </Card>
