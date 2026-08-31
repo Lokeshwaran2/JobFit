@@ -9,7 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Check, AlertTriangle, Sparkles, Trash2 } from "lucide-react";
+import { Check, AlertTriangle, Sparkles, Trash2, Plus, CheckCircle2 } from "lucide-react";
 
 import { updateResume } from "@/actions/resume";
 import { toast } from "sonner";
@@ -54,16 +54,12 @@ export function ResumeEditor({
         }
     };
 
-    // ... existing helpers ...
-
     const handleRemoveExperience = (index: number) => {
         setData((prev: any) => {
             const newData = { ...prev };
             if (newData.experience && Array.isArray(newData.experience)) {
                 newData.experience = newData.experience.filter((_: any, idx: number) => idx !== index);
             }
-            // Auto-save on crucial structure changes? Maybe not, keep manual for now or debounced auto-save later.
-            // Let's stick to manual save button as requested/implied by "check save changes".
             return newData;
         });
     };
@@ -114,13 +110,57 @@ export function ResumeEditor({
 }
 
 // Sub-component to avoid code duplication across mobile/desktop views
-function EditorTabsContent({ data, setData, improvements, missingSkills, handleChange, handleRemoveExperience }: any) {
+function EditorTabsContent({ data, setData, improvements, missingSkills = [], handleChange, handleRemoveExperience }: any) {
+    // Determine remaining missing skills that are not yet in the user's hard skills
+    const existingHardSkills: string[] = Array.isArray(data.skills?.hard)
+        ? data.skills.hard.map((s: string) => s.trim().toLowerCase())
+        : (typeof data.skills?.hard === "string" ? data.skills.hard.split(",").map((s: string) => s.trim().toLowerCase()) : []);
+
+    const remainingMissing = missingSkills.filter(
+        (skill: string) => !existingHardSkills.includes(skill.trim().toLowerCase())
+    );
+
+    const handleAddMissingSkill = (skillToAdd: string) => {
+        const currentList = Array.isArray(data.skills?.hard)
+            ? [...data.skills.hard]
+            : (typeof data.skills?.hard === "string" ? data.skills.hard.split(",").map((s: string) => s.trim()).filter(Boolean) : []);
+
+        if (!currentList.some((s: string) => s.toLowerCase() === skillToAdd.toLowerCase())) {
+            const updatedList = [...currentList, skillToAdd];
+            handleChange("skills", "hard", updatedList);
+            toast.success(`Added "${skillToAdd}" to your skills!`);
+        }
+    };
+
+    const handleAddAllMissingSkills = () => {
+        const currentList = Array.isArray(data.skills?.hard)
+            ? [...data.skills.hard]
+            : (typeof data.skills?.hard === "string" ? data.skills.hard.split(",").map((s: string) => s.trim()).filter(Boolean) : []);
+
+        const remaining = missingSkills.filter(
+            (s: string) => !currentList.some((h: string) => h.toLowerCase() === s.trim().toLowerCase())
+        );
+
+        if (remaining.length > 0) {
+            const updatedList = [...currentList, ...remaining];
+            handleChange("skills", "hard", updatedList);
+            toast.success(`Added ${remaining.length} suggested keywords to your skills!`);
+        }
+    };
+
     return (
         <Tabs defaultValue="basics" className="w-full">
             <TabsList className="w-full">
                 <TabsTrigger value="basics">Basics</TabsTrigger>
                 <TabsTrigger value="experience">Experience</TabsTrigger>
-                <TabsTrigger value="skills">Skills</TabsTrigger>
+                <TabsTrigger value="skills" className="relative">
+                    Skills
+                    {remainingMissing.length > 0 && (
+                        <span className="ml-1.5 rounded-full bg-amber-500 text-white text-[10px] px-1.5 py-0.2 font-bold">
+                            {remainingMissing.length}
+                        </span>
+                    )}
+                </TabsTrigger>
             </TabsList>
 
             <TabsContent value="basics" className="space-y-4 py-4">
@@ -221,38 +261,67 @@ function EditorTabsContent({ data, setData, improvements, missingSkills, handleC
 
             <TabsContent value="skills" className="space-y-4 py-4">
                 <Card>
-                    <CardHeader><CardTitle>Hard Skills</CardTitle></CardHeader>
+                    <CardHeader><CardTitle>Hard Skills & Keywords</CardTitle></CardHeader>
                     <CardContent className="space-y-4">
-                        {/* ATS Feedback for Skills */}
-                        <div className="space-y-3 p-3 bg-slate-50 dark:bg-slate-900 rounded-lg border">
-                            <div className="flex items-center gap-2">
-                                <h3 className="text-sm font-semibold">ATS Skills Analysis</h3>
-                            </div>
-                            <div className="space-y-2 text-sm">
-                                {data.skills?.hard?.map((skill: string, i: number) => (
-                                    <div key={i} className="flex items-start gap-2 text-green-700 dark:text-green-400">
-                                        <Check className="h-4 w-4 mt-0.5 shrink-0" />
-                                        <span>{skill} <span className="text-xs opacity-70 ml-1">(Matched)</span></span>
-                                    </div>
-                                ))}
-                                {missingSkills.map((skill: any, i: number) => (
-                                    <div key={`missing-${i}`} className="flex items-start gap-2 text-amber-700 dark:text-amber-400">
-                                        <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0" />
-                                        <span>Consider adding: <strong>{skill}</strong></span>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
 
-                        <Textarea
-                            value={data.skills?.hard?.join(", ") || ""}
-                            onChange={(e) => {
-                                const list = e.target.value.split(",").map((s: string) => s.trim());
-                                handleChange("skills", "hard", list);
-                            }}
-                            className="min-h-[100px]"
-                        />
-                        <p className="text-xs text-muted-foreground">Comma separated</p>
+                        {/* Interactive Suggested Missing Keywords Section */}
+                        {remainingMissing.length > 0 ? (
+                            <div className="p-3 bg-amber-50/90 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg space-y-2.5">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2 text-amber-900 dark:text-amber-300 font-semibold text-xs">
+                                        <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0" />
+                                        <span>Suggested Missing Keywords ({remainingMissing.length})</span>
+                                    </div>
+                                    {remainingMissing.length > 1 && (
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="sm"
+                                            className="h-6 text-[11px] text-amber-800 hover:text-amber-950 dark:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-900/40 font-semibold underline px-2 py-0"
+                                            onClick={handleAddAllMissingSkills}
+                                        >
+                                            + Add All
+                                        </Button>
+                                    )}
+                                </div>
+                                <p className="text-[11px] text-amber-800/80 dark:text-amber-400/90">
+                                    These keywords are in the job description but missing from your skills. <strong>Click any keyword to add it</strong> to your resume:
+                                </p>
+                                <div className="flex flex-wrap gap-1.5 pt-0.5">
+                                    {remainingMissing.map((skill: string, idx: number) => (
+                                        <button
+                                            key={idx}
+                                            type="button"
+                                            onClick={() => handleAddMissingSkill(skill)}
+                                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-900 hover:bg-amber-200 dark:bg-amber-900/60 dark:text-amber-200 dark:hover:bg-amber-800 border border-amber-300 dark:border-amber-700 transition-all cursor-pointer shadow-sm hover:scale-105 active:scale-95"
+                                            title={`Click to add "${skill}" to your skills`}
+                                        >
+                                            <Plus className="h-3 w-3 text-amber-700 dark:text-amber-300" />
+                                            <span>{skill}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        ) : missingSkills.length > 0 ? (
+                            <div className="p-3 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 rounded-lg flex items-center gap-2 text-xs text-emerald-800 dark:text-emerald-300 font-medium">
+                                <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                                <span>All suggested job description keywords have been added to your skills!</span>
+                            </div>
+                        ) : null}
+
+                        {/* Current Matched Skills Display */}
+                        <div className="space-y-2">
+                            <Label className="text-xs text-muted-foreground">Current Hard Skills (Comma Separated)</Label>
+                            <Textarea
+                                value={Array.isArray(data.skills?.hard) ? data.skills.hard.join(", ") : (data.skills?.hard || "")}
+                                onChange={(e) => {
+                                    const list = e.target.value.split(",").map((s: string) => s.trim());
+                                    handleChange("skills", "hard", list);
+                                }}
+                                className="min-h-[120px]"
+                            />
+                            <p className="text-xs text-muted-foreground">Editing the text area updates your resume preview live.</p>
+                        </div>
                     </CardContent>
                 </Card>
             </TabsContent>
@@ -260,3 +329,4 @@ function EditorTabsContent({ data, setData, improvements, missingSkills, handleC
         </Tabs>
     );
 }
+

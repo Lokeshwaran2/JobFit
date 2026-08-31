@@ -17,7 +17,7 @@ export function ResumeBuilder({
     jobDescription,
     atsScore,
     improvements,
-    missingSkills,
+    missingSkills = [],
     isPro,
     credits
 }: {
@@ -33,15 +33,36 @@ export function ResumeBuilder({
     const [resumeData, setResumeData] = useState(initialData);
     const isDesktop = useMediaQuery("(min-width: 768px)");
 
-    //import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+    // Calculate live dynamic ATS score based on candidate's added missing keywords
+    const totalMissing = missingSkills.length;
+    const existingSkillsList: string[] = Array.isArray(resumeData.skills?.hard)
+        ? resumeData.skills.hard.map((s: string) => s.trim().toLowerCase())
+        : (typeof resumeData.skills?.hard === "string" ? resumeData.skills.hard.split(",").map((s: string) => s.trim().toLowerCase()) : []);
 
-    // ... inside the component ...
+    const addedMissingCount = missingSkills.filter(
+        (skill: string) => existingSkillsList.includes(skill.trim().toLowerCase())
+    ).length;
+
+    const baseScore = improvements?.originalScore || (totalMissing > 0 ? Math.max(35, atsScore - Math.round(totalMissing * 3)) : atsScore);
+    const targetScore = atsScore;
+
+    const liveAtsScore = totalMissing > 0
+        ? Math.min(99, baseScore + Math.round((targetScore - baseScore) * (addedMissingCount / totalMissing)))
+        : atsScore;
+
+    const dynamicScoreBreakdown = {
+        ...improvements?.scoreBreakdown,
+        originalScore: baseScore,
+        targetScore: targetScore,
+        scoreGain: liveAtsScore - baseScore,
+        percentageGain: baseScore > 0 ? Math.round(((liveAtsScore - baseScore) / baseScore) * 100) : 0
+    };
 
     if (!isDesktop) {
         return (
             <div className="h-full w-full flex flex-col">
                 <div className="flex-none">
-                    <AtsScoreHeader score={atsScore} scoreBreakdown={improvements?.scoreBreakdown} />
+                    <AtsScoreHeader score={liveAtsScore} scoreBreakdown={dynamicScoreBreakdown} />
                     <div className="max-w-5xl mx-auto px-4">
                         <ImprovementSummary stats={improvements} />
                     </div>
@@ -88,7 +109,7 @@ export function ResumeBuilder({
         <div className="h-full w-full flex flex-col">
             {/* ATS Score and Improvements */}
             <div className="flex-none">
-                <AtsScoreHeader score={atsScore} scoreBreakdown={improvements?.scoreBreakdown} />
+                <AtsScoreHeader score={liveAtsScore} scoreBreakdown={dynamicScoreBreakdown} />
                 <div className="max-w-5xl mx-auto px-4">
                     <ImprovementSummary stats={improvements} />
                 </div>
