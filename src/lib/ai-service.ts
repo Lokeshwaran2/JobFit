@@ -33,11 +33,42 @@ export class AiService {
             return parsed;
           }
         } catch {
-          // Fall back to candidate search if outer parse fails
+          // Fall back if exact outer parse fails
         }
       }
 
-      // 4. Fallback search for outer valid JSON candidate
+      // 4. Auto-repair truncated JSON (e.g. missing trailing brackets/braces from token limit)
+      if (startIndex !== -1) {
+        try {
+          let repaired = cleaned.substring(startIndex).trim();
+          const quoteCount = (repaired.match(/(?<!\\)"/g) || []).length;
+          if (quoteCount % 2 !== 0) {
+            repaired += '"';
+          }
+          repaired = repaired.replace(/,\s*$/, "");
+
+          const openBraces = (repaired.match(/\{/g) || []).length;
+          const closeBraces = (repaired.match(/\}/g) || []).length;
+          const openBrackets = (repaired.match(/\[/g) || []).length;
+          const closeBrackets = (repaired.match(/\]/g) || []).length;
+
+          for (let i = 0; i < openBrackets - closeBrackets; i++) {
+            repaired += "]";
+          }
+          for (let i = 0; i < openBraces - closeBraces; i++) {
+            repaired += "}";
+          }
+
+          const parsed = JSON.parse(repaired);
+          if (typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed)) {
+            return parsed;
+          }
+        } catch {
+          // Fall back to candidate search
+        }
+      }
+
+      // 5. Fallback search for outer valid JSON candidate
       const rightIndices: number[] = [];
       for (let i = cleaned.length - 1; i >= 0; i--) {
         if (cleaned[i] === '}') rightIndices.push(i);
@@ -108,6 +139,7 @@ export class AiService {
       model,
       messages: [{ role: "system", content: "You are an API that outputs strictly valid JSON. Do not output anything else. Do not wrap in markdown code blocks. Start your response with '{'." }, { role: "user", content: prompt }],
       temperature: 0,
+      max_tokens: 8192,
     });
 
     return this.parseJsonFromOutput(response.choices[0].message.content || "{}");
@@ -140,6 +172,7 @@ export class AiService {
       model,
       messages: [{ role: "system", content: "You are an API that outputs strictly valid JSON. Do not output anything else. Do not wrap in markdown code blocks. Start your response with '{'." }, { role: "user", content: prompt }],
       temperature: 0,
+      max_tokens: 8192,
     });
 
     return this.parseJsonFromOutput(response.choices[0].message.content || "{}");
@@ -170,31 +203,20 @@ export class AiService {
          - Use Google X-Y-Z formula.
          - Set "isOptimized" to true for every rewritten bullet.
       4. Skills Section Optimization:
-         - Reorder "hard" skills to match JD.
+         - Reorder existing candidate "hard" skills to align with JD.
+         - DO NOT auto-inject unmentioned skills into candidate's hard skills array. Put all missing JD skills into the "missingSkills" array so the candidate can interactively select and add them via UI buttons.
          - USE SYNONYMS: If a skill has a common synonym (e.g. "React" / "React.js"), use the format "Term / Synonym" to capture both.
          - EXTRACT TOOLS: Populate a separate "tools" array in the skills object with specific tools (Git, Docker, VS Code, Jira, etc.).
-      5. GENERATE IMPROVEMENT STATS:
-         - Count how many bullet points were rewritten.
-         - List specific keywords added.
-         - Identify new action verbs used.
-      6. PERFORM 95+ SCORE ANALYSIS (Strict 10-point check on the NEWLY GENERATED content):
-         - Analyze against these 10 factors:
-           1. Job Title Alignment: Exact match to JD title?
-           2. Keyword Placement: Keywords in Title/Experience/Summary?
-           3. Quantified Impact: Do at least 3 bullets have metrics?
-           4. Action Verb Diversity: Are verbs varied?
-           5. Skill Synonyms: Are synonyms used?
-           6. Tools Section: Is there a Tools & Environment section?
-           7. Project Tech Stack: Do projects list tech stack?
-           8. Soft Skills: Are leadership/collab terms present?
-           9. Location/Availability: Included?
-           10. Section Order: Summary -> Skills -> Experience -> Projects -> Education?
-      
-      7. CALCULATE FINAL ATS SCORE (CRITICAL):
-         - SCORE LOGIC: Start with a base of 85.
-         - Add +1.5 points for every PASSED check in the 10-point analysis above.
-         - If Job Title, Metrics, and Tools checks pass, the score MUST be above 95. Max score: 99.
-      8. OUTPUT MUST BE VALID JSON ONLY. NO MARKDOWN. NO CODE BLOCKS.
+      5. GENERATE GENUINE IMPROVEMENT STATS:
+         - Calculate "originalScore": Estimate candidate's original raw resume score against the JD before optimization (0-100) based on missing keywords, title mismatch, and non-quantified bullets.
+         - Calculate "atsScore": The new optimized score (target 90-99).
+         - Calculate "scoreGain": atsScore - originalScore.
+         - Calculate "percentageGain": Math.round(((atsScore - originalScore) / originalScore) * 100).
+         - Count how many experience bullet points were genuinely rewritten.
+         - List key target keywords identified from the job description.
+         - List strong action verbs used.
+      6. PERFORM 95+ SCORE ANALYSIS:
+         - Keep response output compact and valid JSON.
       
       Output Schema (Strict JSON):
       {
@@ -220,25 +242,27 @@ export class AiService {
         },
         "missingSkills": ["string"],
         "atsScore": 95,
+        "originalScore": 52,
         "keywordMatch": 90,
         "improvementStats": {
-            "bulletPointsRewritten": 1,
+            "originalScore": 52,
+            "atsScore": 95,
+            "scoreGain": 43,
+            "percentageGain": 83,
+            "bulletPointsRewritten": 4,
             "keywordsAdded": ["string"],
             "actionVerbsUsed": ["string"],
             "summaryOptimized": true
         },
         "scoreBreakdown": {
             "jobTitleMatch": true,
-            "metricsCount": 1,
+            "metricsCount": true,
             "actionVerbDiversity": true,
             "keywordPlacement": true,
             "skillsSynonyms": true,
             "toolsSection": true,
             "projectTechStack": true,
-            "softSkills": true,
-            "sectionOrder": true,
-            "locationAvailability": true,
-            "checklist": [ { "label": "string", "passed": true, "impact": "string" } ]
+            "softSkills": true
         }
       }
     `;
@@ -247,6 +271,7 @@ export class AiService {
       model,
       messages: [{ role: "system", content: "You are an expert resume writer API. Output strictly valid JSON. Do not output anything else. Do not wrap in markdown code blocks. Start your response with '{'." }, { role: "user", content: prompt }],
       temperature: 0,
+      max_tokens: 8192,
     });
 
     return this.parseJsonFromOutput(response.choices[0].message.content || "{}");

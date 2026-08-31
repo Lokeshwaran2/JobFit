@@ -84,12 +84,17 @@ export function ImprovementSummary({ stats }: ImprovementSummaryProps) {
 
                         {keywordsAdded.length > 0 && (
                             <div className="col-span-full mt-2">
-                                <span className="text-xs font-medium text-emerald-700 dark:text-emerald-400 uppercase tracking-wider mb-2 block">
-                                    Added ATS Keywords
-                                </span>
+                                <div className="flex items-center justify-between mb-2">
+                                    <span className="text-xs font-semibold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider">
+                                        Target ATS Keywords for this Role
+                                    </span>
+                                    <span className="text-[11px] text-emerald-700/80 dark:text-emerald-400/80 font-normal">
+                                        (Add missing keywords in the Skills tab)
+                                    </span>
+                                </div>
                                 <div className="flex flex-wrap gap-2">
                                     {keywordsAdded.map((keyword, i) => (
-                                        <Badge key={i} variant="secondary" className="bg-emerald-100 text-emerald-800 hover:bg-emerald-200 border-none">
+                                        <Badge key={i} variant="secondary" className="bg-emerald-100 text-emerald-900 dark:bg-emerald-900/40 dark:text-emerald-200 hover:bg-emerald-200 border border-emerald-200 dark:border-emerald-800">
                                             {keyword}
                                         </Badge>
                                     ))}
