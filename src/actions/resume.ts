@@ -31,6 +31,30 @@ export async function deleteResume(resumeId: string) {
     revalidatePath("/dashboard");
 }
 
+export async function deleteResumes(resumeIds: string[]) {
+    const session = await auth();
+    const userId = session?.user?.id;
+
+    if (!userId) {
+        throw new Error("Unauthorized");
+    }
+
+    if (!Array.isArray(resumeIds) || resumeIds.length === 0) {
+        return;
+    }
+
+    await prisma.resume.deleteMany({
+        where: {
+            id: {
+                in: resumeIds,
+            },
+            userId: userId,
+        },
+    });
+
+    revalidatePath("/dashboard");
+}
+
 export async function updateResume(resumeId: string, data: any) {
     const session = await auth();
     const userId = session?.user?.id;

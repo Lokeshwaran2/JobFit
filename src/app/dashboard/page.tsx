@@ -5,7 +5,7 @@ import { Plus, FileText } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { Resume } from "@prisma/client";
-import { ResumeCard } from "@/components/dashboard/resume-card";
+import { ResumeList } from "@/components/dashboard/resume-list";
 
 export default async function DashboardPage() {
     const session = await auth();
@@ -65,11 +65,7 @@ export default async function DashboardPage() {
                     </CardContent>
                 </Card>
             ) : (
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {resumes.map((resume: Resume) => (
-                        <ResumeCard key={resume.id} resume={resume} />
-                    ))}
-                </div>
+                <ResumeList resumes={resumes} />
             )}
         </div>
     );
