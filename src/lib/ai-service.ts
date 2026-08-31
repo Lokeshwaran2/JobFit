@@ -11,16 +11,54 @@ export class AiService {
 
   private static parseJsonFromOutput(text: string) {
     try {
-      // Find the first '{' and the last '}'
-      const startIndex = text.indexOf('{');
-      const endIndex = text.lastIndexOf('}');
+      let cleaned = text;
 
-      if (startIndex === -1 || endIndex === -1 || endIndex <= startIndex) {
-        throw new Error("No valid JSON object found in response");
+      // 1. If </think> tag exists (e.g. reasoning models), discard all thought output
+      const lastThinkEnd = cleaned.lastIndexOf('</think>');
+      if (lastThinkEnd !== -1) {
+        cleaned = cleaned.substring(lastThinkEnd + 8);
       }
 
-      const jsonString = text.substring(startIndex, endIndex + 1);
-      return JSON.parse(jsonString);
+      // 2. Strip markdown code fences if present
+      cleaned = cleaned.replace(/```json\s*/gi, "").replace(/```\s*/gi, "").trim();
+
+      // 3. Try parsing the outer-most JSON object first
+      const startIndex = cleaned.indexOf('{');
+      const endIndex = cleaned.lastIndexOf('}');
+      if (startIndex !== -1 && endIndex !== -1 && endIndex > startIndex) {
+        const candidate = cleaned.substring(startIndex, endIndex + 1);
+        try {
+          const parsed = JSON.parse(candidate);
+          if (typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed)) {
+            return parsed;
+          }
+        } catch {
+          // Fall back to candidate search if outer parse fails
+        }
+      }
+
+      // 4. Fallback search for outer valid JSON candidate
+      const rightIndices: number[] = [];
+      for (let i = cleaned.length - 1; i >= 0; i--) {
+        if (cleaned[i] === '}') rightIndices.push(i);
+      }
+
+      for (const endIdx of rightIndices) {
+        const startIdx = cleaned.indexOf('{');
+        if (startIdx !== -1 && startIdx < endIdx) {
+          const candidate = cleaned.substring(startIdx, endIdx + 1);
+          try {
+            const parsed = JSON.parse(candidate);
+            if (typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed)) {
+              return parsed;
+            }
+          } catch {
+            // continue candidate search
+          }
+        }
+      }
+
+      throw new Error("No valid JSON object found in response");
     } catch (error) {
       console.error("JSON Parse Error:", error);
       console.error("Raw Text:", text);
@@ -30,6 +68,7 @@ export class AiService {
 
   static async extractResumeFromText(text: string) {
     const groq = this.getClient();
+    const model = process.env.GROQ_MODEL || "openai/gpt-oss-120b";
     const prompt = `
       You are an expert ATS Resume Parser. 
       Task: Convert the unstructured resume text below into a structured JSON format.
@@ -66,7 +105,7 @@ export class AiService {
     `;
 
     const response = await groq.chat.completions.create({
-      model: "qwen/qwen3.6-27b", // Modified to bypass rate limit (original: llama-3.3-70b-versatile)
+      model,
       messages: [{ role: "system", content: "You are an API that outputs strictly valid JSON. Do not output anything else. Do not wrap in markdown code blocks. Start your response with '{'." }, { role: "user", content: prompt }],
       temperature: 0,
     });
@@ -76,6 +115,7 @@ export class AiService {
 
   static async analyzeJobDescription(jdText: string) {
     const groq = this.getClient();
+    const model = process.env.GROQ_MODEL || "openai/gpt-oss-120b";
     const prompt = `
       You are a Hiring Manager. Analyze this Job Description.
       
@@ -86,10 +126,10 @@ export class AiService {
 
       IMPORTANT: Output strictly valid JSON. Do not include any introductory text, markdown formatting, or code blocks. The first character of your response must be '{'.
 
-      Output Schema (Strict JSON, no markdown):
+      Output Schema (Strict JSON):
       {
-        "role": "string (Job Title)",
-        "keywords": ["string (Top 20 ATS keywords)"],
+        "role": "string",
+        "keywords": ["string"],
         "requiredSkills": ["string"],
         "coreResponsibilities": ["string"],
         "seniorityLevel": "string"
@@ -97,7 +137,7 @@ export class AiService {
     `;
 
     const response = await groq.chat.completions.create({
-      model: "qwen/qwen3.6-27b",
+      model,
       messages: [{ role: "system", content: "You are an API that outputs strictly valid JSON. Do not output anything else. Do not wrap in markdown code blocks. Start your response with '{'." }, { role: "user", content: prompt }],
       temperature: 0,
     });
@@ -107,6 +147,7 @@ export class AiService {
 
   static async rewriteResume(currentResume: any, jdAnalysis: any) {
     const groq = this.getClient();
+    const model = process.env.GROQ_MODEL || "openai/gpt-oss-120b";
     const prompt = `
       You are an expert Resume Writer & ATS Optimizer.
       
@@ -114,7 +155,7 @@ export class AiService {
       
       Target Job Profile:
       Role: ${jdAnalysis.role}
-      Keywords to Integrate: ${jdAnalysis.keywords.join(", ")}
+      Keywords to Integrate: ${(jdAnalysis.keywords || []).join(", ")}
       
       Candidate Resume (JSON):
       ${JSON.stringify(currentResume)}
@@ -138,29 +179,27 @@ export class AiService {
          - Identify new action verbs used.
       6. PERFORM 95+ SCORE ANALYSIS (Strict 10-point check on the NEWLY GENERATED content):
          - Analyze against these 10 factors:
-           1. Job Title Alignment: Exact match to JD title? (Should be YES now)
+           1. Job Title Alignment: Exact match to JD title?
            2. Keyword Placement: Keywords in Title/Experience/Summary?
-           3. Quantified Impact: Do at least 3 bullets have metrics? (Should be YES now)
+           3. Quantified Impact: Do at least 3 bullets have metrics?
            4. Action Verb Diversity: Are verbs varied?
-           5. Skill Synonyms: Are synonyms used? (Should be YES now)
-           6. Tools Section: Is there a Tools & Environment section? (Should be YES now)
+           5. Skill Synonyms: Are synonyms used?
+           6. Tools Section: Is there a Tools & Environment section?
            7. Project Tech Stack: Do projects list tech stack?
-           8. Soft Skills: Are leadership/collab terms present? (Should be YES now)
+           8. Soft Skills: Are leadership/collab terms present?
            9. Location/Availability: Included?
            10. Section Order: Summary -> Skills -> Experience -> Projects -> Education?
       
       7. CALCULATE FINAL ATS SCORE (CRITICAL):
          - SCORE LOGIC: Start with a base of 85.
          - Add +1.5 points for every PASSED check in the 10-point analysis above.
-         - If Job Title, Metrics, and Tools checks pass, the score MUST be above 95.
-         - Max score: 99.
-         - Do not be conservative. The resume has been optimized to be perfect.
-      8. OUTPUT MUST BE VALID JSON ONLY. NO MARKKDOWN. NO CODE BLOCKS.
+         - If Job Title, Metrics, and Tools checks pass, the score MUST be above 95. Max score: 99.
+      8. OUTPUT MUST BE VALID JSON ONLY. NO MARKDOWN. NO CODE BLOCKS.
       
       Output Schema (Strict JSON):
       {
         "structuredData": { 
-             "personalInfo": { "title": "string (EXACT MATCH TO JD)", ... },
+             "personalInfo": { "name": "string", "email": "string", "phone": "string", "linkedin": "string", "title": "string" },
              "summary": "string",
              "skills": { 
                 "hard": ["string"], 
@@ -173,38 +212,39 @@ export class AiService {
                  "role": "string", 
                  "startDate": "string", 
                  "endDate": "string", 
-                 "description": [ { "text": "string", "isOptimized": boolean } ] 
+                 "description": [ { "text": "string", "isOptimized": true } ] 
                } 
              ],
-             ...other fields...
+             "projects": [ { "name": "string", "description": "string", "link": "string" } ],
+             "education": [ { "institution": "string", "degree": "string", "year": "string" } ]
         },
-        "missingSkills": ["string (skills in JD but not in Resume)"],
-        "atsScore": number,
-        "keywordMatch": number,
+        "missingSkills": ["string"],
+        "atsScore": 95,
+        "keywordMatch": 90,
         "improvementStats": {
-            "bulletPointsRewritten": number,
+            "bulletPointsRewritten": 1,
             "keywordsAdded": ["string"],
             "actionVerbsUsed": ["string"],
-            "summaryOptimized": boolean
+            "summaryOptimized": true
         },
         "scoreBreakdown": {
-            "jobTitleMatch": boolean,
-            "metricsCount": number,
-            "actionVerbDiversity": boolean,
-            "keywordPlacement": boolean,
-            "skillsSynonyms": boolean,
-            "toolsSection": boolean,
-            "projectTechStack": boolean,
-            "softSkills": boolean,
-            "sectionOrder": boolean,
-            "locationAvailability": boolean,
-            "checklist": [ { "label": "string", "passed": boolean, "impact": "string (e.g. '+5 pts')" } ]
+            "jobTitleMatch": true,
+            "metricsCount": 1,
+            "actionVerbDiversity": true,
+            "keywordPlacement": true,
+            "skillsSynonyms": true,
+            "toolsSection": true,
+            "projectTechStack": true,
+            "softSkills": true,
+            "sectionOrder": true,
+            "locationAvailability": true,
+            "checklist": [ { "label": "string", "passed": true, "impact": "string" } ]
         }
       }
     `;
 
     const response = await groq.chat.completions.create({
-      model: "qwen/qwen3.6-27b",
+      model,
       messages: [{ role: "system", content: "You are an expert resume writer API. Output strictly valid JSON. Do not output anything else. Do not wrap in markdown code blocks. Start your response with '{'." }, { role: "user", content: prompt }],
       temperature: 0,
     });

@@ -17,10 +17,15 @@ export async function UserAccountNav() {
     if (!session?.user) return null;
 
     // Fetch fresh user data
-    const dbUser = await prisma.user.findUnique({
-        where: { id: session.user.id },
-        select: { credits: true, isPro: true }
-    });
+    let dbUser = null;
+    try {
+        dbUser = await prisma.user.findUnique({
+            where: { id: session.user.id },
+            select: { credits: true, isPro: true }
+        });
+    } catch (error) {
+        console.error("Database user fetch error in nav:", error);
+    }
 
     return (
         <DropdownMenu>
