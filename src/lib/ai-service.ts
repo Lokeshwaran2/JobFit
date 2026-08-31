@@ -139,7 +139,7 @@ export class AiService {
       model,
       messages: [{ role: "system", content: "You are an API that outputs strictly valid JSON. Do not output anything else. Do not wrap in markdown code blocks. Start your response with '{'." }, { role: "user", content: prompt }],
       temperature: 0,
-      max_tokens: 8192,
+      max_tokens: 3500,
     });
 
     return this.parseJsonFromOutput(response.choices[0].message.content || "{}");
@@ -153,7 +153,7 @@ export class AiService {
       
       Job Description:
       """
-      ${jdText.slice(0, 10000)}
+      ${jdText.slice(0, 5000)}
       """
 
       IMPORTANT: Output strictly valid JSON. Do not include any introductory text, markdown formatting, or code blocks. The first character of your response must be '{'.
@@ -172,7 +172,7 @@ export class AiService {
       model,
       messages: [{ role: "system", content: "You are an API that outputs strictly valid JSON. Do not output anything else. Do not wrap in markdown code blocks. Start your response with '{'." }, { role: "user", content: prompt }],
       temperature: 0,
-      max_tokens: 8192,
+      max_tokens: 2000,
     });
 
     return this.parseJsonFromOutput(response.choices[0].message.content || "{}");
@@ -188,10 +188,10 @@ export class AiService {
       
       Target Job Profile:
       Role: ${jdAnalysis.role}
-      Keywords to Integrate: ${(jdAnalysis.keywords || []).join(", ")}
+      Keywords to Integrate: ${(jdAnalysis.keywords || []).slice(0, 15).join(", ")}
       
       Candidate Resume (JSON):
-      ${JSON.stringify(currentResume)}
+      ${JSON.stringify(currentResume).slice(0, 8000)}
       
       Instructions:
       1. FORCE Job Title Match: You MUST replace "personalInfo.title" with the EXACT target role title from the JD. This is critical for ATS.
@@ -271,7 +271,7 @@ export class AiService {
       model,
       messages: [{ role: "system", content: "You are an expert resume writer API. Output strictly valid JSON. Do not output anything else. Do not wrap in markdown code blocks. Start your response with '{'." }, { role: "user", content: prompt }],
       temperature: 0,
-      max_tokens: 8192,
+      max_tokens: 3500,
     });
 
     return this.parseJsonFromOutput(response.choices[0].message.content || "{}");
