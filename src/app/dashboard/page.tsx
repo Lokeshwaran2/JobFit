@@ -13,16 +13,25 @@ export default async function DashboardPage() {
 
     if (!userId) return null;
 
-    const [resumes, dbUser] = await Promise.all([
-        prisma.resume.findMany({
-            where: { userId },
-            orderBy: { createdAt: "desc" },
-        }),
-        prisma.user.findUnique({
-            where: { id: userId },
-            select: { isPro: true, credits: true }
-        })
-    ]);
+    let resumes: Resume[] = [];
+    let dbUser: { isPro: boolean; credits: number } | null = null;
+
+    try {
+        const [resumesData, userData] = await Promise.all([
+            prisma.resume.findMany({
+                where: { userId },
+                orderBy: { createdAt: "desc" },
+            }),
+            prisma.user.findUnique({
+                where: { id: userId },
+                select: { isPro: true, credits: true }
+            })
+        ]);
+        resumes = resumesData;
+        dbUser = userData;
+    } catch (error) {
+        console.error("Dashboard DB fetch error:", error);
+    }
 
     const newResumeHref = (dbUser?.isPro || (dbUser?.credits ?? 0) > 0) ? "/builder/new" : "/subscription";
 

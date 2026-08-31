@@ -24,10 +24,14 @@ export default async function Home() {
 
   let dbUser = null;
   if (session?.user?.id) {
-    dbUser = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { isPro: true, credits: true }
-    });
+    try {
+      dbUser = await prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { isPro: true, credits: true }
+      });
+    } catch (error) {
+      console.error("Database user fetch error:", error);
+    }
   }
 
   const faqSchema = {
