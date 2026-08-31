@@ -28,31 +28,45 @@ export async function POST(req: Request) {
 
         // Check if AutoPay / Subscription is requested
         if (isAutoPay || plan === "jobhunt") {
-            const planId = process.env.RAZORPAY_JOBHUNT_PLAN_ID;
+            try {
+                let planId = process.env.RAZORPAY_JOBHUNT_PLAN_ID;
 
-            if (planId) {
-                try {
-                    const subscription = await razorpay.subscriptions.create({
-                        plan_id: planId,
-                        customer_notify: 1,
-                        total_count: 12, // 12 billing cycles (monthly)
-                        notes: {
-                            userId: session.user.id,
-                            plan: plan,
-                            autoPay: "true"
+                // Dynamically create Razorpay Plan if not pre-configured in .env
+                if (!planId) {
+                    const dynamicPlan = await razorpay.plans.create({
+                        period: "monthly",
+                        interval: 1,
+                        item: {
+                            name: plan === "starter" ? "JobFit Starter Plan" : "JobFit Job Hunt Mode",
+                            amount: amountInPaise,
+                            currency: "INR",
+                            description: "Monthly AutoPay Subscription for JobFit"
                         }
                     });
-
-                    return NextResponse.json({
-                        subscriptionId: subscription.id,
-                        isAutoPay: true,
-                        amount: amountInPaise,
-                        currency: "INR",
-                        keyId: process.env.RAZORPAY_KEY_ID
-                    });
-                } catch (subError) {
-                    console.warn("[RAZORPAY_SUB_CREATE_FALLBACK] Could not create subscription, falling back to auto-recurring order notes:", subError);
+                    planId = dynamicPlan.id;
                 }
+
+                // Create Razorpay Subscription ID for AutoPay UPI / Mandate / Card Standing Instructions
+                const subscription = await razorpay.subscriptions.create({
+                    plan_id: planId,
+                    customer_notify: 1,
+                    total_count: 12, // 12 monthly billing cycles
+                    notes: {
+                        userId: session.user.id,
+                        plan: plan,
+                        autoPay: "true"
+                    }
+                });
+
+                return NextResponse.json({
+                    subscriptionId: subscription.id,
+                    isAutoPay: true,
+                    amount: amountInPaise,
+                    currency: "INR",
+                    keyId: process.env.RAZORPAY_KEY_ID
+                });
+            } catch (subError) {
+                console.error("[RAZORPAY_SUBSCRIPTION_CREATION_FAILED]", subError);
             }
         }
 
