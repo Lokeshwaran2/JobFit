@@ -94,15 +94,15 @@ export function ResumeUploadForm() {
             <Card>
                 <CardHeader>
                     <CardTitle>2. Your Resume</CardTitle>
-                    <CardDescription>Upload your current resume (PDF or DOCX).</CardDescription>
+                    <CardDescription>Upload your current resume (PDF, DOCX, or DOC).</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="grid w-full max-w-sm items-center gap-2">
-                        <Label htmlFor="resume">Resume (PDF/DOCX)</Label>
+                        <Label htmlFor="resume">Resume (PDF / DOCX / DOC)</Label>
                         <Input
                             id="resume"
                             type="file"
-                            accept=".pdf, .docx"
+                            accept=".pdf, .docx, .doc"
                             {...register("resumeFile", { required: true })}
                         />
                         {errors.resumeFile && <span className="text-sm text-red-500">File Required</span>}
