@@ -33,10 +33,12 @@ export async function parseFileToText(file: File): Promise<string> {
         return parsePdfToText(buffer);
     } else if (
         mimeType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
-        name.endsWith(".docx")
+        mimeType === "application/msword" ||
+        name.endsWith(".docx") ||
+        name.endsWith(".doc")
     ) {
         return parseDocxToText(buffer);
     } else {
-        throw new Error("Unsupported file type. Please upload a PDF or DOCX file.");
+        throw new Error("Unsupported file type. Please upload a PDF or DOCX/DOC file.");
     }
 }
