@@ -162,7 +162,7 @@ export class AiService {
       {
         "role": "string",
         "keywords": ["string"],
-        "requiredSkills": ["string"],
+        "requiredSkills": ["string (MUST be concrete technical skills, languages, frameworks, databases, or tools like 'PostgreSQL', 'Docker', 'React'. NEVER include locations like 'Bengaluru', 'Remote', or generic job phrases like 'High volume applications', 'Fast paced environment')"],
         "coreResponsibilities": ["string"],
         "seniorityLevel": "string"
       }
@@ -205,6 +205,7 @@ export class AiService {
       4. Skills Section Optimization:
          - Reorder existing candidate "hard" skills to align with JD.
          - DO NOT auto-inject unmentioned skills into candidate's hard skills array. Put all missing JD skills into the "missingSkills" array so the candidate can interactively select and add them via UI buttons.
+         - "missingSkills" MUST strictly be concrete technical skills, tools, or languages (e.g. 'PostgreSQL', 'Docker', 'Redis'). NEVER output locations (e.g. 'Bengaluru', 'Remote'), years of experience, or non-skills (e.g. 'High volume applications', 'Ambiguous environments', 'Inclusive team culture').
          - USE SYNONYMS: If a skill has a common synonym (e.g. "React" / "React.js"), use the format "Term / Synonym" to capture both.
          - EXTRACT TOOLS: Populate a separate "tools" array in the skills object with specific tools (Git, Docker, VS Code, Jira, etc.).
       5. GENERATE GENUINE IMPROVEMENT STATS:

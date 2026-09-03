@@ -28,6 +28,10 @@ model User {
   stripeCurrentPeriodEnd DateTime?
 
   resumes Resume[]
+  skillGaps           UserSkillGap[]
+  skillGapOccurrences SkillGapOccurrence[]
+  learningProgress    LearningProgress[]
+  profileSkills       UserSkill[]
 }
 
 model Account {
@@ -87,4 +91,70 @@ model Resume {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  skillGapOccurrences SkillGapOccurrence[]
+}
+
+model UserSkillGap {
+  id              String    @id @default(cuid())
+  userId          String
+  canonicalSkill  String
+  missingCount    Int       @default(1)
+  firstDetectedAt DateTime  @default(now())
+  lastDetectedAt  DateTime  @default(now())
+  sourceCount     Int       @default(1)
+  status          String    @default("learning") // "learning" | "acquired"
+  acquiredAt      DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, canonicalSkill])
+  @@index([userId, missingCount(sort: Desc)])
+  @@index([userId, status])
+}
+
+model SkillGapOccurrence {
+  id             String   @id @default(cuid())
+  userId         String
+  canonicalSkill String
+  originalSkill  String?
+  resumeId       String?
+  jobTitle       String?
+  targetJobDesc  String?  @db.Text
+  detectedAt     DateTime @default(now())
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resume Resume? @relation(fields: [resumeId], references: [id], onDelete: SetNull)
+
+  @@unique([userId, canonicalSkill, resumeId])
+  @@index([userId, canonicalSkill])
+  @@index([userId, detectedAt(sort: Desc)])
+}
+
+model LearningProgress {
+  id             String   @id @default(cuid())
+  userId         String
+  canonicalSkill String
+  stepId         String
+  status         String   @default("not_started") // "not_started" | "in_progress" | "completed"
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, canonicalSkill, stepId])
+  @@index([userId, canonicalSkill])
+}
+
+model UserSkill {
+  id             String   @id @default(cuid())
+  userId         String
+  canonicalSkill String
+  createdAt      DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, canonicalSkill])
 }
