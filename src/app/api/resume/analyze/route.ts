@@ -3,6 +3,8 @@ import { auth } from "@/auth";
 import { parseFileToText } from "@/lib/file-parser";
 import { AiService } from "@/lib/ai-service";
 import { prisma } from "@/lib/prisma";
+import { SkillGapTracker } from "@/lib/skills/skill-gap-tracker";
+import { isValidSkill } from "@/lib/skills/skill-validator";
 
 export async function POST(req: NextRequest) {
     try {
@@ -57,6 +59,10 @@ export async function POST(req: NextRequest) {
         // 3. Tailor Resume (The Core Match)
         const tailoredResult = await AiService.rewriteResume(resumeData, jdData);
 
+        // Filter missingSkills so places and non-skills are never saved as skill gaps
+        const filteredMissingSkills = (Array.isArray(tailoredResult.missingSkills) ? tailoredResult.missingSkills : [])
+            .filter((s: string) => typeof s === "string" && isValidSkill(s));
+
         // 4. Save to DB
         const resume = await prisma.resume.create({
             data: {
@@ -66,12 +72,39 @@ export async function POST(req: NextRequest) {
                 targetJobDesc: sanitize(jdText),
                 // tailoredResult contains structuredData, missingSkills, atsScore
                 structuredData: tailoredResult.structuredData,
-                missingSkills: tailoredResult.missingSkills || [],
+                missingSkills: filteredMissingSkills,
                 atsScore: tailoredResult.atsScore || 0,
                 keywordMatch: tailoredResult.keywordMatch || 0,
                 improvements: tailoredResult.improvementStats || {},
             }
         });
+
+        // 5. Track Missing Skill Gaps & Update Learning Priorities (Resilient)
+        try {
+            const rawJdSkills = [
+                ...(Array.isArray(jdData.requiredSkills) ? jdData.requiredSkills.filter(isValidSkill) : []),
+                ...(Array.isArray(jdData.keywords) ? jdData.keywords.filter(isValidSkill) : []),
+                ...filteredMissingSkills,
+            ];
+
+            const rawCandidateSkills = [
+                ...(Array.isArray(resumeData?.skills?.hard) ? resumeData.skills.hard : []),
+                ...(Array.isArray(resumeData?.skills?.soft) ? resumeData.skills.soft : []),
+                ...(Array.isArray(resumeData?.skills?.tools) ? resumeData.skills.tools : []),
+                ...(Array.isArray(tailoredResult?.structuredData?.skills?.hard) ? tailoredResult.structuredData.skills.hard : []),
+            ];
+
+            await SkillGapTracker.recordSkillGaps({
+                userId: dbUserId,
+                resumeId: resume.id,
+                jobTitle: jdData.role || "Job Application",
+                targetJobDesc: sanitize(jdText),
+                jdSkills: rawJdSkills,
+                candidateSkills: rawCandidateSkills,
+            });
+        } catch (skillGapErr) {
+            console.error("Skill gap tracking warning (non-fatal):", skillGapErr);
+        }
 
         // Decrement Credits if not Pro
         if (!dbUser.isPro) {

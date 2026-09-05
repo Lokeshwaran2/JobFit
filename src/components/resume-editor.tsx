@@ -116,9 +116,14 @@ function EditorTabsContent({ data, setData, improvements, missingSkills = [], ha
         ? data.skills.hard.map((s: string) => s.trim().toLowerCase())
         : (typeof data.skills?.hard === "string" ? data.skills.hard.split(",").map((s: string) => s.trim().toLowerCase()) : []);
 
+    const [showAllMissing, setShowAllMissing] = useState(false);
+
     const remainingMissing = missingSkills.filter(
         (skill: string) => !existingHardSkills.includes(skill.trim().toLowerCase())
     );
+
+    const displayedMissing = showAllMissing ? remainingMissing : remainingMissing.slice(0, 5);
+    const hasMoreMissing = remainingMissing.length > 5;
 
     const handleAddMissingSkill = (skillToAdd: string) => {
         const currentList = Array.isArray(data.skills?.hard)
@@ -287,8 +292,8 @@ function EditorTabsContent({ data, setData, improvements, missingSkills = [], ha
                                 <p className="text-[11px] text-amber-800/80 dark:text-amber-400/90">
                                     These keywords are in the job description but missing from your skills. <strong>Click any keyword to add it</strong> to your resume:
                                 </p>
-                                <div className="flex flex-wrap gap-1.5 pt-0.5">
-                                    {remainingMissing.map((skill: string, idx: number) => (
+                                <div className="flex flex-wrap gap-1.5 pt-0.5 items-center">
+                                    {displayedMissing.map((skill: string, idx: number) => (
                                         <button
                                             key={idx}
                                             type="button"
@@ -300,6 +305,15 @@ function EditorTabsContent({ data, setData, improvements, missingSkills = [], ha
                                             <span>{skill}</span>
                                         </button>
                                     ))}
+                                    {hasMoreMissing && (
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowAllMissing(!showAllMissing)}
+                                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold text-amber-900 dark:text-amber-200 bg-amber-200/80 hover:bg-amber-300 dark:bg-amber-800/60 dark:hover:bg-amber-700 border border-amber-300 dark:border-amber-600 transition-all cursor-pointer shadow-xs"
+                                        >
+                                            {showAllMissing ? "Show top 5 only" : `+${remainingMissing.length - 5} more (Show all)`}
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         ) : missingSkills.length > 0 ? (
