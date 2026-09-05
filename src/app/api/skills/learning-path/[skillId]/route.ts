@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { SkillGapTracker } from "@/lib/skills/skill-gap-tracker";
+import { SkillLearningEngine } from "@/lib/skills/engine/skill-learning-engine";
 
 /**
  * GET /api/skills/learning-path/[skillId]
- * Returns the structured learning path for a skill along with current user progress.
+ * Returns the personalized, skill-specific, role-aware, free learning path.
+ * Supports query parameters: ?jdId=...&role=...&company=...
  */
 export async function GET(
   req: NextRequest,
@@ -21,7 +23,21 @@ export async function GET(
     const { skillId } = await context.params;
     const decodedSkill = decodeURIComponent(skillId);
 
-    const details = await SkillGapTracker.getSkillGapDetails(userId, decodedSkill);
+    const { searchParams } = new URL(req.url);
+    const jdId = searchParams.get("jdId") || undefined;
+    const role = searchParams.get("role") || undefined;
+    const company = searchParams.get("company") || undefined;
+
+    const [details, personalizedPath] = await Promise.all([
+      SkillGapTracker.getSkillGapDetails(userId, decodedSkill),
+      SkillLearningEngine.generateLearningPath({
+        userId,
+        skill: decodedSkill,
+        jdId,
+        targetRole: role,
+        company,
+      }),
+    ]);
 
     if (!details) {
       return NextResponse.json({ error: "Skill not found" }, { status: 404 });
@@ -29,9 +45,11 @@ export async function GET(
 
     return NextResponse.json({
       success: true,
-      canonicalSkill: details.canonicalSkill,
-      learningPath: details.learningPath,
+      ...personalizedPath, // Section 31 format
+      learningPath: details.learningPath, // Legacy format
       gap: details.gap,
+      occurrences: details.occurrences,
+      personalizedPath,
     });
   } catch (error: any) {
     console.error("[API GET /skills/learning-path/:skillId] Error:", error);

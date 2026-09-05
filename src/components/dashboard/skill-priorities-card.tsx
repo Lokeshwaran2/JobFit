@@ -56,8 +56,10 @@ export function SkillPrioritiesCard() {
     setIsDialogOpen(true);
   };
 
-  // Top 3 highest frequency skills for highlight banner
-  const topHighlights = skills.filter((s) => s.status === "learning").slice(0, 3);
+  // Top 3 highest frequency skills for highlight banner (exclude completed/acquired skills)
+  const topHighlights = skills
+    .filter((s) => s.status === "learning" && (s.progressPercentage || 0) < 100)
+    .slice(0, 3);
 
   // Top 5 skills initially, or all if clicked more
   const displayedSkills = showAll ? skills : skills.slice(0, 5);
@@ -115,7 +117,7 @@ export function SkillPrioritiesCard() {
                 <span className="text-[11px] text-slate-400">Ranked by hiring demand</span>
               </div>
 
-              <div className="grid gap-3 sm:grid-cols-3">
+              <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                 {topHighlights.map((item, index) => {
                   const isTop = index === 0;
                   const isSecond = index === 1;
@@ -157,10 +159,15 @@ export function SkillPrioritiesCard() {
                         Missing in {item.frequency} job application{item.frequency > 1 ? "s" : ""}
                       </p>
 
-                      <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-[11px]">
+                      <div className="mt-1.5 flex items-center gap-1 text-[11px] text-slate-500 dark:text-slate-400">
+                        <span className="font-semibold text-indigo-600 dark:text-indigo-400">Start Here:</span>
+                        <span className="truncate">Personalized Roadmap</span>
+                      </div>
+
+                      <div className="mt-2.5 pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-[11px]">
                         <span className="text-slate-500">Progress: {item.progressPercentage || 0}%</span>
                         <span className="font-semibold text-indigo-600 dark:text-indigo-400 flex items-center gap-0.5 group-hover:translate-x-0.5 transition-transform">
-                          Learn <ArrowRight className="h-3 w-3" />
+                          Continue Learning <ArrowRight className="h-3 w-3" />
                         </span>
                       </div>
                     </div>
@@ -193,14 +200,15 @@ export function SkillPrioritiesCard() {
             </div>
           ) : (
             /* Prioritized Skills Table / List */
-            <div className="border rounded-xl overflow-hidden bg-white dark:bg-slate-900">
-              <div className="grid grid-cols-12 gap-2 px-4 py-2.5 bg-slate-50 dark:bg-slate-800/60 text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800">
-                <div className="col-span-1 text-center">Rank</div>
-                <div className="col-span-4 sm:col-span-4">Skill</div>
-                <div className="col-span-3 sm:col-span-3">Missing Frequency</div>
-                <div className="col-span-2 hidden sm:block">Priority</div>
-                <div className="col-span-4 sm:col-span-2 text-right">Roadmap</div>
-              </div>
+            <div className="border rounded-xl overflow-x-auto bg-white dark:bg-slate-900">
+              <div className="min-w-[480px] sm:min-w-0">
+                <div className="grid grid-cols-12 gap-2 px-4 py-2.5 bg-slate-50 dark:bg-slate-800/60 text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800">
+                  <div className="col-span-1 text-center">Rank</div>
+                  <div className="col-span-4 sm:col-span-4">Skill</div>
+                  <div className="col-span-3 sm:col-span-3">Missing Frequency</div>
+                  <div className="col-span-2 hidden sm:block">Priority</div>
+                  <div className="col-span-4 sm:col-span-2 text-right">Roadmap</div>
+                </div>
 
               <div className="divide-y divide-slate-100 dark:divide-slate-800/80">
                 {displayedSkills.map((item) => (
@@ -242,18 +250,27 @@ export function SkillPrioritiesCard() {
 
                     {/* Priority Badge */}
                     <div className="col-span-2 hidden sm:block">
-                      <Badge
-                        variant="outline"
-                        className={`text-[10px] font-bold uppercase tracking-wider ${
-                          item.priority === "High"
-                            ? "bg-rose-50 text-rose-700 border-rose-300 dark:bg-rose-950/40 dark:text-rose-300"
-                            : item.priority === "Medium"
-                            ? "bg-amber-50 text-amber-800 border-amber-300 dark:bg-amber-950/40 dark:text-amber-300"
-                            : "bg-slate-50 text-slate-700 border-slate-300 dark:bg-slate-800 dark:text-slate-300"
-                        }`}
-                      >
-                        {item.priority}
-                      </Badge>
+                      {item.status === "acquired" || (item.progressPercentage || 0) >= 100 ? (
+                        <Badge
+                          variant="outline"
+                          className="text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border-emerald-300 dark:bg-emerald-950/40 dark:text-emerald-300"
+                        >
+                          Acquired
+                        </Badge>
+                      ) : (
+                        <Badge
+                          variant="outline"
+                          className={`text-[10px] font-bold uppercase tracking-wider ${
+                            item.priority === "High"
+                              ? "bg-rose-50 text-rose-700 border-rose-300 dark:bg-rose-950/40 dark:text-rose-300"
+                              : item.priority === "Medium"
+                              ? "bg-amber-50 text-amber-800 border-amber-300 dark:bg-amber-950/40 dark:text-amber-300"
+                              : "bg-slate-50 text-slate-700 border-slate-300 dark:bg-slate-800 dark:text-slate-300"
+                          }`}
+                        >
+                          {item.priority}
+                        </Badge>
+                      )}
                     </div>
 
                     {/* Action */}
@@ -268,13 +285,22 @@ export function SkillPrioritiesCard() {
                         }}
                       >
                         <BookOpen className="h-3 w-3 mr-1" />
-                        <span className="hidden sm:inline">Learning Path</span>
-                        <span className="sm:hidden">Path</span>
+                        <span className="hidden sm:inline">
+                          {item.status === "acquired" || (item.progressPercentage || 0) >= 100
+                            ? "Review Path"
+                            : "Learning Path"}
+                        </span>
+                        <span className="sm:hidden">
+                          {item.status === "acquired" || (item.progressPercentage || 0) >= 100
+                            ? "Review"
+                            : "Path"}
+                        </span>
                       </Button>
                     </div>
                   </div>
                 ))}
               </div>
+            </div>
 
               {/* Show More / Show Less Toggle Footer */}
               {hasMore && (
@@ -309,11 +335,13 @@ export function SkillPrioritiesCard() {
 
       {/* Learning Path Modal */}
       <SkillLearningPathDialog
+        key={selectedSkill || "none"}
         skillName={selectedSkill}
         isOpen={isDialogOpen}
         onClose={() => {
           setIsDialogOpen(false);
           setSelectedSkill(null);
+          fetchPriorities();
         }}
         onProgressUpdated={fetchPriorities}
       />

@@ -8,6 +8,9 @@ import { prisma } from "@/lib/prisma";
 import { computeMissingSkills, normalizeSkill, isValidSkill } from "./skill-normalization";
 import { calculateSkillPriorities, PrioritizedSkill } from "./priority-calculator";
 import { getLearningPath, StructuredLearningPath } from "./learning-path-service";
+import { SkillLearningEngine } from "./engine/skill-learning-engine";
+import { PersonalizedLearningPathDTO } from "./engine/types";
+import { getCurriculumDefinition } from "./engine/skill-curriculum-registry";
 
 export interface RecordSkillGapsParams {
   userId: string;
@@ -230,19 +233,14 @@ export class SkillGapTracker {
       return [];
     }
 
-    const whereClause: any = { userId };
-    if (filter.status && filter.status !== "all") {
-      whereClause.status = filter.status;
-    }
-
     let gaps = await prisma.userSkillGap.findMany({
-      where: whereClause,
+      where: { userId },
     });
 
-    if (gaps.length === 0 && (!filter.status || filter.status === "learning" || filter.status === "all")) {
+    if (gaps.length === 0) {
       await SkillGapTracker.syncResumesIfEmpty(userId);
       gaps = await prisma.userSkillGap.findMany({
-        where: whereClause,
+        where: { userId },
       });
     }
 
@@ -264,17 +262,76 @@ export class SkillGapTracker {
         .set(rec.stepId, rec.status as "not_started" | "in_progress" | "completed");
     }
 
-    // Attach computed progressPercentage to each gap
+    // Attach computed progressPercentage to each gap and auto-promote 100% completed gaps
+    const autoAcquirePromises: Promise<any>[] = [];
     const gapsWithProgress = gaps.map((gap) => {
       const stepMap = progressMapBySkill.get(gap.canonicalSkill) || new Map();
-      const path = getLearningPath(gap.canonicalSkill, stepMap);
+
+      if (gap.status === "acquired") {
+        return {
+          ...gap,
+          progressPercentage: 100,
+        };
+      }
+
+      let progressPercentage = 0;
+      // Check if user has progress recorded for this skill in the learning engine
+      if (stepMap.size > 0) {
+        const completedSteps = Array.from(stepMap.values()).filter((s) => s === "completed").length;
+        const curDef = getCurriculumDefinition(gap.canonicalSkill);
+
+        // Total trackable milestones: topics + implementation tasks + 1 capstone
+        const totalItems = curDef
+          ? curDef.modules.flatMap((m) => m.topics).length + curDef.implementationTasks.length + 1
+          : Math.max(stepMap.size, 6);
+
+        progressPercentage = Math.min(100, Math.round((completedSteps / totalItems) * 100));
+      } else {
+        const path = getLearningPath(gap.canonicalSkill, stepMap);
+        progressPercentage = path.progressPercentage || 0;
+      }
+
+      // If user achieved 100% progress, auto-complete and promote to "acquired"
+      if (progressPercentage >= 100) {
+        autoAcquirePromises.push(
+          SkillGapTracker.resolveSkillGap(userId, gap.canonicalSkill).catch((err) => {
+            console.error("[SkillGapTracker] Error auto-resolving completed skill gap:", err);
+          })
+        );
+        return {
+          ...gap,
+          status: "acquired",
+          acquiredAt: gap.acquiredAt || new Date(),
+          progressPercentage: 100,
+        };
+      }
+
       return {
         ...gap,
-        progressPercentage: path.progressPercentage,
+        progressPercentage,
       };
     });
 
-    return calculateSkillPriorities(gapsWithProgress);
+    if (autoAcquirePromises.length > 0) {
+      await Promise.all(autoAcquirePromises);
+    }
+
+    // Filter by status:
+    // "learning" => active gaps (status === "learning" and progress < 100)
+    // "acquired" => acquired/completed skills (status === "acquired" or progress >= 100)
+    // "all" => all skills
+    let filteredGaps = gapsWithProgress;
+    if (filter.status === "learning") {
+      filteredGaps = gapsWithProgress.filter(
+        (g) => g.status === "learning" && (g.progressPercentage ?? 0) < 100
+      );
+    } else if (filter.status === "acquired") {
+      filteredGaps = gapsWithProgress.filter(
+        (g) => g.status === "acquired" || (g.progressPercentage ?? 0) >= 100
+      );
+    }
+
+    return calculateSkillPriorities(filteredGaps);
   }
 
   /**
@@ -330,12 +387,17 @@ export class SkillGapTracker {
     }
 
     const learningPath = getLearningPath(canonicalSkill, progressMap);
+    const personalizedPath = await SkillLearningEngine.generateLearningPath({
+      userId,
+      skill: canonicalSkill,
+    });
 
     return {
       canonicalSkill,
       gap,
       occurrences,
       learningPath,
+      personalizedPath,
     };
   }
 
@@ -385,10 +447,17 @@ export class SkillGapTracker {
     }
 
     const path = getLearningPath(canonicalSkill, progressMap);
+    const progressPercentage = path.progressPercentage || 0;
+
+    if (progressPercentage >= 100) {
+      await SkillGapTracker.resolveSkillGap(userId, canonicalSkill).catch((err) => {
+        console.error("[SkillGapTracker] Error auto-resolving completed skill gap:", err);
+      });
+    }
 
     return {
       canonicalSkill,
-      progressPercentage: path.progressPercentage || 0,
+      progressPercentage,
       status,
     };
   }
