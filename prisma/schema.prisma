@@ -34,6 +34,13 @@ model User {
   profileSkills       UserSkill[]
   skillLevels         UserSkillLevel[]
   assessments         SkillAssessment[]
+
+  // Connected Profile URLs and safe profile data
+  githubUrl           String?
+  linkedinUrl         String?
+  linkedinData        Json? // Safe pasted/imported profile info: { headline, about, experience, skills, etc. }
+  profileScores       ProfileScore[]
+  profileChecks       ProfileScoreCheck[]
 }
 
 model Account {
@@ -95,6 +102,52 @@ model Resume {
   updatedAt DateTime @updatedAt
 
   skillGapOccurrences SkillGapOccurrence[]
+  profileScores       ProfileScore[]
+}
+
+model ProfileScore {
+  id           String   @id @default(cuid())
+  userId       String
+  resumeId     String?
+  jobId        String?
+  platform     String   // "github" | "linkedin" | "overall"
+  score        Int      // 0 - 100
+  targetRole   String?
+  breakdown    Json     // Detailed category scores
+  evidence     Json?    // Matched skills, repository/experience evidence
+  strengths    String[] // "Why" points
+  improvements String[] // "Needs improvement" points
+  assessedAt   DateTime @default(now())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resume Resume? @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+
+  @@index([userId, resumeId, platform])
+  @@index([userId, assessedAt(sort: Desc)])
+}
+
+model ProfileScoreCheck {
+  id              String   @id @default(cuid())
+  userId          String
+  role            String
+  company         String?
+  inputType       String   // "jd" | "role"
+  jdSnippet       String?  @db.Text
+  githubScore     Int?
+  linkedinScore   Int?
+  overallScore    Int
+  breakdown       Json     // { github, linkedin, overall }
+  skillMatches    Json     // Array of SkillMatrixRow
+  strengths       String[]
+  weaknesses      String[]
+  recommendations Json     // Array of ActionableRecommendation
+  createdAt       DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt(sort: Desc)])
 }
 
 model UserSkillGap {

@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { AtsScoreHeader } from "./ats-score-header";
 import { ImprovementSummary } from "./improvement-summary";
+import { ProfileStrengthCard } from "./profile-strength-card";
 
 export function ResumeBuilder({
     initialData,
@@ -19,7 +20,9 @@ export function ResumeBuilder({
     improvements,
     missingSkills = [],
     isPro,
-    credits
+    credits,
+    githubUrl,
+    linkedinUrl,
 }: {
     initialData: any;
     resumeId: string;
@@ -29,6 +32,8 @@ export function ResumeBuilder({
     missingSkills?: string[];
     isPro: boolean;
     credits: number;
+    githubUrl?: string | null;
+    linkedinUrl?: string | null;
 }) {
     const [resumeData, setResumeData] = useState(initialData);
     const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -63,8 +68,16 @@ export function ResumeBuilder({
             <div className="h-full w-full flex flex-col">
                 <div className="flex-none">
                     <AtsScoreHeader score={liveAtsScore} scoreBreakdown={dynamicScoreBreakdown} />
-                    <div className="max-w-5xl mx-auto px-4">
+                    <div className="max-w-5xl mx-auto px-4 space-y-4">
                         <ImprovementSummary stats={improvements} />
+                        <ProfileStrengthCard
+                            resumeId={resumeId}
+                            targetRole={resumeData.personalInfo?.title || "Software Engineer"}
+                            jobDescription={jobDescription}
+                            resumeScore={liveAtsScore}
+                            githubUrl={githubUrl}
+                            linkedinUrl={linkedinUrl}
+                        />
                     </div>
                 </div>
 
@@ -107,11 +120,19 @@ export function ResumeBuilder({
 
     return (
         <div className="h-full w-full flex flex-col">
-            {/* ATS Score and Improvements */}
+            {/* ATS Score, Improvement Summary, and Role Profile Strength */}
             <div className="flex-none">
                 <AtsScoreHeader score={liveAtsScore} scoreBreakdown={dynamicScoreBreakdown} />
-                <div className="max-w-5xl mx-auto px-4">
+                <div className="max-w-5xl mx-auto px-4 space-y-4">
                     <ImprovementSummary stats={improvements} />
+                    <ProfileStrengthCard
+                        resumeId={resumeId}
+                        targetRole={resumeData.personalInfo?.title || "Software Engineer"}
+                        jobDescription={jobDescription}
+                        resumeScore={liveAtsScore}
+                        githubUrl={githubUrl}
+                        linkedinUrl={linkedinUrl}
+                    />
                 </div>
             </div>
 

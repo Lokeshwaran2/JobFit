@@ -2,7 +2,7 @@
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Check, Sparkles, X } from "lucide-react";
+import { Check, Zap, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -22,7 +22,7 @@ export function UpgradeDialog({ children }: UpgradeDialogProps) {
                 <DialogHeader>
                     <div className="flex items-center gap-2 mb-2">
                         <div className="p-2 bg-primary/10 rounded-full">
-                            <Sparkles className="h-5 w-5 text-primary" />
+                            <Zap className="h-5 w-5 text-primary" />
                         </div>
                         <DialogTitle>Unlock Full Access</DialogTitle>
                     </div>

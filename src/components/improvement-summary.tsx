@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, ChevronDown, ChevronUp, Sparkles, Wand2 } from "lucide-react";
+import { Check, ChevronDown, ChevronUp, FileCheck } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -38,11 +38,11 @@ export function ImprovementSummary({ stats }: ImprovementSummaryProps) {
                 <div className="flex items-center justify-between p-4">
                     <div className="flex items-center gap-2">
                         <div className="bg-emerald-100 dark:bg-emerald-900/50 p-2 rounded-full">
-                            <Wand2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                            <FileCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                         </div>
                         <div>
                             <h3 className="font-semibold text-emerald-950 dark:text-emerald-50">Optimization Report</h3>
-                            <p className="text-xs text-muted-foreground">What AI improved in your resume</p>
+                            <p className="text-xs text-muted-foreground">Key enhancements applied to your resume</p>
                         </div>
                     </div>
                     <CollapsibleTrigger asChild>

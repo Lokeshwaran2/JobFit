@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "test:skills": "tsx src/lib/skills/__tests__/skill-gap.test.ts",
-    "test:engine": "tsx src/lib/skills/__tests__/skill-learning-engine.test.ts"
+    "test:engine": "tsx src/lib/skills/__tests__/skill-learning-engine.test.ts",
+    "test:profile-score": "tsx src/lib/profile-scoring/__tests__/profile-scoring.test.ts",
+    "test:profile-check": "tsx src/lib/profile-scoring/__tests__/profile-check.test.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, CheckCircle, FileText, Sparkles, Upload, AlertTriangle, ShieldCheck, BarChart, XCircle } from "lucide-react";
+import { ArrowRight, CheckCircle, FileText, FileCheck, Target, Upload, AlertTriangle, ShieldCheck, BarChart, XCircle } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 
 import { auth } from "@/auth";
@@ -232,7 +232,7 @@ export default async function Home() {
             </Card>
             <Card className="text-center p-6 border-none shadow-md">
               <div className="mx-auto bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mb-4">
-                <Sparkles className="h-8 w-8 text-primary" />
+                <FileCheck className="h-8 w-8 text-primary" />
               </div>
               <h3 className="text-xl font-bold mb-2">3. Optimize & Download</h3>
               <p className="text-muted-foreground">
@@ -310,10 +310,10 @@ export default async function Home() {
                 </div>
               </div>
               <div className="flex gap-4 p-4 border rounded-lg shadow-sm bg-background">
-                <Sparkles className="h-10 w-10 text-yellow-500 shrink-0" />
+                <Target className="h-10 w-10 text-indigo-600 shrink-0" />
                 <div>
-                  <h3 className="font-bold text-lg">AI-Powered Logic</h3>
-                  <p className="text-muted-foreground text-sm">We don't just prompt; we analyze semantic relevance between words.</p>
+                  <h3 className="font-bold text-lg">Semantic Matching Engine</h3>
+                  <p className="text-muted-foreground text-sm">Deep keyword relevance, skills gap detection, and role alignment.</p>
                 </div>
               </div>
             </div>

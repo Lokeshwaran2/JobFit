@@ -28,7 +28,7 @@ export default async function BuilderPage({ params }: { params: Promise<{ id: st
         }),
         prisma.user.findUnique({
             where: { id: userId },
-            select: { isPro: true, credits: true }
+            select: { isPro: true, credits: true, githubUrl: true, linkedinUrl: true }
         })
     ]);
 
@@ -50,6 +50,8 @@ export default async function BuilderPage({ params }: { params: Promise<{ id: st
                 missingSkills={(resume.missingSkills as string[]) || []}
                 isPro={user?.isPro || false}
                 credits={user?.credits || 0}
+                githubUrl={user?.githubUrl || null}
+                linkedinUrl={user?.linkedinUrl || null}
             />
         </div>
     );

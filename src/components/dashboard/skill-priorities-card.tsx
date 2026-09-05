@@ -13,7 +13,6 @@ import {
   BookOpen,
   ArrowRight,
   CheckCircle2,
-  Sparkles,
   AlertCircle,
   GraduationCap,
   Loader2,
@@ -187,7 +186,7 @@ export function SkillPrioritiesCard() {
             /* Empty State */
             <div className="flex flex-col items-center justify-center py-10 text-center rounded-xl border border-dashed p-6">
               <div className="p-3 rounded-full bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 mb-3">
-                <Sparkles className="h-6 w-6" />
+                <GraduationCap className="h-6 w-6" />
               </div>
               <h4 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                 {filter === "acquired" ? "No acquired skills yet" : "No skill gaps recorded yet"}
