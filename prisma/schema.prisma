@@ -32,6 +32,8 @@ model User {
   skillGapOccurrences SkillGapOccurrence[]
   learningProgress    LearningProgress[]
   profileSkills       UserSkill[]
+  skillLevels         UserSkillLevel[]
+  assessments         SkillAssessment[]
 }
 
 model Account {
@@ -158,3 +160,171 @@ model UserSkill {
 
   @@unique([userId, canonicalSkill])
 }
+
+model SkillCurriculum {
+  id              String   @id @default(cuid())
+  skillId         String   // canonical skill name, e.g. "PostgreSQL", "Docker"
+  version         Int      @default(1)
+  description     String   @db.Text
+  targetRoles     String[] // e.g. ["Backend Developer", "DevOps Engineer"]
+  prerequisites   String[]
+  estimatedHours  Int      @default(20)
+  isAiGenerated   Boolean  @default(false)
+  publishedAt     DateTime @default(now())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  modules         LearningModule[]
+  implementations LearningImplementation[]
+
+  @@unique([skillId, version])
+  @@index([skillId])
+}
+
+model LearningModule {
+  id             String          @id @default(cuid())
+  curriculumId   String
+  curriculum     SkillCurriculum @relation(fields: [curriculumId], references: [id], onDelete: Cascade)
+  title          String
+  description    String          @db.Text
+  level          String          // "beginner" | "intermediate" | "advanced"
+  order          Int
+  estimatedHours Int             @default(5)
+  topics         LearningTopic[]
+
+  @@index([curriculumId])
+}
+
+model LearningTopic {
+  id               String          @id @default(cuid())
+  moduleId         String
+  module           LearningModule  @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  title            String
+  description      String          @db.Text
+  order            Int
+  required         Boolean         @default(true)
+  estimatedMinutes Int             @default(60)
+
+  resources        CuratedResource[]
+  practiceTasks    LearningPractice[]
+  prerequisites    LearningTopicPrerequisite[] @relation("TopicDependencies")
+  dependentOnMe    LearningTopicPrerequisite[] @relation("TopicPrerequisites")
+
+  @@index([moduleId])
+}
+
+model LearningTopicPrerequisite {
+  id                  String        @id @default(cuid())
+  topicId             String
+  prerequisiteTopicId String
+
+  topic               LearningTopic @relation("TopicDependencies", fields: [topicId], references: [id], onDelete: Cascade)
+  prerequisite        LearningTopic @relation("TopicPrerequisites", fields: [prerequisiteTopicId], references: [id], onDelete: Cascade)
+
+  @@unique([topicId, prerequisiteTopicId])
+}
+
+model CuratedResource {
+  id                String         @id @default(cuid())
+  skillId           String
+  topicId           String?
+  topic             LearningTopic? @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  title             String
+  url               String         @db.Text
+  provider          String
+  resourceType      String         // "official_docs" | "structured_course" | "tutorial" | "interactive" | "practice" | "project" | "video" | "book" | "documentation"
+  level             String         @default("all") // "beginner" | "intermediate" | "advanced" | "all"
+  isFree            Boolean        @default(true)
+  isOfficial        Boolean        @default(false)
+  qualityScore      Float          @default(85.0)
+  interactive       Boolean        @default(false)
+  projectBased      Boolean        @default(false)
+  estimatedMinutes  Int            @default(30)
+  lastVerifiedAt    DateTime?
+  status            String         @default("active") // "active" | "inactive" | "redirected" | "unknown"
+  verificationError String?
+  isPrimary         Boolean        @default(false)
+  whyThisResource   String?        @db.Text
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+
+  @@index([skillId])
+  @@index([topicId])
+  @@index([isFree, status])
+}
+
+model LearningPractice {
+  id                 String        @id @default(cuid())
+  topicId            String
+  topic              LearningTopic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  title              String
+  description        String        @db.Text
+  difficulty         String        @default("intermediate") // "beginner" | "intermediate" | "advanced"
+  expectedOutcome    String        @db.Text
+  verificationMethod String        @default("quiz") // "code_execution" | "explain_analyze" | "quiz" | "manual_check"
+  order              Int           @default(1)
+  hints              String[]      @default([])
+
+  @@index([topicId])
+}
+
+model LearningImplementation {
+  id                   String          @id @default(cuid())
+  curriculumId         String
+  curriculum           SkillCurriculum @relation(fields: [curriculumId], references: [id], onDelete: Cascade)
+  skillId              String
+  title                String
+  description          String          @db.Text
+  requirements         String[]        // concrete measurable deliverables
+  expectedTechnologies String[]
+  difficulty           String          @default("intermediate") // "intermediate" | "advanced"
+  estimatedHours       Int             @default(10)
+  order                Int             @default(1)
+  isCapstone           Boolean         @default(false)
+
+  @@index([curriculumId])
+  @@index([skillId])
+}
+
+model UserSkillLevel {
+  id         String   @id @default(cuid())
+  userId     String
+  skillId    String   // canonical skill
+  level      String   @default("beginner") // "beginner" | "elementary" | "intermediate" | "advanced"
+  confidence Float    @default(0.8)
+  evidence   Json?    // e.g. { matchedSkills: [], resumeEvidence: [], priorProgress: 0 }
+  assessedAt DateTime @default(now())
+
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, skillId])
+  @@index([userId])
+}
+
+model SkillAssessment {
+  id             String   @id @default(cuid())
+  userId         String
+  skillId        String   // canonical skill
+  score          Float    // 0 - 100
+  level          String   // "beginner" | "intermediate" | "advanced"
+  assessmentType String   // "checkpoint" | "mcq" | "practical" | "capstone"
+  evidence       Json?    // questions, answers, githubUrl, etc.
+  assessedAt     DateTime @default(now())
+
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, skillId])
+}
+
+model LearningRequirement {
+  id             String   @id @default(cuid())
+  skillId        String
+  topicId        String?
+  relevanceScore Float    @default(1.0)
+  jdId           String?
+  reason         String   @db.Text
+  createdAt      DateTime @default(now())
+
+  @@index([skillId, jdId])
+}
+
