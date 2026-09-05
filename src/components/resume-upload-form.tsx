@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Upload, FileText, Loader2, Sparkles } from "lucide-react";
+import { Upload, FileText, Loader2, FileCheck } from "lucide-react";
 
 // Form Schema
 const formSchema = z.object({
@@ -119,7 +119,7 @@ export function ResumeUploadForm() {
                         </>
                     ) : (
                         <>
-                            <Sparkles className="mr-2 h-4 w-4" />
+                            <FileCheck className="mr-2 h-4 w-4" />
                             Generate Tailored Resume
                         </>
                     )}

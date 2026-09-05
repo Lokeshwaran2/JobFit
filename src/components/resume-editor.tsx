@@ -9,7 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Check, AlertTriangle, Sparkles, Trash2, Plus, CheckCircle2 } from "lucide-react";
+import { Check, AlertTriangle, FileCheck, TrendingUp, Trash2, Plus, CheckCircle2 } from "lucide-react";
 
 import { updateResume } from "@/actions/resume";
 import { toast } from "sonner";
@@ -171,7 +171,7 @@ function EditorTabsContent({ data, setData, improvements, missingSkills = [], ha
             <TabsContent value="basics" className="space-y-4 py-4">
                 {improvements?.summaryOptimized && (
                     <Alert className="bg-blue-50 text-blue-900 border-blue-200 dark:bg-blue-950/30 dark:text-blue-300 dark:border-blue-800">
-                        <Sparkles className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                        <FileCheck className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                         <AlertTitle>Summary Enhanced</AlertTitle>
                         <AlertDescription>
                             Your professional summary has been rewritten to highlight your key strengths.
@@ -210,7 +210,7 @@ function EditorTabsContent({ data, setData, improvements, missingSkills = [], ha
             <TabsContent value="experience" className="space-y-4 py-4">
                 {improvements?.bulletPointsRewritten > 0 && (
                     <Alert className="bg-emerald-50 text-emerald-900 border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-300 dark:border-emerald-800">
-                        <Sparkles className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                        <TrendingUp className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                         <AlertTitle>Experience Optimized</AlertTitle>
                         <AlertDescription>
                             Rewrote {improvements.bulletPointsRewritten} bullet points for maximum impact.

@@ -20,7 +20,10 @@ export default async function SettingsPage() {
             image: true,
             isPro: true,
             credits: true,
-            stripeCurrentPeriodEnd: true
+            stripeCurrentPeriodEnd: true,
+            githubUrl: true,
+            linkedinUrl: true,
+            linkedinData: true,
         }
     });
 
@@ -41,7 +44,7 @@ export default async function SettingsPage() {
                 renewalDate={user.stripeCurrentPeriodEnd}
             />
 
-            <SettingsForm user={session.user} />
+            <SettingsForm user={user} />
         </div>
     );
 }

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle, Upload, FileText, Sparkles, TrendingUp, Users, Building2 } from "lucide-react";
+import { ArrowRight, CheckCircle, Upload, FileText, Target, TrendingUp, Users, Building2 } from "lucide-react";
 import resumePages from "@/data/resumePages.json";
 import { Metadata } from "next";
 
@@ -106,7 +106,7 @@ export default async function ResumeForPage({ params }: PageProps) {
                         {/* Skills Section */}
                         <div className="bg-slate-50 dark:bg-slate-900 rounded-xl p-8 border shadow-sm">
                             <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
-                                <Sparkles className="h-5 w-5 text-yellow-500" />
+                                <Target className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                                 Top Skills for {role}
                             </h3>
                             <div className="grid sm:grid-cols-2 gap-4">

@@ -7,6 +7,7 @@ import { auth } from "@/auth";
 import { Resume } from "@prisma/client";
 import { ResumeList } from "@/components/dashboard/resume-list";
 import { SkillPrioritiesCard } from "@/components/dashboard/skill-priorities-card";
+import { ProfileScoreCheckCard } from "@/components/dashboard/profile-score-check-card";
 
 export default async function DashboardPage() {
     const session = await auth();
@@ -38,6 +39,9 @@ export default async function DashboardPage() {
 
     return (
         <div className="space-y-8">
+            {/* Prominent Profile Strength Check Tool */}
+            <ProfileScoreCheckCard />
+
             {/* Skill Learning Priorities Section */}
             <SkillPrioritiesCard />
 

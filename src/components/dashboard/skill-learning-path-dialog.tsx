@@ -18,7 +18,7 @@ import {
   ExternalLink,
   BookOpen,
   Layers,
-  Sparkles,
+  Compass,
   Trophy,
   History,
   Check,
@@ -476,7 +476,7 @@ export function SkillLearningPathDialog({
           <div className="bg-gradient-to-r from-indigo-50 via-indigo-50/70 to-purple-50 dark:from-indigo-950/40 dark:via-indigo-950/20 dark:to-purple-950/30 border-b border-indigo-100 dark:border-indigo-900/50 px-4 sm:px-6 py-2.5 sm:py-3 shrink-0 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-start gap-2.5 min-w-0">
               <div className="p-1.5 rounded-lg bg-indigo-600 text-white shrink-0 mt-0.5">
-                <Sparkles className="h-3.5 w-3.5" />
+                <Compass className="h-3.5 w-3.5" />
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
