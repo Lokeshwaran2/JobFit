@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   },
 };
 
-import { Toaster } from "sonner";
+import { ToasterProvider } from "@/components/toaster-provider";
 
 export default function RootLayout({
   children,
@@ -43,7 +43,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} overflow-x-hidden`}>
         {children}
-        <Toaster richColors position="top-right" />
+        <ToasterProvider />
       </body>
     </html>
   );
