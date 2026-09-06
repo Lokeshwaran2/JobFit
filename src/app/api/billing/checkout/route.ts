@@ -22,10 +22,36 @@ export async function POST(req: Request) {
       );
     }
 
+    let userEmail = session.user.email || "";
+    let userName = session.user.name || undefined;
+
+    if (!userEmail) {
+      const { prisma } = await import("@/lib/prisma");
+      const dbUser = await prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { email: true, name: true },
+      });
+      if (dbUser?.email) {
+        userEmail = dbUser.email;
+      }
+      if (!userName && dbUser?.name) {
+        userName = dbUser.name;
+      }
+    }
+
+    if (!userEmail) {
+      return new NextResponse(
+        JSON.stringify({
+          error: "Your account is missing an email address. Please update your profile with a valid email to proceed with checkout.",
+        }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
     const checkoutResult = await BillingService.createCheckout({
       userId: session.user.id,
-      userEmail: session.user.email || "",
-      userName: session.user.name || undefined,
+      userEmail,
+      userName,
       planId,
       currency,
       country,
