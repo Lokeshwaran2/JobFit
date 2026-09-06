@@ -1,6 +1,7 @@
 # JobFit 🚀
 
-> AI-powered resume optimization platform that helps job seekers tailor their resumes to specific job descriptions.
+> Full-Spectrum AI Career Intelligence & 10-Factor ATS Resume Optimization Platform.  
+> JobFit tailors resumes to job descriptions with Google X-Y-Z metrics, audits candidate GitHub & LinkedIn profiles for recruiter proof, tracks recurring skill gaps across applications, and builds personalized learning roadmaps with verified free resources.
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-jobfit--mu.vercel.app-blue?style=for-the-badge&logo=vercel)](https://jobfit-mu.vercel.app)
 [![Status](https://img.shields.io/badge/Status-🟢_Live-success?style=for-the-badge)]()
@@ -8,32 +9,53 @@
 
 ---
 
-## 🌐 Live Demo
+## 🌐 Live Application
 
 👉 **[Try JobFit Live](https://jobfit-mu.vercel.app)**  
-**Status:** 🟢 Live Production
+**Status:** 🟢 Live Production Deployment
 
 ---
 
 ## 🎯 The Problem
 
-Most job seekers submit the exact same resume to dozens of different applications. As a result:
-- **Keyword Mismatch**: Resumes fail to incorporate the specific terminology required by modern Applicant Tracking Systems (ATS).
-- **Unquantified Impact**: Bullet points describe daily tasks instead of measurable achievements.
-- **Low Callback Rates**: Candidates are filtered out by screening tools before a hiring manager ever reads their application.
+Most job seekers submit the exact same generic resume to dozens of applications. As a result:
+- **Keyword Deficit**: Resumes fail to incorporate the specific semantic terminology required by modern Applicant Tracking Systems (ATS) like Workday, Taleo, and Greenhouse.
+- **Unquantified Impact**: Bullet points describe daily tasks ("worked on checkout forms") instead of measurable business outcomes.
+- **Unverified Digital Presence**: In competitive technical hiring, 80% of recruiters audit GitHub and LinkedIn. When candidate repositories or headline keywords don't match resume claims, applications stall.
+- **Blind Job Hunting**: Candidates repeatedly apply to jobs without realizing which missing skills are systematically causing their auto-rejections.
 
 ---
 
 ## 💡 What JobFit Does
 
-JobFit analyzes a candidate's resume against a target job description to:
+JobFit provides an end-to-end career intelligence and application optimization pipeline:
 
-- **Extract Relevant Skills & Keywords**: Parses unstructured JDs to identify top 20 keywords, required skills, and core responsibilities.
-- **Identify Missing Skills**: Highlights missing or underrepresented technical and soft skills.
-- **Evaluate Resume-to-Job Alignment**: Calculates an AI-assisted 0–100 match score across 10 evaluation dimensions.
-- **Improve Bullet Points**: Rewrites experience bullets using an X-Y-Z style achievement framework with action-oriented and measurable outcomes.
-- **Generate ATS-Friendly Resumes**: Produces clean, machine-readable resumes exported as PDFs.
-- **Manage Tailored Resumes**: Enables users to save and track multiple resume versions inside a personal dashboard.
+### 1. 10-Factor ATS Resume Tailoring & Rewriting
+- **Target Role Extraction**: Analyzes unstructured job descriptions (JDs) to extract target titles, top 20 keywords, required tools, and seniority levels.
+- **Google X-Y-Z Impact Bullets**: Automatically rewrites experience points into *"Accomplished [X], measured by [Y], by doing [Z]"* with concrete metrics (throughput, latency, percentages, scale).
+- **10-Dimension Evaluation Engine**: Scores resumes across Title Alignment, Keyword Density, Impact Metrics, Action Verbs, Skill Synonyms, Dedicated Tools Section, Tech Stack Recency, Soft Skills, Location, and Section Hierarchy.
+- **Machine-Readable PDF Engine**: Generates single-column vector PDFs via `@react-pdf/renderer` guaranteed to parse cleanly on corporate portals without formatting traps.
+
+### 2. Multi-Platform Candidate Profiler (GitHub & LinkedIn)
+- **GitHub Repository Audit**: Connects candidate public GitHub profiles, scanning repositories, languages, commit velocity, star counts, and topic tags to verify concrete code proof against the target JD.
+- **LinkedIn Presence Audit**: Evaluates headline keyword density, About section clarity, and skill endorsements for maximum recruiter discoverability.
+- **Unified 3-Way Match Matrix**: Cross-validates JD requirements side-by-side against Resume statements, GitHub code evidence, and LinkedIn endorsements to eliminate false positives.
+
+### 3. Recurring Skill Gap Tracker & Priority Engine
+- **Cross-Job Aggregation**: Automatically identifies and tallies missing skills detected across multiple job applications and resumes.
+- **Priority Scoring**: Computes a dynamic demand score based on recurrence frequency, recency, and market hiring trends so candidates know what to learn next.
+- **Status Tracking**: Tracks skills across "learning", "in progress", and "acquired" states.
+
+### 4. Autonomous Skill Learning Engine
+- **Curriculum Registry**: Built-in structured curriculums for high-demand technologies (PostgreSQL, Docker, Kubernetes, React, Python, Go, Node.js, Kafka, Redis, AWS, etc.).
+- **User Level Detection**: Automatically assesses candidate baseline experience (Beginner, Intermediate, Advanced) from their resume background.
+- **100% Free Verified Resources**: Curates official documentation, interactive browser sandboxes, and verified video courses.
+- **Milestone Checkpoints & Capstones**: Provides hands-on coding challenges and real-world capstone projects designed to be committed to GitHub as portfolio proof.
+
+### 5. Role & Company SEO Intelligence Hubs
+- **86+ Role Guides**: Pre-built benchmark resume structures and keyword lists for roles like Software Engineer, Frontend, Backend, Full-Stack, DevOps, Data Science, and Product Management (`/resume-for/[slug]`).
+- **IT Services Tracks**: Dedicated preparation guides for major IT recruiters (TCS, Infosys, Accenture, etc.).
+- **Dedicated Diagnostic Tools**: Standalone hubs for `/ats-resume-checker`, `/job-fit-resume`, and `/resume-based-on-job-description`.
 
 ---
 
@@ -42,98 +64,74 @@ JobFit analyzes a candidate's resume against a target job description to:
 | Category | Technology |
 |---|---|
 | **Framework** | Next.js 15 (App Router, Server Actions, TypeScript) |
-| **UI & Styling** | Tailwind CSS v4, Radix UI, Lucide Icons, next-themes |
+| **UI & Styling** | Tailwind CSS v4, Radix UI Primitives, Lucide Icons, next-themes |
 | **Database & ORM** | PostgreSQL (Neon), Prisma ORM |
-| **Authentication** | NextAuth.js v5, Prisma Adapter, bcryptjs |
-| **AI Engine** | Groq SDK, Llama 3.1 8B Instant |
-| **Document Processing** | pdf-parse, Mammoth (DOCX) |
-| **PDF Generation** | @react-pdf/renderer, react-pdf |
-| **Payments** | Razorpay |
+| **Authentication** | NextAuth.js v5 (Beta 25), Prisma Adapter, bcryptjs |
+| **AI Engine** | Groq SDK (`llama-3.1-8b-instant`, `openai/gpt-oss-120b`), Structured JSON schema outputs |
+| **Document Processing** | `pdf-parse`, `Mammoth` (DOCX) |
+| **PDF Generation** | `@react-pdf/renderer`, `react-pdf` |
+| **Payments & Billing** | Razorpay SDK (Order creation, webhook signature verification) |
+| **Testing & Execution** | `tsx`, custom test suites for skills, learning engine, and profile scoring |
 | **Deployment** | Vercel |
-
----
-
-## 📸 Screenshots
-
-### Landing Page
-![JobFit Landing Page](./docs/images/landing-page.png)
-
-### Resume Analysis & JD Matching
-![Resume Analysis](./docs/images/resume-analysis.png)
-
-### Resume Builder & Editor
-![Resume Builder](./docs/images/resume-builder.png)
-
-### ATS Match Score Engine
-![ATS Score](./docs/images/ats-score.png)
-
-### Candidate Dashboard
-![Dashboard](./docs/images/dashboard.png)
 
 ---
 
 ## 🏗️ Architecture
 
 ```text
-                    ┌─────────────────────┐
-                    │      Next.js        │
-                    │   Web Application   │
-                    └──────────┬──────────┘
-                               │
-             ┌─────────────────┼─────────────────┐
-             │                 │                 │
-             ▼                 ▼                 ▼
-        Authentication     Resume APIs       Payments
-          NextAuth          Server Actions    Razorpay
-             │                 │
-             │                 ▼
-             │            AI Service
-             │                 │
-             │          ┌──────┴──────┐
-             │          │             │
-             │       Resume         JD
-             │      Analysis      Analysis
-             │          │             │
-             │          └──────┬──────┘
-             │                 ▼
-             │          Match Analysis
-             │                 │
-             └────────────┬────┘
-                          ▼
-                     PostgreSQL
-                       + Prisma
+                             ┌──────────────────────────────┐
+                             │      Next.js App Router       │
+                             │  (Landing, Dashboard, Builder) │
+                             └──────────────┬───────────────┘
+                                            │
+              ┌─────────────────────────────┼─────────────────────────────┐
+              │                             │                             │
+              ▼                             ▼                             ▼
+       Authentication                  Resume Engine                Candidate Profiler
+     NextAuth v5 (Auth.js)           Server Actions + APIs        GitHub & LinkedIn Services
+              │                             │                             │
+              │                             ▼                             ▼
+              │                     AI Analysis Engine             3-Way Match Matrix
+              │                     (Groq SDK / Llama)             (Resume vs Code vs JD)
+              │                             │                             │
+              │                 ┌───────────┴───────────┐                 │
+              │                 ▼                       ▼                 │
+              │          10-Factor ATS             Skill Gap              │
+              │          Match Scoring             Tracker                │
+              │                 │                       │                 │
+              │                 ▼                       ▼                 │
+              │          Google X-Y-Z              Autonomous             │
+              │          Bullet Rewriter        Learning Engine           │
+              │                 │                       │                 │
+              └─────────────────┼───────────────────────┼─────────────────┘
+                                ▼                       ▼
+                             PostgreSQL Database (Neon) + Prisma ORM
 ```
 
 ---
 
-## 🧠 Responsible AI Architecture
+## 🧠 Core Engineering Services
 
-The AI service (`src/lib/ai-service.ts`) uses structured LLM outputs via Groq (`llama-3.1-8b-instant`):
+### 1. AI Service & Document Normalization (`src/lib/ai-service.ts`)
+- **Document Text Normalization**: Ingests raw text from uploaded PDFs and DOCX files, normalizing it into a strict typed JSON candidate model (`personalInfo`, `skills`, `experience`, `projects`, `education`).
+- **JD Requirement Extraction**: Extracts required role title, top 20 ATS keywords, hard/soft skills, tools, and seniority levels.
+- **Google X-Y-Z Achievement Transformation**: Rewrites candidate bullets using action verbs and measurable metrics without hallucinating unmentioned skills.
+- **Robust JSON Repair Engine**: Custom multi-pass JSON stream sanitizer that strips markdown fences, handles truncation repair, and balances nested bracket counts.
 
-1. **Document Normalization**: Converts raw PDF/DOCX text into typed JSON schema (`personalInfo`, `skills`, `experience`, `projects`, `education`).
-2. **JD Requirement Extraction**: Identifies target job title, top 20 ATS keywords, required skills, and core responsibilities from job descriptions.
-3. **Targeted Bullet Improvement**: Rewrites experience bullet points using action-oriented language and encourages measurable outcomes when supported by the candidate's original information.
-4. **Terminology Alignment**: Evaluates job-title alignment and suggests relevant terminology when appropriate without fabricating candidate experience.
-5. **0–100 ATS Match Scoring**: Evaluates candidate resumes against 10 dimensions (Title Alignment, Keyword Placement, Impact Metrics, Action Verbs, Skill Synonyms, Tools Section, Tech Stack, Soft Skills, Location, Section Order).
+### 2. Candidate Profile Scoring Engine (`src/lib/profile-scoring/`)
+- **GitHub Scoring Service (`github-scoring-service.ts`)**: Evaluates repository counts, commit activity, language distributions, star counts, topic tags, and technical stack overlap with target roles.
+- **LinkedIn Scoring Service (`linkedin-scoring-service.ts`)**: Audits headline strength, about section keyword density, experience relevance, and endorsed competencies.
+- **Unified Profile Scorer (`profile-scoring-engine.ts`)**: Merges resume claims with external code evidence and generates actionable, step-by-step recommendations.
 
----
+### 3. Skill Gap Tracker & Priority Engine (`src/lib/skills/skill-gap-tracker.ts`)
+- **Skill Normalization (`skill-normalization.ts`)**: Canonicalizes variations and synonyms (e.g. "ReactJS", "React.js" -> "React"; "Postgres" -> "PostgreSQL").
+- **Priority Calculation (`priority-calculator.ts`)**: Weights missing skills by application recurrence frequency, recency of detection, and hiring market impact.
 
-## 🧠 Engineering Challenges
-
-### 1. Resume → Structured Data
-Resumes vary drastically in structure and format. JobFit converts extracted document text from `.pdf` and `.docx` files into a normalized candidate schema before analysis.
-
-### 2. Job Description → Structured Requirements
-The system processes unstructured job posts to extract title, technical skills, soft skills, keywords, and seniority levels for deterministic matching.
-
-### 3. AI Output Reliability
-LLM outputs are constrained into structured JSON formats so that downstream scoring and resume generation remain predictable and schema-safe.
-
-### 4. Machine-Readable PDF Generation
-Generated resumes preserve machine-readable text and standard section hierarchy required by automated Applicant Tracking Systems while maintaining visual layout consistency using `@react-pdf/renderer`.
-
-### 5. Usage & Billing State
-User credit balances and subscription states are validated server-side through Razorpay order and payment verification flows.
+### 4. Autonomous Skill Learning Engine (`src/lib/skills/engine/`)
+- **Curriculum Registry (`skill-curriculum-registry.ts`)**: Deep structured definitions for technical skills with modular learning topics and deliverables.
+- **User Level Detector (`user-level-detector.ts`)**: Diagnoses candidate level (beginner, intermediate, advanced) using past experience and repository evidence.
+- **JD-Aware Curriculum Service (`jd-aware-curriculum-service.ts`)**: Adapts roadmaps to emphasize the specific aspects required by the candidate's target job posting.
+- **Resource Verification & Ranking (`resource-verification-service.ts`, `resource-ranking-service.ts`)**: Ensures all external links are live, free, and official documentation or verified sandboxes.
 
 ---
 
@@ -142,102 +140,94 @@ User credit balances and subscription states are validated server-side through R
 ```text
 JobFit/
 ├── prisma/
-│   └── schema.prisma         # Prisma ORM Schema (User, Account, Session, Resume)
-├── public/                    # Public static assets & branding
+│   └── schema.prisma                   # Full Prisma ORM Schema (User, Resume, ProfileScores, SkillGaps, Curricula)
+├── public/                             # Static assets, logos, and icons
 ├── src/
-│   ├── actions/               # Next.js Server Actions
-│   │   ├── login.ts           # Authentication action
-│   │   ├── register.ts        # Registration action
-│   │   ├── resume.ts          # Resume CRUD actions
-│   │   └── update-profile.ts  # User profile update action
-│   ├── app/                   # App Router Pages & API Endpoints
-│   │   ├── (auth)/            # Auth routes (Login, Register)
-│   │   ├── api/               # API endpoints (Auth, Resume, Razorpay)
-│   │   ├── builder/           # Multi-step resume builder interface
-│   │   ├── dashboard/         # User dashboard & resume history
-│   │   ├── subscription/      # Billing & credit purchase interface
-│   │   ├── layout.tsx         # Root application layout
-│   │   └── page.tsx           # SEO Landing page with FAQ schema
-│   ├── components/            # UI Components
-│   │   ├── ats-score-header.tsx    # ATS score indicator
-│   │   ├── improvement-summary.tsx # AI rewrite statistics
-│   │   ├── pricing-section.tsx     # Razorpay pricing table
-│   │   ├── resume-builder.tsx      # Main state machine workflow
-│   │   ├── resume-editor.tsx       # Field-by-field resume form
-│   │   ├── resume-preview.tsx      # Interactive PDF previewer
-│   │   ├── resume-document.tsx     # @react-pdf layout document
-│   │   └── ui/                     # Radix UI primitive wrappers
-│   ├── lib/                   # Utility modules & Services
-│   │   ├── ai-service.ts      # Groq AI prompts & ATS match scoring
-│   │   ├── file-parser.ts     # Document text extractor
-│   │   ├── pdf-parser.ts      # PDF parse handler
-│   │   ├── prisma.ts          # Singleton Prisma Client
-│   │   └── razorpay.ts        # Razorpay SDK initialization
-│   └── middleware.ts          # Authentication middleware
-├── env-example.txt            # Environment variable template
-├── next.config.ts             # Next.js configuration
-├── package.json               # Dependencies & scripts
-└── tsconfig.json              # TypeScript configuration
+│   ├── actions/                        # Next.js Server Actions (Auth, Resume CRUD, Profile)
+│   ├── app/                            # App Router Pages & API Routes
+│   │   ├── (auth)/                     # Auth routes (Login, Register)
+│   │   ├── api/                        # API Endpoints
+│   │   │   ├── auth/                   # NextAuth handlers
+│   │   │   ├── profile-score/          # GitHub & LinkedIn scoring endpoints
+│   │   │   ├── razorpay/               # Razorpay order, verify & webhook handlers
+│   │   │   ├── resume/                 # Resume analysis & parsing
+│   │   │   └── skills/                 # Skill gap tracking & learning path APIs
+│   │   ├── ats-resume-checker/         # Diagnostic ATS scanner landing page
+│   │   ├── builder/                    # Interactive multi-step resume builder
+│   │   ├── checkout/                   # Razorpay plan checkout interface
+│   │   ├── dashboard/                  # Candidate dashboard (Resumes, Profile Scores, Skill Roadmaps)
+│   │   ├── job-fit-resume/             # SEO landing page for job-fit resumes
+│   │   ├── resume-based-on-job-description/ # SEO landing page for JD-based tailoring
+│   │   ├── resume-for/                 # 86+ SEO role and company resume guides
+│   │   ├── subscription/               # Billing and credit purchase management
+│   │   ├── layout.tsx                  # Root application layout
+│   │   └── page.tsx                    # Production landing page
+│   ├── components/                     # React UI Components
+│   │   ├── dashboard/                  # Dashboard cards (ProfileScoreCheck, SkillPriorities, ResumeList)
+│   │   ├── landing/                    # Interactive product showcase widget
+│   │   ├── ui/                         # Radix UI primitives (Dialog, Tabs, Badge, Button, Card, etc.)
+│   │   ├── ats-score-header.tsx        # Live ATS match score indicators
+│   │   ├── download-resume-button.tsx  # PDF downloader trigger
+│   │   ├── improvement-summary.tsx     # AI rewrite statistics card
+│   │   ├── pricing-section.tsx         # Razorpay pricing table
+│   │   ├── profile-strength-card.tsx   # GitHub & LinkedIn audit summary
+│   │   ├── resume-builder.tsx          # Main builder state machine
+│   │   ├── resume-document.tsx         # @react-pdf vector document layout
+│   │   ├── resume-editor.tsx           # Field-by-field interactive resume editor
+│   │   └── resume-preview.tsx          # Real-time PDF preview canvas
+│   ├── data/
+│   │   └── resumePages.json            # Role and company SEO dataset
+│   ├── lib/                            # Business Logic & Core Engines
+│   │   ├── ai-service.ts               # Groq Llama AI prompts & ATS matching
+│   │   ├── file-parser.ts              # PDF and DOCX file text extractors
+│   │   ├── prisma.ts                   # Singleton Prisma Client
+│   │   ├── razorpay.ts                 # Razorpay SDK client initialization
+│   │   ├── profile-scoring/            # GitHub & LinkedIn Scoring Engine
+│   │   │   ├── github-scoring-service.ts   # GitHub repository & commit audit
+│   │   │   ├── linkedin-scoring-service.ts # LinkedIn headline & skills audit
+│   │   │   ├── profile-scoring-engine.ts   # Unified candidate match matrix
+│   │   │   └── url-validator.ts            # Social profile URL sanitizers
+│   │   └── skills/                     # Skill Gap & Autonomous Learning Engine
+│   │       ├── engine/                 # Curriculum registry & learning path generator
+│   │       ├── priority-calculator.ts  # Gap frequency & priority calculator
+│   │       ├── skill-gap-tracker.ts    # Cross-application gap tracker
+│   │       └── skill-normalization.ts  # Canonical skill dictionary
+│   └── middleware.ts                   # Route protection & authentication middleware
+├── package.json                        # Dependencies & scripts
+└── tsconfig.json                       # TypeScript compiler configuration
 ```
 
 ---
 
-## 🗄️ Database Design
+## 🗄️ Database Design (Prisma ORM)
 
-Managed via **Prisma ORM** (`prisma/schema.prisma`):
+The PostgreSQL database schema (`prisma/schema.prisma`) manages the complete career intelligence lifecycle:
 
-- **User**: Authentication details, `isPro` status, credit balance (`credits`), and customer payment references.
-- **Account**: NextAuth account provider linking.
-- **Session** & **VerificationToken**: NextAuth session tokens.
-- **Resume**: Parsed resume title, raw text, file URL, target job description, computed `atsScore`, `keywordMatch`, `missingSkills` list, `improvements` summary, and full `structuredData` JSON.
-
----
-
-## 🔐 Security
-
-- **Environment Secret Isolation**: Secrets and API keys are stored outside the repository in `.env` files.
-- **Authentication**: User access control is enforced via NextAuth.js v5.
-- **Route Protection**: Protected application routes require valid user session authentication.
-- **Server-Side Payment Verification**: Razorpay order HMAC signatures are verified server-side before granting credits or pro access.
-- **Database Query Safety**: Database access is handled through Prisma's parameterized query APIs, reducing exposure to SQL injection risks.
+- **User**: Authentication credentials, `isPro` subscription status, `credits` balance, Stripe/Razorpay customer identifiers, and connected profile links (`githubUrl`, `linkedinUrl`).
+- **Resume**: Parsed resume text, target job description, computed `atsScore`, `keywordMatch`, `missingSkills` array, AI rewrite `improvements` JSON, and full `structuredData` JSON schema.
+- **ProfileScore & ProfileScoreCheck**: Detailed candidate audit snapshots containing GitHub scores, LinkedIn scores, category breakdowns, matched code repositories, and actionable recommendations.
+- **UserSkillGap & SkillGapOccurrence**: Tracks canonical missing skills across multiple resumes and target jobs, storing detection timestamps, recurrence counts, and acquisition status.
+- **SkillCurriculum, LearningModule & LearningTopic**: Structured curriculum definitions for canonical skills, detailing topic prerequisites, estimated hours, and level targets.
+- **CuratedResource, LearningPractice & LearningImplementation**: Curated official documentation, interactive sandbox exercises, verification checkpoints, and capstone projects.
+- **LearningProgress & UserSkillLevel**: Tracks step completion status and diagnostic candidate skill levels (beginner, intermediate, advanced).
 
 ---
 
-## 💳 Billing & Monetization
+## 🔐 Security & Reliability
 
-- **Free Tier**: 3 initial credits upon registration to test resume analysis.
-- **Credit Purchases & Subscriptions**: Integrated with Razorpay order creation (`/api/razorpay/order`) and server-side signature verification (`/api/razorpay/verify`) endpoints.
-
----
-
-## ☁️ Deployment
-
-| Component | Platform |
-|---|---|
-| **Frontend / Web Application** | Vercel |
-| **Database** | Neon PostgreSQL |
-| **AI Provider** | Groq |
-| **Payments** | Razorpay |
-
-### Production Site
-👉 **[Open JobFit Live](https://jobfit-mu.vercel.app)**
-
----
-
-## 📊 Project Highlights
-
-- 🚀 Live production deployment
-- 📄 PDF/DOCX resume processing
-- 🤖 AI-assisted match scoring & targeted bullet improvement
-- 💳 Active Razorpay subscription & credit monetization
+- **Machine-Readable PDF Guarantee**: Eliminates complex graphics and multi-column tables that crash enterprise ATS parsers, outputting single-column vector PDFs.
+- **Strict Output Schema Enforcement**: Constrains AI generation to validated JSON models to prevent hallucinations or broken downstream rendering.
+- **Environment Secret Isolation**: API keys (Groq, Razorpay, NextAuth) are strictly maintained in `.env` configurations.
+- **Authentication & Protected Routes**: Enforced via NextAuth.js v5 with session-backed server action verification.
+- **Payment Verification**: Razorpay order HMAC SHA256 signatures are validated server-side before updating user credits or pro access.
 
 ---
 
 ## 🚀 Local Development Setup
 
 ### 1. Prerequisites
-- **Node.js**: v18.x or higher
-- **PostgreSQL Database** (e.g., Neon PostgreSQL or local PostgreSQL instance)
+- **Node.js**: v18.x or v20.x
+- **PostgreSQL Database** (e.g., Neon PostgreSQL or local instance)
 
 ### 2. Installation & Setup
 
@@ -262,12 +252,25 @@ RAZORPAY_KEY_ID="rzp_test_..."
 RAZORPAY_KEY_SECRET="your_razorpay_secret"
 ```
 
+### 3. Database Migration & Client Generation
+
 ```bash
-# Push database schema & generate client
 npx prisma db push
 npx prisma generate
+```
 
-# Start development server
+### 4. Running Test Suites
+
+```bash
+npm run test:skills          # Run skill gap aggregation tests
+npm run test:engine          # Run autonomous learning engine tests
+npm run test:profile-score   # Run GitHub & LinkedIn profile scoring tests
+npm run test:profile-check   # Run unified match matrix tests
+```
+
+### 5. Start Development Server
+
+```bash
 npm run dev
 ```
 
