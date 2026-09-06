@@ -52,16 +52,10 @@ export class DodoPaymentsProvider implements IPaymentProvider {
     const client = this.initClient();
     const apiKey = process.env.DODO_PAYMENTS_API_KEY;
 
-    // Graceful test fallback if running in development without a real Dodo API key
     if (!client || !apiKey || apiKey.startsWith("test_dodo_api_key_placeholder")) {
-      const mockSessionId = `dodo_test_sess_${Date.now()}`;
-      return {
-        provider: "dodo",
-        sessionId: mockSessionId,
-        checkoutUrl:
-          params.returnUrl ||
-          `/checkout/success?provider=dodo&session_id=${mockSessionId}&plan=${params.planId}&currency=${currency}`,
-      };
+      throw new Error(
+        "Dodo Payments is not configured on this server. Please set DODO_PAYMENTS_API_KEY in your environment variables."
+      );
     }
 
     const productId =
@@ -98,10 +92,14 @@ export class DodoPaymentsProvider implements IPaymentProvider {
             }`,
     });
 
+    if (!session.checkout_url) {
+      throw new Error("Dodo Payments checkout creation succeeded but did not return a checkout URL.");
+    }
+
     return {
       provider: "dodo",
       sessionId: session.session_id,
-      checkoutUrl: session.checkout_url || undefined,
+      checkoutUrl: session.checkout_url,
     };
   }
 
