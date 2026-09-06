@@ -223,6 +223,47 @@ The PostgreSQL database schema (`prisma/schema.prisma`) manages the complete car
 
 ---
 
+## 💳 Global Multi-Currency Recurring Billing Architecture
+
+JobFit features an enterprise dual-payment provider architecture supporting domestic Indian INR transactions via **Razorpay** and global multi-currency recurring billing via **Dodo Payments**.
+
+```
+                           BillingService (Facade)
+                               /            \
+                PaymentProviderRouter (Deterministic)
+                             /                \
+    India + INR (RazorpayProvider)        Global / Non-INR (DodoPaymentsProvider)
+    • Domestic UPI AutoPay & Cards       • Global Cards & Local Payment Methods
+    • RBI e-Mandate Compliant            • Merchant of Record (MoR) & Tax Handling
+    • Minor Unit: Paise (₹299 = 29900)    • Dodo Hosted Checkout & Customer Portal
+    • Razorpay Webhooks & Verify         • Minor Units: Cents/Pence ($12 = 1200)
+                                         • Standard Webhooks with Cryptographic Unwrap
+```
+
+### 1. Deterministic Provider Routing
+- **INR Transactions (India)**: Routed authoritatively to `Razorpay` for seamless UPI AutoPay, domestic NetBanking, and Indian card standing instructions.
+- **International Transactions (USD, EUR, GBP, Adaptive)**: Routed to `Dodo Payments` for global recurring subscriptions, recurring billing, international cards, and automatic adaptive currency localization.
+
+### 2. Float-Free Currency Architecture
+- All monetary operations throughout JobFit use **integer minor units** (`amountMinor`) paired with explicit 3-letter ISO `currency` codes to eliminate IEEE 754 floating-point rounding errors.
+  - INR 99 → `amountMinor: 9900, currency: "INR"`
+  - INR 299 → `amountMinor: 29900, currency: "INR"`
+  - USD 2.99 → `amountMinor: 299, currency: "USD"`
+  - USD 12.00 → `amountMinor: 1200, currency: "USD"`
+  - EUR 11.00 → `amountMinor: 1100, currency: "EUR"`
+  - GBP 10.00 → `amountMinor: 1000, currency: "GBP"`
+
+### 3. Autopay & Subscription Lifecycle
+- Real subscription billing utilizing Dodo Checkout Sessions (`client.checkoutSessions.create`) and Dodo Customer Portal (`client.customers.customerPortal.create`).
+- State Machine: `pending` → `active` ⇄ `renewed` / `past_due` / `on_hold` → `cancelled`.
+- Cancel at period end supported with automated entitlement preservation until the billing cycle expires.
+
+### 4. Cryptographic Webhook Verification & Idempotency
+- **Dodo Webhook (`/api/webhooks/dodo`)**: Cryptographically unwrapped using `dodopayments` SDK checking `webhook-id`, `webhook-signature`, and `webhook-timestamp`.
+- **Idempotency Ledger**: Every incoming event is recorded in the `WebhookEvent` database model with SHA-256 payload hashing and unique `(provider, providerEventId)` constraints to guarantee that duplicate deliveries are safely ignored.
+
+---
+
 ## 🚀 Local Development Setup
 
 ### 1. Prerequisites
@@ -248,8 +289,18 @@ Configure `.env`:
 DATABASE_URL="postgresql://user:password@localhost:5432/jobfit?schema=public"
 AUTH_SECRET="your_nextauth_secret_here"
 GROQ_API_KEY="gsk_your_groq_api_key"
+
+# Razorpay (Domestic INR Payments)
 RAZORPAY_KEY_ID="rzp_test_..."
 RAZORPAY_KEY_SECRET="your_razorpay_secret"
+RAZORPAY_WEBHOOK_SECRET="your_razorpay_webhook_secret"
+
+# Dodo Payments (Global Multi-Currency Recurring Billing)
+DODO_PAYMENTS_API_KEY="test_..."
+DODO_PAYMENTS_WEBHOOK_KEY="whsec_..."
+DODO_PAYMENTS_ENVIRONMENT="test_mode" # 'test_mode' | 'live_mode'
+DODO_PRODUCT_JOBHUNT_USD="p_jobhunt_usd"
+DODO_PRODUCT_STARTER_USD="p_starter_usd"
 ```
 
 ### 3. Database Migration & Client Generation
@@ -262,6 +313,7 @@ npx prisma generate
 ### 4. Running Test Suites
 
 ```bash
+npm run test:billing         # Run Dodo & Razorpay provider routing, currency & minor unit tests
 npm run test:skills          # Run skill gap aggregation tests
 npm run test:engine          # Run autonomous learning engine tests
 npm run test:profile-score   # Run GitHub & LinkedIn profile scoring tests

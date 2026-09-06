@@ -41,6 +41,11 @@ model User {
   linkedinData        Json? // Safe pasted/imported profile info: { headline, about, experience, skills, etc. }
   profileScores       ProfileScore[]
   profileChecks       ProfileScoreCheck[]
+
+  // Multi-Provider Billing & Subscriptions (Razorpay + Dodo)
+  paymentCustomers    PaymentCustomer[]
+  subscriptions       Subscription[]
+  payments            Payment[]
 }
 
 model Account {
@@ -379,5 +384,92 @@ model LearningRequirement {
   createdAt      DateTime @default(now())
 
   @@index([skillId, jdId])
+}
+
+model PaymentCustomer {
+  id                 String   @id @default(cuid())
+  userId             String
+  provider           String   // "razorpay" | "dodo"
+  providerCustomerId String
+  email              String?
+  name               String?
+  country            String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerCustomerId])
+  @@unique([userId, provider])
+  @@index([userId])
+}
+
+model Subscription {
+  id                     String    @id @default(cuid())
+  userId                 String
+  planId                 String    // "starter" | "jobhunt"
+  provider               String    // "razorpay" | "dodo"
+  providerSubscriptionId String?
+  providerCustomerId     String?
+  currency               String    // "INR", "USD", "EUR", "GBP", etc.
+  amountMinor            Int       // stored in smallest unit, e.g. 29900 paise, 1200 cents
+  interval               String    @default("month") // "month" | "year"
+  intervalCount          Int       @default(1)
+  status                 String    // "pending" | "active" | "past_due" | "on_hold" | "cancelled" | "failed" | "expired"
+  currentPeriodStart     DateTime  @default(now())
+  currentPeriodEnd       DateTime?
+  cancelAtPeriodEnd      Boolean   @default(false)
+  canceledAt             DateTime?
+  trialEndsAt            DateTime?
+  metadata               Json?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  payments Payment[]
+
+  @@unique([provider, providerSubscriptionId])
+  @@index([userId, status])
+  @@index([provider, status])
+}
+
+model Payment {
+  id                String    @id @default(cuid())
+  userId            String
+  subscriptionId    String?
+  provider          String    // "razorpay" | "dodo"
+  providerPaymentId String
+  amountMinor       Int
+  currency          String    // "INR", "USD", "EUR", "GBP", etc.
+  status            String    // "succeeded" | "failed" | "pending" | "refunded"
+  type              String    // "initial" | "renewal" | "upgrade" | "downgrade" | "one_time" | "refund"
+  failureReason     String?
+  paidAt            DateTime?
+  metadata          Json?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscription Subscription? @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
+
+  @@unique([provider, providerPaymentId])
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([provider, status])
+}
+
+model WebhookEvent {
+  id              String    @id @default(cuid())
+  provider        String    // "razorpay" | "dodo"
+  providerEventId String
+  eventType       String
+  payloadHash     String?
+  receivedAt      DateTime  @default(now())
+  processedAt     DateTime?
+  status          String    @default("received") // "received" | "processed" | "failed"
+  error           String?   @db.Text
+
+  @@unique([provider, providerEventId])
+  @@index([provider, eventType])
+  @@index([status])
 }
 

@@ -73,6 +73,57 @@ export async function POST(req: Request) {
             });
         }
 
+        // Record in unified billing models for consistent reporting
+        try {
+            const amountMinor = plan === "starter" ? 9900 : 29900;
+            await (prisma as any).payment.upsert({
+                where: {
+                    provider_providerPaymentId: {
+                        provider: "razorpay",
+                        providerPaymentId: paymentId,
+                    }
+                },
+                update: { status: "succeeded" },
+                create: {
+                    userId: user.id,
+                    provider: "razorpay",
+                    providerPaymentId: paymentId,
+                    amountMinor,
+                    currency: "INR",
+                    status: "succeeded",
+                    type: subscriptionId ? "renewal" : "initial",
+                    paidAt: new Date(),
+                }
+            });
+
+            if (subscriptionId || plan === "jobhunt") {
+                const now = new Date();
+                const nextMonth = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+                await (prisma as any).subscription.upsert({
+                    where: { id: subscriptionId || `sub_rzp_${user.id}` },
+                    update: {
+                        status: "active",
+                        currentPeriodEnd: nextMonth,
+                    },
+                    create: {
+                        userId: user.id,
+                        planId: "jobhunt",
+                        provider: "razorpay",
+                        providerSubscriptionId: subscriptionId || undefined,
+                        currency: "INR",
+                        amountMinor: 29900,
+                        interval: "month",
+                        intervalCount: 1,
+                        status: "active",
+                        currentPeriodStart: now,
+                        currentPeriodEnd: nextMonth,
+                    }
+                });
+            }
+        } catch (billingSyncErr) {
+            console.warn("[RAZORPAY_VERIFY_BILLING_SYNC_WARN]", billingSyncErr);
+        }
+
         return NextResponse.json({ success: true });
 
     } catch (error) {

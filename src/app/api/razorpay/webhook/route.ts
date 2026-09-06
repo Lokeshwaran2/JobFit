@@ -22,6 +22,32 @@ export async function POST(req: Request) {
 
         const event = JSON.parse(bodyText);
         const eventType = event.event;
+        const providerEventId = event.event_id || event.id || `rzp_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+
+        // Idempotency check with WebhookEvent
+        const existingEvent = await (prisma as any).webhookEvent.findUnique({
+            where: {
+                provider_providerEventId: {
+                    provider: "razorpay",
+                    providerEventId,
+                }
+            }
+        });
+
+        if (existingEvent) {
+            return NextResponse.json({ status: "ok", duplicate: true });
+        }
+
+        await (prisma as any).webhookEvent.create({
+            data: {
+                provider: "razorpay",
+                providerEventId,
+                eventType,
+                payloadHash: crypto.createHash("sha256").update(bodyText).digest("hex"),
+                status: "processed",
+                processedAt: new Date(),
+            }
+        });
 
         // AutoPay Subscription Renewal Charge Success Event
         if (eventType === "subscription.charged" || eventType === "invoice.paid") {
@@ -55,6 +81,32 @@ export async function POST(req: Request) {
                         stripeCurrentPeriodEnd: nextRenewalDate
                     }
                 });
+
+                try {
+                    const paymentId = payload.payment?.entity?.id || `pay_rzp_renew_${Date.now()}`;
+                    await (prisma as any).payment.create({
+                        data: {
+                            userId: user.id,
+                            provider: "razorpay",
+                            providerPaymentId: paymentId,
+                            amountMinor: 29900,
+                            currency: "INR",
+                            status: "succeeded",
+                            type: "renewal",
+                            paidAt: new Date(),
+                        }
+                    });
+
+                    await (prisma as any).subscription.updateMany({
+                        where: { userId: user.id, provider: "razorpay" },
+                        data: {
+                            status: "active",
+                            currentPeriodEnd: nextRenewalDate,
+                        }
+                    });
+                } catch (e) {
+                    console.warn("[RAZORPAY_WEBHOOK_UNIFIED_RECORDING_WARN]", e);
+                }
 
                 console.log(`[RAZORPAY_AUTOPAY_WEBHOOK] Renewed subscription for user ${user.id} until ${nextRenewalDate.toISOString()}`);
             }

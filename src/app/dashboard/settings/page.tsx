@@ -29,6 +29,11 @@ export default async function SettingsPage() {
 
     if (!user) redirect("/login");
 
+    const subscription = await (prisma as any).subscription.findFirst({
+        where: { userId: user.id },
+        orderBy: { createdAt: "desc" },
+    });
+
     return (
         <div className="space-y-6">
             <div>
@@ -41,7 +46,11 @@ export default async function SettingsPage() {
             <SubscriptionCard
                 isPro={user.isPro}
                 credits={user.credits}
-                renewalDate={user.stripeCurrentPeriodEnd}
+                renewalDate={subscription?.currentPeriodEnd || user.stripeCurrentPeriodEnd}
+                provider={subscription?.provider}
+                currency={subscription?.currency}
+                amountMinor={subscription?.amountMinor}
+                status={subscription?.status}
             />
 
             <SettingsForm user={user} />
