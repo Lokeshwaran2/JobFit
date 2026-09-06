@@ -247,7 +247,6 @@ function CheckoutContent() {
                     </p>
                 </CardFooter>
             </Card>
-            <Toaster richColors position="top-right" />
         </div>
     );
 }
