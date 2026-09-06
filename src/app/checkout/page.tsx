@@ -18,6 +18,7 @@ function CheckoutContent() {
     const [loading, setLoading] = useState(false);
     const [currency, setCurrency] = useState(currencyParam);
     const [isAutoPay, setIsAutoPay] = useState(plan === "jobhunt");
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     const isSupported = !!CANONICAL_PLANS[plan as "starter" | "jobhunt"];
     const planConfig = isSupported ? CANONICAL_PLANS[plan as "starter" | "jobhunt"] : null;
@@ -26,6 +27,7 @@ function CheckoutContent() {
 
     const handlePayment = async () => {
         if (!planConfig) return;
+        setErrorMessage(null);
         setLoading(true);
 
         try {
@@ -109,7 +111,9 @@ function CheckoutContent() {
             rzp.open();
         } catch (error: any) {
             console.error("[CHECKOUT_ERROR]", error);
-            toast.error(error.message || "Something went wrong initializing payment");
+            const msg = error.message || "Something went wrong initializing payment";
+            setErrorMessage(msg);
+            toast.error(msg);
         } finally {
             setLoading(false);
         }
@@ -213,6 +217,16 @@ function CheckoutContent() {
                     </div>
                 </CardContent>
                 <CardFooter className="flex flex-col gap-3 pt-2">
+                    {errorMessage && (
+                        <div className="w-full p-3.5 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-xs text-red-700 dark:text-red-300 flex items-start gap-2.5">
+                            <AlertCircle className="h-4 w-4 shrink-0 text-red-500 mt-0.5" />
+                            <div className="flex-1">
+                                <p className="font-semibold mb-0.5">Checkout Notice</p>
+                                <p className="leading-relaxed">{errorMessage}</p>
+                            </div>
+                        </div>
+                    )}
+
                     <Button
                         className={`w-full h-11 text-base font-semibold text-white transition-all shadow ${
                             isDodo 
@@ -233,6 +247,7 @@ function CheckoutContent() {
                     </p>
                 </CardFooter>
             </Card>
+            <Toaster richColors position="top-right" />
         </div>
     );
 }

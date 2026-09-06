@@ -62,38 +62,51 @@ export class DodoPaymentsProvider implements IPaymentProvider {
       planPrice.dodoProductId ||
       (params.planId === "jobhunt" ? "pdt_0Nn13iu7iyjBaUFxoQhco" : "pdt_0Nn13P7ZHGAsPi6dTyH1S");
 
-    const session = await client.checkoutSessions.create({
-      product_cart: [
-        {
-          product_id: productId,
-          quantity: 1,
+    let session;
+    try {
+      session = await client.checkoutSessions.create({
+        product_cart: [
+          {
+            product_id: productId,
+            quantity: 1,
+          },
+        ],
+        customer: {
+          email: params.userEmail,
+          name: params.userName || params.userEmail.split("@")[0],
         },
-      ],
-      customer: {
-        email: params.userEmail,
-        name: params.userName || params.userEmail.split("@")[0],
-      },
-      billing_currency: currency as any,
-      metadata: {
-        userId: params.userId,
-        planId: params.planId,
-        internalSubscriptionId: params.metadata?.internalSubscriptionId || "",
-        environment: process.env.NODE_ENV || "development",
-        ...params.metadata,
-      },
-      return_url:
-        params.returnUrl && params.returnUrl.startsWith("http")
-          ? params.returnUrl
-          : `${process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}${
-              params.returnUrl?.startsWith("/") ? "" : "/"
-            }${
-              params.returnUrl ||
-              `dashboard?success=true&provider=dodo&plan=${params.planId}`
-            }`,
-    });
+        billing_currency: currency as any,
+        metadata: {
+          userId: params.userId,
+          planId: params.planId,
+          internalSubscriptionId: params.metadata?.internalSubscriptionId || "",
+          environment: process.env.NODE_ENV || "production",
+          ...params.metadata,
+        },
+        return_url:
+          params.returnUrl && params.returnUrl.startsWith("http")
+            ? params.returnUrl
+            : `${process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_APP_URL || "https://jobfit.co.in"}${
+                params.returnUrl?.startsWith("/") ? "" : "/"
+              }${
+                params.returnUrl ||
+                `dashboard?success=true&provider=dodo&plan=${params.planId}`
+              }`,
+      });
+    } catch (apiError: any) {
+      console.error("[DODO_PAYMENTS_API_ERROR]", apiError);
+      const detail =
+        apiError?.message ||
+        apiError?.error?.message ||
+        apiError?.statusText ||
+        "Unknown error communicating with Dodo Payments";
+      throw new Error(`Dodo Payments rejected checkout: ${detail}`);
+    }
 
-    if (!session.checkout_url) {
-      throw new Error("Dodo Payments checkout creation succeeded but did not return a checkout URL.");
+    if (!session || !session.checkout_url) {
+      throw new Error(
+        "Dodo Payments checkout creation succeeded but did not return a valid checkout URL."
+      );
     }
 
     return {
