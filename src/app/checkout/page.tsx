@@ -40,6 +40,12 @@ function CheckoutContent() {
                 }),
             });
 
+            if (res.status === 401) {
+                toast.error("Please sign in to proceed with checkout.");
+                router.push(`/login?callbackUrl=${encodeURIComponent(window.location.pathname + window.location.search)}`);
+                return;
+            }
+
             if (!res.ok) {
                 const errData = await res.json().catch(() => ({}));
                 throw new Error(errData.error || "Failed to initialize checkout session");
