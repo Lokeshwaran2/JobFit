@@ -1,4 +1,5 @@
 import Groq from "groq-sdk";
+import { StructuredJobDescriptionSchema, StructuredJobDescription } from "./matching/types";
 
 export class AiService {
   private static getClient() {
@@ -91,8 +92,10 @@ export class AiService {
 
       throw new Error("No valid JSON object found in response");
     } catch (error) {
-      console.error("JSON Parse Error:", error);
-      console.error("Raw Text:", text);
+      console.error("JSON Parse Error in AI output parsing:", {
+        error: error instanceof Error ? error.message : "Unknown error",
+        textLength: text?.length || 0,
+      });
       throw new Error("Failed to parse AI response as JSON");
     }
   }
@@ -145,26 +148,55 @@ export class AiService {
     return this.parseJsonFromOutput(response.choices[0].message.content || "{}");
   }
 
-  static async analyzeJobDescription(jdText: string) {
+  static async analyzeJobDescription(jdText: string): Promise<StructuredJobDescription> {
     const groq = this.getClient();
     const model = process.env.GROQ_MODEL || "openai/gpt-oss-120b";
     const prompt = `
-      You are a Hiring Manager. Analyze this Job Description.
+      You are an expert Job Description Intelligence Analyzer. Analyze this Job Description.
       
       Job Description:
       """
-      ${jdText.slice(0, 5000)}
+      ${jdText.slice(0, 8000)}
       """
+
+      CRITICAL EXTRACTION RULES:
+      1. NEVER INVENT MISSING REQUIREMENTS:
+         - If the company name is not explicitly identified in the text, set "company": null.
+         - If minimum or maximum years of experience are not explicitly stated, set "minYearsExperience": null and "maxYearsExperience": null. NEVER guess.
+         - If education requirements are not specified, set "educationRequirements": [].
+         - If certifications are not specified, set "certifications": [].
+         - If workplaceType is not specified as remote, hybrid, or onsite, set "workplaceType": null.
+         - If jobType is not specified as full-time, part-time, contract, or internship, set "jobType": null.
+         - If seniorityLevel is not specified, set "seniorityLevel": null.
+      2. DISTINGUISH REQUIRED VS PREFERRED SKILLS:
+         - "requiredSkills": Concrete mandatory technical skills, programming languages, frameworks, or databases (e.g. 'TypeScript', 'React', 'Node.js', 'PostgreSQL').
+         - "preferredSkills": Desired, preferred, nice-to-have, or bonus skills (e.g. 'AWS', 'Docker', 'Kubernetes').
+         - "tools": Specific developer tools and software mentioned (e.g. 'Git', 'Jira', 'Postman', 'Figma').
+         - NEVER include geographic locations (e.g. 'Bengaluru', 'Remote') or generic workplace fluff (e.g. 'fast-paced', 'self-starter', 'high volume applications') in requiredSkills.
+      3. CORE RESPONSIBILITIES:
+         - Extract key responsibility items from the JD as concise strings.
+      4. KEYWORDS:
+         - Extract core industry, architecture, and technology keywords.
 
       IMPORTANT: Output strictly valid JSON. Do not include any introductory text, markdown formatting, or code blocks. The first character of your response must be '{'.
 
       Output Schema (Strict JSON):
       {
+        "company": "string or null",
         "role": "string",
-        "keywords": ["string"],
-        "requiredSkills": ["string (MUST be concrete technical skills, languages, frameworks, databases, or tools like 'PostgreSQL', 'Docker', 'React'. NEVER include locations like 'Bengaluru', 'Remote', or generic job phrases like 'High volume applications', 'Fast paced environment')"],
+        "location": "string or null",
+        "workplaceType": "remote | hybrid | onsite | null",
+        "jobType": "full-time | part-time | contract | internship | null",
+        "seniorityLevel": "string or null",
+        "minYearsExperience": "number or null",
+        "maxYearsExperience": "number or null",
+        "requiredSkills": ["string"],
+        "preferredSkills": ["string"],
+        "tools": ["string"],
         "coreResponsibilities": ["string"],
-        "seniorityLevel": "string"
+        "educationRequirements": ["string"],
+        "certifications": ["string"],
+        "keywords": ["string"]
       }
     `;
 
@@ -172,19 +204,18 @@ export class AiService {
       model,
       messages: [{ role: "system", content: "You are an API that outputs strictly valid JSON. Do not output anything else. Do not wrap in markdown code blocks. Start your response with '{'." }, { role: "user", content: prompt }],
       temperature: 0,
-      max_tokens: 2000,
+      max_tokens: 2500,
     });
 
-    return this.parseJsonFromOutput(response.choices[0].message.content || "{}");
+    const raw = this.parseJsonFromOutput(response.choices[0].message.content || "{}");
+    return StructuredJobDescriptionSchema.parse(raw);
   }
 
-  static async rewriteResume(currentResume: any, jdAnalysis: any) {
-    const groq = this.getClient();
-    const model = process.env.GROQ_MODEL || "openai/gpt-oss-120b";
-    const prompt = `
-      You are an expert Resume Writer & ATS Optimizer.
+  static getRewritePrompt(currentResume: any, jdAnalysis: any): string {
+    return `
+      You are an expert Resume Writer & Career Alignment Specialist.
       
-      Task: Rewrite the candidate's experience to align with the Target Job.
+      Task: Tailor the candidate's experience to align authentically with the Target Job without fabricating facts.
       
       Target Job Profile:
       Role: ${jdAnalysis.role}
@@ -193,31 +224,50 @@ export class AiService {
       Candidate Resume (JSON):
       ${JSON.stringify(currentResume).slice(0, 8000)}
       
-      Instructions:
-      1. FORCE Job Title Match: You MUST replace "personalInfo.title" with the EXACT target role title from the JD. This is critical for ATS.
-      2. Rewrite "summary" to be punchy, relevant, and contain keywords.
-      3. Rewrite "experience" bullet points (CRITICAL):
-         - MUST QUANTIFY IMPACT: Every single bullet point must include a number, percentage ($), or time metric. 
-         - If exact numbers are not in the source, ESTIMATE reasonable metrics (e.g. "Improved performance by ~20%", "Reduced load time by 30%").
-         - INJECT SOFT SKILLS: Ensure at least 1-2 bullets mention "Collaborated with", "Led", or "Mentored".
-         - Use Google X-Y-Z formula.
-         - Set "isOptimized" to true for every rewritten bullet.
-      4. Skills Section Optimization:
-         - Reorder existing candidate "hard" skills to align with JD.
-         - DO NOT auto-inject unmentioned skills into candidate's hard skills array. Put all missing JD skills into the "missingSkills" array so the candidate can interactively select and add them via UI buttons.
-         - "missingSkills" MUST strictly be concrete technical skills, tools, or languages (e.g. 'PostgreSQL', 'Docker', 'Redis'). NEVER output locations (e.g. 'Bengaluru', 'Remote'), years of experience, or non-skills (e.g. 'High volume applications', 'Ambiguous environments', 'Inclusive team culture').
-         - USE SYNONYMS: If a skill has a common synonym (e.g. "React" / "React.js"), use the format "Term / Synonym" to capture both.
-         - EXTRACT TOOLS: Populate a separate "tools" array in the skills object with specific tools (Git, Docker, VS Code, Jira, etc.).
-      5. GENERATE GENUINE IMPROVEMENT STATS:
-         - Calculate "originalScore": Estimate candidate's original raw resume score against the JD before optimization (0-100) based on missing keywords, title mismatch, and non-quantified bullets.
-         - Calculate "atsScore": The new optimized score (target 90-99).
-         - Calculate "scoreGain": atsScore - originalScore.
-         - Calculate "percentageGain": Math.round(((atsScore - originalScore) / originalScore) * 100).
+      CRITICAL SOURCE-OF-TRUTH & INTEGRITY RULES:
+      1. RESUME FACTS ARE AUTHORITATIVE:
+         - The candidate's resume represents actual historical experience.
+         - The job description describes job REQUIREMENTS, NOT candidate experience.
+         - NEVER transfer job requirements into the candidate's experience or skills as if the candidate already possesses them.
+         - If a requirement in the JD is missing from the resume, do NOT claim it in the tailored experience.
+      
+      2. PRESERVE CANDIDATE JOB TITLES:
+         - Do NOT overwrite or change the candidate's actual job title in "personalInfo.title" or employment roles in "experience[].role" to match the target job title.
+         - Preserve the candidate's factual employment history and job titles exactly as provided.
+      
+      3. ZERO FABRICATION & STRICT METRICS INTEGRITY:
+         - The AI must NEVER fabricate candidate facts, technologies, certifications, achievements, responsibilities, or employers.
+         - PRESERVE SOURCE TECHNOLOGIES & TOOLS:
+           * Do NOT strip or remove candidate technologies, frameworks, tools, or architectural layers mentioned in the original bullet (e.g. Angular, .NET APIs, database layers, REST APIs).
+           * Retain the candidate's authentic technical stack and evidence.
+         - DO NOT INVENT UNSUPPORTED TECHNICAL MECHANISMS:
+           * Never invent specific technical techniques or implementation details (e.g. "query tuning", "caching", "code refactoring", "hot-fixes", "sharding", "indexing") unless they are explicitly present in the original bullet or candidate resume.
+         - METRIC RULES:
+           * If the original resume contains a real metric (e.g., numbers, percentages, dollar amounts, team sizes, latency figures), you may preserve or rephrase it.
+           * If NO metric is present in the source resume:
+             - DO NOT invent a metric.
+             - DO NOT estimate a metric (e.g. NEVER generate fake numbers like "37%", "20%", "$2.4M", or "team of 10").
+             - DO NOT create fake percentages or timeframes.
+             - Instead, write a strong, professional QUALITATIVE achievement focusing on action, methodology, and outcome without inventing unmentioned techniques.
+         - You may improve clarity, reorder information, emphasize existing experience, align existing experience with job terminology, and improve bullet structure using strong action verbs.
+         - Set "isOptimized" to true for every improved bullet.
+
+      4. SKILLS SECTION & MISSING SKILLS GAP:
+         - Reorder existing candidate "hard" skills to highlight alignment with the JD.
+         - NEVER auto-inject unmentioned skills into candidate's hard skills array or experience bullets.
+         - Put all missing JD skills strictly into the "missingSkills" array so the candidate can review and add them if they actually possess them.
+         - "missingSkills" MUST strictly be concrete technical skills, tools, or languages (e.g. 'PostgreSQL', 'Docker', 'Redis'). NEVER output locations (e.g. 'Bengaluru', 'Remote'), years of experience, or non-skills (e.g. 'High volume applications', 'Fast paced environment').
+         - USE SYNONYMS: If an existing candidate skill has a common synonym requested in the JD (e.g. "React" / "React.js"), use the format "Term / Synonym".
+         - Extract candidate-verified tools into a separate "tools" array (Git, Docker, VS Code, Jira, etc.).
+
+      5. REALISTIC JOB MATCH STATS (NO ARTIFICIAL SCORE INFLATION):
+         - Calculate "originalScore": Objective baseline match score (0-100) before tailoring based on keyword overlap, role alignment, and bullet clarity.
+         - Calculate "atsScore": Objective Job Match Score (0-100) after tailoring based on truthful keyword and experience alignment. Do NOT force a fake 90-99 score.
+         - Calculate "scoreGain": Math.max(0, atsScore - originalScore).
+         - Calculate "percentageGain": originalScore > 0 ? Math.round(((atsScore - originalScore) / originalScore) * 100) : 0.
          - Count how many experience bullet points were genuinely rewritten.
-         - List key target keywords identified from the job description.
+         - List key target keywords identified from the job description that were genuinely aligned.
          - List strong action verbs used.
-      6. PERFORM 95+ SCORE ANALYSIS:
-         - Keep response output compact and valid JSON.
       
       Output Schema (Strict JSON):
       {
@@ -267,6 +317,12 @@ export class AiService {
         }
       }
     `;
+  }
+
+  static async rewriteResume(currentResume: any, jdAnalysis: any) {
+    const groq = this.getClient();
+    const model = process.env.GROQ_MODEL || "openai/gpt-oss-120b";
+    const prompt = this.getRewritePrompt(currentResume, jdAnalysis);
 
     const response = await groq.chat.completions.create({
       model,

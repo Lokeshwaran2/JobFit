@@ -68,7 +68,7 @@ export default function SubscriptionPage() {
                                 </li>
                                 <li className="flex items-center text-slate-700">
                                     <Check className="h-4 w-4 text-green-500 mr-2.5 shrink-0" />
-                                    ATS match score
+                                    Job Match Score
                                 </li>
                                 <li className="flex items-center text-slate-700">
                                     <Check className="h-4 w-4 text-green-500 mr-2.5 shrink-0" />
@@ -110,7 +110,7 @@ export default function SubscriptionPage() {
                                 </li>
                                 <li className="flex items-center text-slate-700">
                                     <Check className="h-4 w-4 text-green-500 mr-2.5 shrink-0" />
-                                    High ATS-score rewrite
+                                    AI resume tailoring & keyword alignment
                                 </li>
                                 <li className="flex items-center text-slate-700">
                                     <Check className="h-4 w-4 text-green-500 mr-2.5 shrink-0" />
@@ -149,7 +149,7 @@ export default function SubscriptionPage() {
                                 </li>
                                 <li className="flex items-center text-slate-300">
                                     <Check className="h-4 w-4 text-emerald-400 mr-2.5 shrink-0" />
-                                    Unlimited ATS optimization
+                                    Unlimited resume tailoring
                                 </li>
                                 <li className="flex items-center text-slate-300">
                                     <Check className="h-4 w-4 text-emerald-400 mr-2.5 shrink-0" />
@@ -173,7 +173,7 @@ export default function SubscriptionPage() {
                 <div className="text-center space-y-2 pt-8">
                     <div className="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 text-sm text-slate-400">
                         <span className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5" /> Used by job seekers applying to top companies</span>
-                        <span className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5" /> ATS-safe formatting</span>
+                        <span className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5" /> Clean machine-readable formatting</span>
                     </div>
                     <div className="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 text-sm text-slate-400">
                         <span className="flex items-center gap-1.5"><Check className="h-3.5 w-3.5" /> No data stored permanently</span>

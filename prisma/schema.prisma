@@ -28,6 +28,7 @@ model User {
   stripeCurrentPeriodEnd DateTime?
 
   resumes Resume[]
+  jobs    Job[]
   skillGaps           UserSkillGap[]
   skillGapOccurrences SkillGapOccurrence[]
   learningProgress    LearningProgress[]
@@ -46,6 +47,7 @@ model User {
   paymentCustomers    PaymentCustomer[]
   subscriptions       Subscription[]
   payments            Payment[]
+  applications        Application[]
 }
 
 model Account {
@@ -83,10 +85,58 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+model Job {
+  id              String   @id @default(cuid())
+  userId          String
+  jobHash         String
+  title           String
+  company         String?
+  location        String?
+  workplaceType   String?  // "remote" | "hybrid" | "onsite"
+  jobType         String?  // "full-time" | "part-time" | "contract" | "internship"
+  source          String   @default("manual") // "manual" | "linkedin" | "greenhouse" | "lever" | "workday" | "generic_url"
+  sourceUrl       String?  @db.Text
+  sourceDomain    String?
+  rawDescription  String   @db.Text
+  parsedData      Json?    // Structured extraction from JD analysis
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resumes         Resume[]
+  applications    Application[]
+
+  @@unique([userId, jobHash])
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([jobHash])
+}
+
+model Application {
+  id        String    @id @default(cuid())
+  userId    String
+  jobId     String
+  status    String    @default("SAVED") // "SAVED" | "APPLIED" | "INTERVIEW" | "OFFER" | "REJECTED"
+  appliedAt DateTime?
+  notes     String?   @db.Text
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  job  Job  @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, jobId])
+  @@index([userId, status])
+  @@index([userId, updatedAt(sort: Desc)])
+}
+
 model Resume {
   id     String @id @default(cuid())
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  jobId           String?
+  job             Job?     @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  templateId      String   @default("classic")
 
   title           String // e.g. "Software Engineer - Google"
   originalText    String? // Extracted text from uploaded PDF
@@ -102,12 +152,15 @@ model Resume {
 
   // Structured Content (The "Source of Truth" for the editor)
   structuredData Json? // { summary, skills, experience: [], projects: [], education: [] }
+  originalData   Json? // Raw parsed candidate resume structured data before tailoring
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   skillGapOccurrences SkillGapOccurrence[]
   profileScores       ProfileScore[]
+
+  @@index([userId, jobId])
 }
 
 model ProfileScore {

@@ -4,11 +4,11 @@ import { ArrowRight, CheckCircle, Search, ShieldAlert, BarChart3, ScanSearch, Fi
 import { auth } from "@/auth";
 
 export const metadata = {
-    title: "Free ATS Resume Checker & Score Scanner | JobFit",
-    description: "Will your resume pass? Use our free ATS resume checker to see your match score, identify parsing errors, and fix missing keywords.",
+    title: "Free Resume & Job Match Checker | JobFit",
+    description: "See how closely your resume matches the job description. Evaluate keyword alignment, check ATS parsing readiness, and identify missing requirements.",
     openGraph: {
-        title: "Free ATS Resume Checker & Score Scanner | JobFit",
-        description: "Will your resume pass? Use our free ATS resume checker to see your match score.",
+        title: "Free Resume & Job Match Checker | JobFit",
+        description: "See how closely your resume matches the target job. Evaluate keyword alignment and parsing readiness.",
         url: "https://jobfit.co.in/ats-resume-checker",
         type: "website",
     },
@@ -40,14 +40,14 @@ export default async function AtsResumeChecker() {
                 <section className="space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32">
                     <div className="container mx-auto flex max-w-[64rem] flex-col items-center gap-4 text-center px-4">
                         <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight">
-                            <span className="text-primary">ATS Resume Checker</span>
+                            <span className="text-primary">Resume Job Match Checker</span>
                         </h1>
                         <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
-                            Don't get rejected by a robot. Scan your resume against the job description to see exactly what the Applicant Tracking System sees.
+                            See how closely your resume matches the job. Analyze keyword alignment, check machine-readable parsing structure, and find gaps before you apply.
                         </p>
                         <div className="space-x-4">
                             <Button size="lg" asChild>
-                                <Link href="/builder/new">Check My ATS Resume Score <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                                <Link href="/builder/new">Check My Job Match Score <ArrowRight className="ml-2 h-4 w-4" /></Link>
                             </Button>
                         </div>
                     </div>
@@ -57,12 +57,11 @@ export default async function AtsResumeChecker() {
                 <section className="container max-w-4xl py-12 space-y-8 px-4">
                     <div className="prose dark:prose-invert max-w-none">
                         <p className="text-lg leading-loose">
-                            An <strong>ATS Resume Checker</strong> is a diagnostic tool designed to simulate the parsing algorithms used by major hiring platforms like Workday, Greenhouse, and Taleo.
+                            An <strong>ATS Resume Checker</strong> is a diagnostic tool designed to evaluate resume structure, text extraction, and alignment against job requirements.
                         </p>
                         <p className="text-lg leading-loose mt-4">
-                            Before a human recruiter ever reads your name, a software bot (the Applicant Tracking System) scans your document.
-                            It strips away your beautiful formatting, ignores your graphics, and hunts for specific keywords. If your resume
-                            isn't optimized for this machine reading, it gets archived instantly—regardless of how qualified you are.
+                            Applicant Tracking Systems (ATS) index candidate documents so recruiters can search and filter applicants by keywords, qualifications, and experience.
+                            If your resume uses unreadable formatting or misses relevant terminology used in the job description, recruiters searching their applicant database may not find your profile.
                         </p>
                     </div>
                 </section>
@@ -183,28 +182,28 @@ export default async function AtsResumeChecker() {
                     </div>
                 </section>
 
-                {/* What Does an ATS Score Mean? */}
+                {/* What Does a Job Match Score Mean? */}
                 <section className="container max-w-4xl py-16 space-y-8">
-                    <h2 className="text-3xl font-bold mb-6">What Does an ATS Resume Score Mean?</h2>
+                    <h2 className="text-3xl font-bold mb-6">What Does a Job Match Score Mean?</h2>
                     <div className="p-6 border rounded-xl bg-gradient-to-br from-background to-slate-50 dark:to-slate-900">
                         <div className="flex flex-col md:flex-row gap-8 items-center">
                             <div className="shrink-0 text-center">
-                                <div className="text-6xl font-bold text-primary mb-2">95</div>
-                                <span className="text-sm text-muted-foreground font-medium uppercase tracking-wide">Target Score</span>
+                                <div className="text-6xl font-bold text-primary mb-2">90+</div>
+                                <span className="text-sm text-muted-foreground font-medium uppercase tracking-wide">Target Range</span>
                             </div>
                             <div className="space-y-4">
                                 <p className="text-muted-foreground">
-                                    An ATS score is a probability indicator. It estimates how likely your resume is to pass the automated filter and be seen by a human recruiter.
+                                    A Job Match Score provides an objective measure of alignment between your resume and the target role, highlighting keyword coverage and parsing readiness.
                                 </p>
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                                     <div className="p-3 rounded bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-300">
-                                        <strong>0-50: Critical Risk</strong><br />Likely rejection. Missing core requirements.
+                                        <strong>0-50: Low Alignment</strong><br />Missing critical core requirements or keywords.
                                     </div>
                                     <div className="p-3 rounded bg-yellow-100 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-300">
-                                        <strong>50-80: Average</strong><br />May pass, but will be ranked lower than peers.
+                                        <strong>50-80: Moderate Alignment</strong><br />Solid foundation with opportunities to strengthen terminology.
                                     </div>
                                     <div className="p-3 rounded bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300">
-                                        <strong>80-100: Top Tier</strong><br />Highly relevant. Strong chance of interview.
+                                        <strong>80-100: Strong Alignment</strong><br />High keyword alignment and clean parsing structure.
                                     </div>
                                 </div>
                             </div>
@@ -214,13 +213,13 @@ export default async function AtsResumeChecker() {
                     <div className="flex gap-3 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg text-sm text-blue-800 dark:text-blue-200 mt-6">
                         <ShieldAlert className="h-5 w-5 shrink-0" />
                         <p>
-                            <strong>Note:</strong> No tool can guarantee a job offer. A high score means your resume is <em>readable</em> and <em>relevant</em>, removing the technical barriers to getting hired. The rest depends on your actual interview performance.
+                            <strong>Note:</strong> No tool can guarantee an employer's hiring decisions or predict proprietary ATS configurations. A strong match score indicates that your resume is structured for reliable machine parsing and clearly communicates relevant qualifications.
                         </p>
                     </div>
 
                     <div className="pt-8 text-center">
                         <Button size="lg" asChild className="h-14 px-8 text-lg">
-                            <Link href="/builder/new">Check My ATS Resume Score</Link>
+                            <Link href="/builder/new">Check My Job Match Score</Link>
                         </Button>
                     </div>
                 </section>

@@ -34,7 +34,7 @@ export const metadata = {
   description: "Generate an ATS-optimized resume based on any job description. Audit your GitHub & LinkedIn profiles, close skill gaps with free roadmaps, and apply with confidence.",
   openGraph: {
     title: "ATS Resume Builder & Candidate Profiler – JobFit",
-    description: "Tailor your resume to any job description, audit your profiles, and improve ATS score instantly.",
+    description: "Tailor your resume to any job description, audit your profiles, and improve job match alignment instantly.",
     url: "https://jobfit.co.in",
     type: "website",
   },
@@ -68,15 +68,15 @@ export default async function Home() {
         "name": "Is this ATS safe?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes, 100%. We use standard single-column text layouts and machine-readable PDF vectors generated via @react-pdf/renderer. They are fully compatible with all major Applicant Tracking Systems (ATS) like Workday, Taleo, and Greenhouse without getting stripped or garbled."
+          "text": "We use standard single-column text layouts and machine-readable vector PDFs designed to avoid common parsing issues like multi-column tables, text boxes, and complex graphics."
         }
       },
       {
         "@type": "Question",
-        "name": "What is the 10-dimension ATS Match Score?",
+        "name": "What is the Multi-Factor Job Match Score?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Unlike primitive keyword counters, JobFit scores your resume across 10 evaluation dimensions: Target Title Alignment, Keyword Density, Quantified Impact Metrics (Google X-Y-Z), Action Verbs, Skill Synonyms, Tools Section, Tech Stack Recency, Soft Skills, Location, and Section Hierarchy."
+          "text": "Unlike primitive keyword counters, JobFit evaluates your resume against the target job across key dimensions: Role Alignment, Keyword Coverage, Quantified Impact, Action Verbs, Skill Synonyms, Tools Section, Tech Stack Recency, Core Competencies, and Section Structure."
         }
       },
       {
@@ -100,7 +100,7 @@ export default async function Home() {
         "name": "Is JobFit free?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes, you can try JobFit for free. Every account gets free credits to calculate ATS match scores, identify missing skills, and audit candidate profiles. For full AI bullet rewrites and unlimited PDF downloads, plans start at ₹99/month."
+          "text": "Yes, you can try JobFit for free. Every account gets free credits to calculate job match scores, identify missing skills, and audit candidate profiles. For full AI bullet rewrites and unlimited PDF downloads, plans start at ₹99/month."
         }
       },
       {
@@ -108,7 +108,7 @@ export default async function Home() {
         "name": "Can I download the resume as a PDF?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes! Once optimized in our side-by-side interactive editor, you can download your resume as a perfectly formatted, ATS-compliant PDF ready for corporate job portals."
+          "text": "Yes! Once optimized in our side-by-side interactive editor, you can download your resume as a clean, machine-readable PDF ready for corporate job portals."
         }
       }
     ]
@@ -138,7 +138,7 @@ export default async function Home() {
               How it Works
             </Link>
             <Link href="#scoring" className="hover:text-foreground transition-colors">
-              10-Factor ATS
+              Job Match Score
             </Link>
             <Link href="#profiler" className="hover:text-foreground transition-colors">
               Candidate Profiler
@@ -193,9 +193,9 @@ export default async function Home() {
             {/* Pill Badge with Active Pulse */}
             <div className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-background/80 backdrop-blur-md px-4 py-1.5 text-xs sm:text-sm font-medium shadow-xs text-foreground/80 animate-in fade-in slide-in-from-bottom-3 duration-700">
               <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>#1 AI Career & ATS Shortlist Engine</span>
+              <span>AI Resume & Job Alignment Engine</span>
               <span className="text-muted-foreground/60">•</span>
-              <span className="text-primary font-semibold">10-Factor Scoring</span>
+              <span className="text-primary font-semibold">Multi-Factor Match</span>
             </div>
 
             {/* Main Headline */}
@@ -210,14 +210,14 @@ export default async function Home() {
 
             {/* Sub-headline */}
             <p className="max-w-[46rem] leading-normal text-muted-foreground sm:text-lg md:text-xl sm:leading-8 animate-in fade-in slide-in-from-bottom-5 duration-700 delay-200">
-              Don't let a bot reject your hard work. Tailor your resume with <span className="font-semibold text-foreground">Google X-Y-Z metrics</span>, audit your <span className="font-semibold text-foreground">GitHub & LinkedIn profiles</span>, and pass the <span className="font-semibold text-foreground">Applicant Tracking System (ATS)</span> every single time.
+              See how closely your resume matches the job. Tailor your experience with <span className="font-semibold text-foreground">evidence-based impact</span>, audit your <span className="font-semibold text-foreground">GitHub & LinkedIn profiles</span>, and improve <span className="font-semibold text-foreground">ATS parsing readiness & keyword alignment</span>.
             </p>
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-3.5 items-center justify-center pt-2 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-300 w-full sm:w-auto">
               <Button size="lg" asChild className="h-12 px-8 text-base font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 w-full sm:w-auto">
                 <Link href={newResumeHref}>
-                  Generate ATS Resume Free <ArrowRight className="ml-2 h-5 w-5" />
+                  Tailor Your Resume Free <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
               <Button variant="outline" size="lg" asChild className="h-12 px-7 text-base font-medium bg-background/60 backdrop-blur-sm hover:bg-muted/60 transition-all w-full sm:w-auto">
@@ -230,7 +230,7 @@ export default async function Home() {
                 <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" /> 3 Free Scans Included
               </span>
               <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" /> Workday, Taleo & Greenhouse Tested
+                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" /> Clean ATS-Friendly Structure
               </span>
               <span className="flex items-center gap-1.5">
                 <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" /> No Credit Card Required
@@ -252,7 +252,7 @@ export default async function Home() {
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-muted-foreground">Computed Match:</span>
                   <span className="text-sm font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-md border border-emerald-500/20">
-                    96% ATS Score
+                    94% Job Match Score
                   </span>
                 </div>
               </div>
@@ -283,7 +283,7 @@ export default async function Home() {
               {/* Verification Badges */}
               <div className="flex flex-wrap items-center justify-between gap-2 pt-1 text-[11px] text-muted-foreground">
                 <div className="flex flex-wrap gap-2">
-                  <span className="bg-muted px-2 py-0.5 rounded-md font-medium text-foreground">✓ 10-Factor Tested</span>
+                  <span className="bg-muted px-2 py-0.5 rounded-md font-medium text-foreground">✓ Multi-Factor Aligned</span>
                   <span className="bg-muted px-2 py-0.5 rounded-md font-medium text-foreground">✓ Exact Synonyms Added</span>
                   <span className="bg-muted px-2 py-0.5 rounded-md font-medium text-foreground">✓ GitHub Code Verified</span>
                 </div>
@@ -300,10 +300,10 @@ export default async function Home() {
           <div className="bg-slate-50/80 border py-12 px-6 md:px-12 dark:bg-card/40 rounded-2xl shadow-xs space-y-8">
             <div className="text-center space-y-3">
               <h2 className="font-heading text-3xl md:text-4xl font-bold tracking-tight">
-                What is an ATS and Why Do Resumes Fail?
+                How Do Applicant Tracking Systems Screen Resumes?
               </h2>
               <p className="text-base sm:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                An Applicant Tracking System (ATS) is software used by 99% of Fortune 500 companies to filter candidates. It acts as a gatekeeper, scanning your resume for specific keywords, quantified impact, and relevance before a human ever sees it.
+                Applicant Tracking Systems (ATS) are software tools used by employers to organize, index, and search candidate resumes. They scan documents to identify relevant skills, role keywords, and qualifications so recruiters can prioritize applications for review.
               </p>
             </div>
 
@@ -314,12 +314,12 @@ export default async function Home() {
                   <div className="h-7 w-7 rounded-full bg-red-100 dark:bg-red-950 flex items-center justify-center text-red-600 dark:text-red-400 shrink-0">
                     <XCircle className="h-4 w-4" />
                   </div>
-                  Why You Get Rejected
+                  Why Resumes Get Overlooked
                 </h3>
                 <ul className="space-y-3 text-sm text-muted-foreground">
                   <li className="flex gap-2.5">
                     <div className="h-1.5 w-1.5 rounded-full bg-red-400 mt-2 shrink-0"></div>
-                    <span><strong className="text-foreground">Unquantified Experience:</strong> Stating "responsible for microservices" without numbers, latency gains, or throughput fails ATS scoring.</span>
+                    <span><strong className="text-foreground">Unclear Experience:</strong> Stating generic duties without clear actions, methodology, or outcomes makes it harder for recruiters and parsers to evaluate your impact.</span>
                   </li>
                   <li className="flex gap-2.5">
                     <div className="h-1.5 w-1.5 rounded-full bg-red-400 mt-2 shrink-0"></div>
@@ -355,7 +355,7 @@ export default async function Home() {
                   </li>
                   <li className="flex gap-2.5">
                     <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 mt-2 shrink-0"></div>
-                    <span><strong className="text-foreground">Machine-Readable Vector PDF:</strong> Exports clean single-column layouts engineered with @react-pdf/renderer that pass all parsers.</span>
+                    <span><strong className="text-foreground">Machine-Readable Vector PDF:</strong> Exports clean single-column layouts engineered with @react-pdf/renderer designed for reliable text extraction.</span>
                   </li>
                   <li className="flex gap-2.5">
                     <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 mt-2 shrink-0"></div>
@@ -434,7 +434,7 @@ export default async function Home() {
 
           <div className="text-center">
             <Button size="lg" asChild className="shadow-sm">
-              <Link href={newResumeHref}>Generate ATS Resume Free</Link>
+              <Link href={newResumeHref}>Check Your Job Match Free</Link>
             </Button>
           </div>
         </section>
@@ -447,10 +447,10 @@ export default async function Home() {
                 <Target className="h-3.5 w-3.5 text-primary" /> Algorithmic Benchmark
               </div>
               <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
-                10-Dimension ATS Match Score Explained
+                Multi-Dimension Job Match Score Explained
               </h2>
               <p className="max-w-[85%] leading-normal text-muted-foreground sm:text-lg">
-                Most enterprise screening portals require a match score of at least 80% to be shortlisted for a phone screen.
+                See how closely your resume aligns with job requirements, discover missing skills, and strengthen keyword coverage before applying.
               </p>
 
               {/* Modern Transformation Card */}
@@ -476,7 +476,7 @@ export default async function Home() {
 
                   {/* After Score */}
                   <div className="text-center p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/[0.03] w-full md:w-auto shadow-xs">
-                    <div className="text-5xl font-extrabold text-emerald-600 dark:text-emerald-400 mb-1">95%+</div>
+                    <div className="text-5xl font-extrabold text-emerald-600 dark:text-emerald-400 mb-1">92%</div>
                     <div className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">JobFit Optimized</div>
                     <p className="text-xs text-muted-foreground mt-1.5 max-w-[170px] mx-auto">
                       Google X-Y-Z metrics, exact role title, and top 20 keywords.
@@ -487,8 +487,8 @@ export default async function Home() {
                 {/* 10 Dimensions Pills */}
                 <div className="mt-8 pt-6 border-t border-border/70 text-left space-y-3">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="font-bold text-foreground">Scored Across 10 Critical ATS Evaluation Dimensions:</span>
-                    <span className="text-muted-foreground hidden sm:inline">Enterprise Safe</span>
+                    <span className="font-bold text-foreground">Evaluated Across Key Job Alignment Dimensions:</span>
+                    <span className="text-muted-foreground hidden sm:inline">Parsing Ready</span>
                   </div>
                   <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs">
                     <div className="p-2 rounded-lg bg-muted/60 hover:bg-muted font-medium text-center transition-colors">Target Title Match</div>
@@ -651,24 +651,24 @@ export default async function Home() {
                 Templates like Canva or basic text editors focus on design. We focus on <strong>data</strong>. An ATS doesn't care if your resume is colorful; it cares if it's readable, keyword-dense, and quantified.
               </p>
               <p className="text-base sm:text-lg text-muted-foreground mb-8 leading-relaxed">
-                JobFit is engineered for the machine first, ensuring you pass corporate filters so a human hiring manager can appreciate your real engineering and product skills.
+                JobFit ensures your resume is structured for reliable machine parsing and clearly highlights relevant skills so hiring teams can easily assess your qualifications.
               </p>
               <Button size="lg" asChild className="shadow-sm">
-                <Link href={newResumeHref}>Generate ATS Resume Free</Link>
+                <Link href={newResumeHref}>Tailor Your Resume Free</Link>
               </Button>
             </div>
             <div className="space-y-4">
               <div className="flex gap-4 p-4 border rounded-xl shadow-xs bg-background hover:border-primary/40 transition-colors">
                 <ShieldCheck className="h-10 w-10 text-primary shrink-0" />
                 <div>
-                  <h3 className="font-bold text-base sm:text-lg">Parsing Guarantee</h3>
-                  <p className="text-muted-foreground text-xs sm:text-sm">Our single-column vector PDF formats are verified to parse correctly on Workday, Taleo, and Greenhouse.</p>
+                  <h3 className="font-bold text-base sm:text-lg">ATS Parsing Readiness</h3>
+                  <p className="text-muted-foreground text-xs sm:text-sm">Clean single-column vector PDF formatting designed for machine readability across recruitment portals without layout corruption.</p>
                 </div>
               </div>
               <div className="flex gap-4 p-4 border rounded-xl shadow-xs bg-background hover:border-primary/40 transition-colors">
                 <BarChart className="h-10 w-10 text-blue-500 shrink-0" />
                 <div>
-                  <h3 className="font-bold text-base sm:text-lg">Live 10-Factor Feedback</h3>
+                  <h3 className="font-bold text-base sm:text-lg">Live Match Feedback</h3>
                   <p className="text-muted-foreground text-xs sm:text-sm">See your score increase in real-time as you optimize sections and add missing keywords.</p>
                 </div>
               </div>
@@ -701,13 +701,13 @@ export default async function Home() {
                     </span>
                   </summary>
                   <p className="mt-3 leading-relaxed text-sm sm:text-base text-muted-foreground">
-                    Yes, 100%. We use standard single-column text layouts and machine-readable PDF formats that are fully compatible with all major Applicant Tracking Systems (ATS) like Workday, Taleo, and Greenhouse.
+                    We use clean single-column text layouts and machine-readable vector PDFs designed to avoid common parsing issues like multi-column tables, text boxes, and complex graphics.
                   </p>
                 </details>
 
                 <details className="group border rounded-xl bg-background p-4.5 [&_summary::-webkit-details-marker]:hidden hover:border-primary/40 transition-colors">
                   <summary className="flex cursor-pointer items-center justify-between gap-1.5 font-medium text-base sm:text-lg">
-                    <span className="font-semibold">How accurate is the 10-dimension ATS score?</span>
+                    <span className="font-semibold">How does the Job Match Score work?</span>
                     <span className="shrink-0 rounded-full bg-muted p-1.5 text-muted-foreground sm:p-2 group-open:-rotate-180 transition duration-200">
                       <svg xmlns="http://www.w3.org/2000/svg" className="size-4 shrink-0" viewBox="0 0 20 20" fill="currentColor">
                         <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -715,7 +715,7 @@ export default async function Home() {
                     </span>
                   </summary>
                   <p className="mt-3 leading-relaxed text-sm sm:text-base text-muted-foreground">
-                    Our scoring engine mimics real enterprise screening algorithms. It checks title alignment, keyword density, Google X-Y-Z quantified impact metrics, action verbs, skill synonyms, and section hierarchy. A 95+ score on JobFit is highly likely to pass corporate filters.
+                    JobFit analyzes how closely your resume matches the job description requirements. It evaluates keyword overlap, role alignment, action verbs, technical tools, and structural readability to give you evidence-based feedback on where your application is strong and what can be improved.
                   </p>
                 </details>
 
@@ -757,7 +757,7 @@ export default async function Home() {
                     </span>
                   </summary>
                   <p className="mt-3 leading-relaxed text-sm sm:text-base text-muted-foreground">
-                    Yes, you can try JobFit for free. Every account gets free credits to calculate ATS scores, identify missing skills, and audit candidate profiles. For full AI bullet rewrites and unlimited PDF downloads, affordable plans start at ₹99/month.
+                    Yes, you can try JobFit for free. Every account gets free credits to calculate job match scores, identify missing skills, and audit candidate profiles. For full AI bullet rewrites and unlimited PDF downloads, affordable plans start at ₹99/month.
                   </p>
                 </details>
 
@@ -771,7 +771,7 @@ export default async function Home() {
                     </span>
                   </summary>
                   <p className="mt-3 leading-relaxed text-sm sm:text-base text-muted-foreground">
-                    Yes! Once optimized in our side-by-side builder, you can download your resume as a perfectly formatted, ATS-compatible PDF. The "Job Hunt Mode" plan allows unlimited downloads.
+                    Yes! Once optimized in our side-by-side builder, you can download your resume as a clean, machine-readable PDF formatted for easy applicant tracking system parsing. The "Job Hunt Mode" plan allows unlimited downloads.
                   </p>
                 </details>
               </div>

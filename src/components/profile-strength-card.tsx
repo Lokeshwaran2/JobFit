@@ -152,7 +152,7 @@ export function ProfileStrengthCard({
                   <span className="font-bold text-foreground">{resumeScore}/100</span>
                 </div>
                 <Progress value={resumeScore} className="h-2" />
-                <p className="text-[11px] text-muted-foreground">ATS keyword & metric match</p>
+                <p className="text-[11px] text-muted-foreground">Resume & job keyword match</p>
               </div>
 
               {/* 2. GitHub Role Score */}

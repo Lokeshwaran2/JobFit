@@ -5,7 +5,7 @@ import { Resume } from "@prisma/client";
 import { ResumeCard } from "./resume-card";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Trash2, CheckSquare, X, AlertTriangle } from "lucide-react";
+import { Trash2, CheckSquare, X, AlertTriangle, ChevronDown, ChevronUp } from "lucide-react";
 import { deleteResumes } from "@/actions/resume";
 import { toast } from "sonner";
 import {
@@ -28,6 +28,12 @@ export function ResumeList({ resumes }: ResumeListProps) {
     const [isSelectMode, setIsSelectMode] = useState(false);
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [isPending, startTransition] = useTransition();
+
+    // Initial limit to keep dashboard concise on initial load
+    const INITIAL_LIMIT = 6;
+    const [showAll, setShowAll] = useState(false);
+    const hasMore = resumes.length > INITIAL_LIMIT;
+    const displayedResumes = showAll ? resumes : resumes.slice(0, INITIAL_LIMIT);
 
     const handleToggleSelect = (id: string) => {
         setSelectedIds((prev) =>
@@ -125,7 +131,7 @@ export function ResumeList({ resumes }: ResumeListProps) {
 
             {/* Resume Cards Grid */}
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {resumes.map((resume) => (
+                {displayedResumes.map((resume) => (
                     <ResumeCard
                         key={resume.id}
                         resume={resume}
@@ -135,6 +141,33 @@ export function ResumeList({ resumes }: ResumeListProps) {
                     />
                 ))}
             </div>
+
+            {/* Show All / Show Less Pagination Footer */}
+            {hasMore && (
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+                    <span className="text-xs text-muted-foreground font-medium">
+                        {showAll
+                            ? `Showing all ${resumes.length} resumes`
+                            : `Showing ${displayedResumes.length} of ${resumes.length} resumes`}
+                    </span>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setShowAll(!showAll)}
+                        className="text-xs font-semibold gap-1.5 h-8"
+                    >
+                        {showAll ? (
+                            <>
+                                Show Recent Only <ChevronUp className="h-3.5 w-3.5" />
+                            </>
+                        ) : (
+                            <>
+                                Show All Resumes ({resumes.length}) <ChevronDown className="h-3.5 w-3.5" />
+                            </>
+                        )}
+                    </Button>
+                </div>
+            )}
 
             {/* Bulk Delete Confirmation Dialog */}
             <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>

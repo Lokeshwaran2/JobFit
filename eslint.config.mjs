@@ -10,6 +10,17 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
+  {
+    ignores: [
+      ".next/**",
+      "out/**",
+      "build/**",
+      "next-env.d.ts",
+      "**/*.bundle.cjs",
+      "scratch/**",
+      "src/lib/export/build-worker.js",
+    ],
+  },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
     rules: {
@@ -18,7 +29,6 @@ const eslintConfig = [
       "react/no-unescaped-entities": "off",
       "@next/next/no-img-element": "off",
     },
-    ignores: [".next/**", "out/**", "build/**", "next-env.d.ts"],
   },
 ];
 

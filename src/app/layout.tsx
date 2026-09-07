@@ -11,19 +11,19 @@ export const metadata: Metadata = {
     default: "JobFit - ATS Resume Optimizer",
     template: "%s | JobFit",
   },
-  description: "AI-powered resume tailoring for job seekers. Increase your interview chances with ATS-optimized resumes.",
+  description: "AI-powered resume tailoring for job seekers. Improve keyword alignment, role fit, and ATS parsing readiness.",
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "https://jobfit.co.in",
     title: "JobFit - ATS Resume Optimizer",
-    description: "Tailor your resume to any job description and improve ATS score instantly.",
+    description: "Tailor your resume to any job description and improve job match alignment instantly.",
     siteName: "JobFit",
   },
   twitter: {
     card: "summary_large_image",
     title: "JobFit - ATS Resume Optimizer",
-    description: "Tailor your resume to any job description and improve ATS score instantly.",
+    description: "Tailor your resume to any job description and improve job match alignment instantly.",
   },
   icons: {
     icon: "/logo.png?v=2",

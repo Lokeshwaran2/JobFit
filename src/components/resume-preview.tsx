@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { Loader2 } from "lucide-react";
 import { ResumeDocument } from "./resume-document";
-import { useEffect, useState, useRef } from "react";
+import { TemplateId } from "@/lib/templates/template-registry";
 
 // Dynamically import BlobProvider to avoid SSR issues with @react-pdf/renderer
 const BlobProvider = dynamic(
@@ -18,13 +18,24 @@ const BlobProvider = dynamic(
     }
 );
 
-export function ResumePreview({ data, isMobile }: { data: any, isMobile?: boolean }) {
+export function ResumePreview({
+    data,
+    templateId = "classic",
+    isMobile,
+}: {
+    data: any;
+    templateId?: TemplateId;
+    isMobile?: boolean;
+}) {
     // Estimate PDF height to force scrollable container
-    const contentHeight = Math.max(1150, 1000 + ((data.experience?.length || 0) * 180) + ((data.projects?.length || 0) * 120));
+    const contentHeight = Math.max(1150, 1000 + ((data?.experience?.length || 0) * 180) + ((data?.projects?.length || 0) * 120));
 
     return (
         <div className={`${isMobile ? 'h-auto min-h-[600px]' : 'h-full'} w-full overflow-hidden rounded-lg border bg-background shadow-sm`}>
-            <BlobProvider document={<ResumeDocument data={data} />} key={JSON.stringify(data)}>
+            <BlobProvider
+                document={<ResumeDocument data={data} templateId={templateId} />}
+                key={`${templateId}_${JSON.stringify(data)}`}
+            >
                 {({ url, loading, error }) => {
                     if (loading) {
                         return (
