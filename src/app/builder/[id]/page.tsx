@@ -19,6 +19,8 @@ export default async function BuilderPage({ params }: { params: Promise<{ id: st
             },
             select: {
                 id: true,
+                jobId: true,
+                templateId: true,
                 structuredData: true,
                 targetJobDesc: true,
                 atsScore: true,
@@ -40,10 +42,12 @@ export default async function BuilderPage({ params }: { params: Promise<{ id: st
     const initialData = (resume.structuredData as any) || {};
 
     return (
-        <div className="h-[calc(100vh-4rem)] min-h-[1000px]">
+        <div className="min-h-screen w-full bg-slate-50/50 dark:bg-slate-950/50 pb-16">
             <ResumeBuilder
                 initialData={initialData}
                 resumeId={resume.id}
+                jobId={resume.jobId}
+                initialTemplateId={resume.templateId || "classic"}
                 jobDescription={resume.targetJobDesc || ""}
                 atsScore={resume.atsScore}
                 improvements={resume.improvements as any}

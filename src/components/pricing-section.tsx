@@ -82,14 +82,14 @@ export function PricingSection({ userId, isPro, credits }: PricingSectionProps) 
                             <div className="text-3xl font-bold">{currentCurrencyConfig.symbol}0</div>
                             <ul className="mt-4 space-y-2">
                                 <li className="flex items-center"><Check className="mr-2 h-4 w-4 text-green-500" /> Upload resume + JD</li>
-                                <li className="flex items-center"><Check className="mr-2 h-4 w-4 text-green-500" /> 10-Factor ATS match score</li>
+                                <li className="flex items-center"><Check className="mr-2 h-4 w-4 text-green-500" /> Multi-factor Job Match Score</li>
                                 <li className="flex items-center"><Check className="mr-2 h-4 w-4 text-green-500" /> Skill gap insights</li>
                                 <li className="flex items-center text-muted-foreground"><span className="mr-2 text-red-500">✕</span> Resume download</li>
                             </ul>
                         </CardContent>
                         <CardFooter>
                             <Button className="w-full" variant="outline" disabled={true}>
-                                {credits > 0 ? `${credits} Free Credit${credits > 1 ? 's' : ''} Available` : "Check My ATS Score"}
+                                {credits > 0 ? `${credits} Free Credit${credits > 1 ? 's' : ''} Available` : "Check My Match Score"}
                             </Button>
                         </CardFooter>
                     </Card>
@@ -111,7 +111,7 @@ export function PricingSection({ userId, isPro, credits }: PricingSectionProps) 
                             <ul className="mt-4 space-y-2">
                                 <li className="flex items-center"><Check className="mr-2 h-4 w-4 text-green-500" /> 20 Full Credits</li>
                                 <li className="flex items-center"><Check className="mr-2 h-4 w-4 text-green-500" /> Google XYZ achievement rewrites</li>
-                                <li className="flex items-center"><Check className="mr-2 h-4 w-4 text-green-500" /> ATS-optimized PDF & DOCX export</li>
+                                <li className="flex items-center"><Check className="mr-2 h-4 w-4 text-green-500" /> Clean machine-readable PDF & DOCX export</li>
                                 <li className="flex items-center"><Check className="mr-2 h-4 w-4 text-green-500" /> No automatic renewal</li>
                             </ul>
                         </CardContent>
@@ -156,7 +156,7 @@ export function PricingSection({ userId, isPro, credits }: PricingSectionProps) 
 
                 <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-center text-xs text-muted-foreground">
                     <span className="flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-emerald-500" /> 256-bit encrypted checkout</span>
-                    <span className="flex items-center gap-1.5"><Check className="h-4 w-4 text-emerald-500" /> 10-Factor ATS verification guaranteed</span>
+                    <span className="flex items-center gap-1.5"><Check className="h-4 w-4 text-emerald-500" /> Evidence-based match analysis</span>
                     <span className="flex items-center gap-1.5"><CreditCard className="h-4 w-4 text-emerald-500" /> Cancel anytime via self-serve portal</span>
                 </div>
             </div>

@@ -37,7 +37,7 @@ export function InteractiveShowcase() {
           }`}
         >
           <FileText className="h-4 w-4 text-blue-500" />
-          <span>10-Factor ATS Rewriter</span>
+          <span>Experience Tailoring Engine</span>
         </button>
 
         <button
@@ -83,7 +83,7 @@ export function InteractiveShowcase() {
       {/* Showcase Card Display Container */}
       <Card className="border-border/60 shadow-xl overflow-hidden bg-gradient-to-b from-card to-card/90">
         <CardContent className="p-4 sm:p-8">
-          {/* TAB 1: 10-Factor ATS Resume Rewriter */}
+          {/* TAB 1: Evidence-Based Resume Tailoring */}
           {activeTab === "ats" && (
             <div className="space-y-6">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b">
@@ -92,14 +92,14 @@ export function InteractiveShowcase() {
                     <Badge variant="outline" className="bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-200">
                       Target Role: Senior Full-Stack Engineer
                     </Badge>
-                    <span className="text-xs text-muted-foreground">Scored Against Fortune 500 JD</span>
+                    <span className="text-xs text-muted-foreground">Sample Demonstration Target JD</span>
                   </div>
                   <h3 className="text-xl font-bold mt-1 text-foreground">
                     Google X-Y-Z Achievement Transformation
                   </h3>
                 </div>
 
-                <div className="flex items-center gap-2 bg-muted p-1 rounded-lg">
+                  <div className="flex items-center gap-2 bg-muted p-1 rounded-lg">
                   <button
                     onClick={() => setBulletMode("before")}
                     className={`px-3 py-1 text-xs rounded-md font-medium transition-colors ${
@@ -118,7 +118,7 @@ export function InteractiveShowcase() {
                         : "text-muted-foreground hover:text-foreground"
                     }`}
                   >
-                    JobFit ATS Optimized ✨
+                    JobFit Tailored ✨
                   </button>
                 </div>
               </div>
@@ -139,11 +139,11 @@ export function InteractiveShowcase() {
                       </span>
                       {bulletMode === "after" ? (
                         <span className="text-xs bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded-full font-medium flex items-center gap-1">
-                          <CheckCircle2 className="h-3 w-3" /> Passes 10/10 ATS Filters
+                          <CheckCircle2 className="h-3 w-3" /> High Keyword & Skill Alignment
                         </span>
                       ) : (
                         <span className="text-xs bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-300 px-2 py-0.5 rounded-full font-medium flex items-center gap-1">
-                          <AlertCircle className="h-3 w-3" /> 74% Risk of Auto-Rejection
+                          <AlertCircle className="h-3 w-3" /> Weak Alignment with Role
                         </span>
                       )}
                     </div>
@@ -202,26 +202,26 @@ export function InteractiveShowcase() {
                 <div className="md:col-span-4 bg-muted/40 p-5 rounded-xl border border-border/70 flex flex-col justify-between">
                   <div>
                     <div className="text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-1">
-                      Computed ATS Match
+                      Job Match Score (Example)
                     </div>
                     <div className="flex items-baseline gap-2">
-                      <span className={`text-4xl font-extrabold ${bulletMode === "after" ? "text-emerald-600 dark:text-emerald-400" : "text-red-500"}`}>
-                        {bulletMode === "after" ? "96%" : "44%"}
+                      <span className={`text-4xl font-extrabold ${bulletMode === "after" ? "text-emerald-600 dark:text-emerald-400" : "text-amber-500"}`}>
+                        {bulletMode === "after" ? "88%" : "54%"}
                       </span>
                       <span className="text-xs text-muted-foreground">
-                        {bulletMode === "after" ? "(Interview Guaranteed Range)" : "(Screening Threshold: 80%)"}
+                        {bulletMode === "after" ? "(Tailored Alignment)" : "(Baseline Alignment)"}
                       </span>
                     </div>
 
                     <div className="space-y-3 mt-4">
                       <div>
                         <div className="flex justify-between text-xs mb-1">
-                          <span className="text-muted-foreground">Keyword Density</span>
-                          <span className="font-semibold">{bulletMode === "after" ? "98%" : "50%"}</span>
+                          <span className="text-muted-foreground">Keyword Alignment</span>
+                          <span className="font-semibold">{bulletMode === "after" ? "86%" : "50%"}</span>
                         </div>
                         <div className="h-1.5 w-full bg-border rounded-full overflow-hidden">
                           <div
-                            className={`h-full rounded-full transition-all duration-500 ${bulletMode === "after" ? "w-[98%] bg-emerald-500" : "w-[50%] bg-red-400"}`}
+                            className={`h-full rounded-full transition-all duration-500 ${bulletMode === "after" ? "w-[86%] bg-emerald-500" : "w-[50%] bg-amber-400"}`}
                           />
                         </div>
                       </div>
@@ -229,23 +229,23 @@ export function InteractiveShowcase() {
                       <div>
                         <div className="flex justify-between text-xs mb-1">
                           <span className="text-muted-foreground">Quantified Impact (Google X-Y-Z)</span>
-                          <span className="font-semibold">{bulletMode === "after" ? "95%" : "25%"}</span>
+                          <span className="font-semibold">{bulletMode === "after" ? "84%" : "32%"}</span>
                         </div>
                         <div className="h-1.5 w-full bg-border rounded-full overflow-hidden">
                           <div
-                            className={`h-full rounded-full transition-all duration-500 ${bulletMode === "after" ? "w-[95%] bg-emerald-500" : "w-[25%] bg-red-400"}`}
+                            className={`h-full rounded-full transition-all duration-500 ${bulletMode === "after" ? "w-[84%] bg-emerald-500" : "w-[32%] bg-amber-400"}`}
                           />
                         </div>
                       </div>
 
                       <div>
                         <div className="flex justify-between text-xs mb-1">
-                          <span className="text-muted-foreground">Job Title & Tech Stack Match</span>
-                          <span className="font-semibold">{bulletMode === "after" ? "100%" : "55%"}</span>
+                          <span className="text-muted-foreground">Skill & Evidence Alignment</span>
+                          <span className="font-semibold">{bulletMode === "after" ? "85%" : "48%"}</span>
                         </div>
                         <div className="h-1.5 w-full bg-border rounded-full overflow-hidden">
                           <div
-                            className={`h-full rounded-full transition-all duration-500 ${bulletMode === "after" ? "w-[100%] bg-emerald-500" : "w-[55%] bg-red-400"}`}
+                            className={`h-full rounded-full transition-all duration-500 ${bulletMode === "after" ? "w-[85%] bg-emerald-500" : "w-[48%] bg-amber-400"}`}
                           />
                         </div>
                       </div>
@@ -254,7 +254,7 @@ export function InteractiveShowcase() {
 
                   <Button asChild size="sm" className="w-full mt-5">
                     <Link href="/builder/new">
-                      Rewrite Your Bullets Free <ArrowRight className="ml-1 h-3.5 w-3.5" />
+                      Tailor Your Resume Free <ArrowRight className="ml-1 h-3.5 w-3.5" />
                     </Link>
                   </Button>
                 </div>
@@ -439,7 +439,7 @@ export function InteractiveShowcase() {
                       </td>
                       <td className="py-3 px-4 text-right">
                         <Badge className="bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/20 border-emerald-300">
-                          100% Solid Proof
+                          Strong Verified Proof
                         </Badge>
                       </td>
                     </tr>
@@ -600,7 +600,7 @@ export function InteractiveShowcase() {
                       <span>Auto-Sync to Candidate GitHub</span>
                     </div>
                     <div className="flex items-center gap-1.5 text-muted-foreground">
-                      <CheckCircle2 className="h-3 w-3 text-muted-foreground" /> Automatically Boosts ATS Score
+                      <CheckCircle2 className="h-3 w-3 text-muted-foreground" /> Demonstrates verified technical proof
                     </div>
                   </div>
                 </div>

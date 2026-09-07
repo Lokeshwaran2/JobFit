@@ -6,21 +6,39 @@ export async function POST(req: Request) {
     try {
         const bodyText = await req.text();
         const signature = req.headers.get("x-razorpay-signature");
-
         const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
 
-        if (webhookSecret && signature) {
-            const expectedSignature = crypto
-                .createHmac("sha256", webhookSecret)
-                .update(bodyText)
-                .digest("hex");
-
-            if (expectedSignature !== signature) {
-                return new NextResponse("Invalid webhook signature", { status: 400 });
-            }
+        // 1. Missing secret configuration must fail-closed with 500
+        if (!webhookSecret) {
+            console.error("[RAZORPAY_WEBHOOK] RAZORPAY_WEBHOOK_SECRET is not configured");
+            return new NextResponse("Webhook secret misconfigured", { status: 500 });
         }
 
-        const event = JSON.parse(bodyText);
+        // 2. Missing signature header must be rejected with 400
+        if (!signature) {
+            return new NextResponse("Missing webhook signature header", { status: 400 });
+        }
+
+        // 3. Cryptographic HMAC-SHA256 signature verification (timing-safe)
+        const expectedSignature = crypto
+            .createHmac("sha256", webhookSecret)
+            .update(bodyText)
+            .digest("hex");
+
+        const sigBuffer = Buffer.from(signature);
+        const expBuffer = Buffer.from(expectedSignature);
+        const isValid = sigBuffer.length === expBuffer.length && crypto.timingSafeEqual(sigBuffer, expBuffer);
+
+        if (!isValid) {
+            return new NextResponse("Invalid webhook signature", { status: 400 });
+        }
+
+        let event: any;
+        try {
+            event = JSON.parse(bodyText);
+        } catch {
+            return new NextResponse("Invalid JSON payload", { status: 400 });
+        }
         const eventType = event.event;
         const providerEventId = event.event_id || event.id || `rzp_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
 

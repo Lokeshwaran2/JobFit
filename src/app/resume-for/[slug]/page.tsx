@@ -70,7 +70,7 @@ export default async function ResumeForPage({ params }: PageProps) {
                     <div className="container px-4 md:px-6 mx-auto text-center space-y-6">
                         <div className="inline-flex items-center rounded-full border bg-background px-3 py-1 text-sm font-medium shadow-sm animate-in fade-in slide-in-from-bottom-3">
                             <span className="flex h-2 w-2 rounded-full bg-orange-500 mr-2"></span>
-                            #1 ATS Resume Builder for India
+                            AI Resume Builder for India
                         </div>
 
                         <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-primary max-w-5xl mx-auto animate-in fade-in slide-in-from-bottom-4 delay-100">
@@ -78,7 +78,7 @@ export default async function ResumeForPage({ params }: PageProps) {
                         </h1>
 
                         <p className="max-w-3xl mx-auto text-lg text-muted-foreground animate-in fade-in slide-in-from-bottom-5 delay-200">
-                            Create a professional <strong>{role}</strong> resume tailored for the Indian job market. Optimized for <strong>Naukri, Indeed, and LinkedIn</strong> to help you beat the ATS and get hired {company ? `at ${company}` : ""}.
+                            Create a professional <strong>{role}</strong> resume tailored for the Indian job market. Optimized for <strong>Naukri, Indeed, and LinkedIn</strong> to improve keyword alignment, ensure clean parsing, and get hired {company ? `at ${company}` : ""}.
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 items-center justify-center pt-6 animate-in fade-in slide-in-from-bottom-6 delay-300">

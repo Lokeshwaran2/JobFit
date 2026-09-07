@@ -18,7 +18,7 @@ export default function ResumeForHubPage() {
 
                 <p className="text-lg text-muted-foreground max-w-2xl">
                     Choose your role or target company below to see resume examples,
-                    skills, keywords and tips that help you pass ATS screening and
+                    skills, keywords, and formatting tips to improve ATS parsing readiness and
                     get shortlisted.
                 </p>
 

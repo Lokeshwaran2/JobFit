@@ -8,7 +8,7 @@ export interface NormalizedSkillResult {
 }
 
 // Mapping of lowercase alias or variant to authoritative Canonical Name
-const CANONICAL_SKILL_MAP: Record<string, string> = {
+export const CANONICAL_SKILL_MAP: Record<string, string> = {
   // Databases & Storage
   "postgres": "PostgreSQL",
   "postgresql": "PostgreSQL",
@@ -95,7 +95,13 @@ const CANONICAL_SKILL_MAP: Record<string, string> = {
   "asp.net core": "ASP.NET Core",
   ".net": ".NET",
   ".net core": ".NET Core",
+  ".net apis": ".NET",
   "fastify": "Fastify",
+
+  // Databases & Storage (additional)
+  "database": "Databases",
+  "databases": "Databases",
+  "database layers": "Databases",
 
   // Programming Languages
   "js": "JavaScript",

@@ -6,10 +6,10 @@ import { auth } from "@/auth";
 
 export const metadata = {
     title: "Create Resume Based on Job Description | Tailored & Optimized",
-    description: "Stop guessing. Use our AI to write a resume based on the job description. Match keywords, skills, and requirements to pass the ATS scan.",
+    description: "Stop guessing. Use our AI to tailor your resume based on the job description. Improve keyword alignment, highlight relevant experience, and format cleanly.",
     openGraph: {
         title: "Create Resume Based on Job Description | JobFit",
-        description: "Generate an ATS-optimized resume tailored to any job description.",
+        description: "Generate a tailored resume aligned to any job description.",
         url: "https://jobfit.co.in/resume-based-on-job-description",
         type: "website",
     },
@@ -229,9 +229,9 @@ export default async function ResumeBasedOnJobDescription() {
                                 <CheckCircle className="h-6 w-6 text-primary" />
                             </div>
                             <div>
-                                <h3 className="font-bold text-xl">3. Score Verification</h3>
+                                <h3 className="font-bold text-xl">3. Alignment Verification</h3>
                                 <p className="text-muted-foreground">
-                                    Before you download, we provide an ATS Match Score. If it's below 95, we suggest specific improvements to get you there.
+                                    Before you download, we provide a Job Match Score along with keyword suggestions and formatting checks to help you maximize alignment with the role.
                                 </p>
                             </div>
                         </div>

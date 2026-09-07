@@ -27,7 +27,7 @@ export function UpgradeDialog({ children }: UpgradeDialogProps) {
                         <DialogTitle>Unlock Full Access</DialogTitle>
                     </div>
                     <DialogDescription>
-                        Upgrade to Pro to download your ATS-optimized resume in PDF format.
+                        Upgrade to Pro to download your tailored resume in PDF format.
                     </DialogDescription>
                 </DialogHeader>
 

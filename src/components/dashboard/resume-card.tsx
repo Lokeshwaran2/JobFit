@@ -102,7 +102,7 @@ export function ResumeCard({ resume, isSelectMode = false, isSelected = false, o
                 <CardContent className="pt-0">
                     <div className="flex justify-between items-center mt-2">
                         <div className="text-sm font-medium">
-                            Score: <span className={resume.atsScore >= 80 ? "text-green-600 font-bold" : resume.atsScore >= 50 ? "text-yellow-600 font-bold" : "text-red-600 font-bold"}>{resume.atsScore}</span>
+                            Match Score: <span className={resume.atsScore >= 80 ? "text-green-600 font-bold" : resume.atsScore >= 50 ? "text-yellow-600 font-bold" : "text-red-600 font-bold"}>{resume.atsScore}</span>
                         </div>
                         <Button
                             variant="ghost"
