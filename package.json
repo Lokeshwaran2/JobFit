@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "node src/lib/export/build-worker.js && prisma generate && next build",
     "start": "next start",
     "lint": "eslint",
     "test:skills": "tsx src/lib/skills/__tests__/skill-gap.test.ts",

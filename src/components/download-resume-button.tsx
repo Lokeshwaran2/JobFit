@@ -55,7 +55,35 @@ export function DownloadResumeButton({
     try {
       setDownloadingFormat(format);
 
-      // If resumeId is available, download directly from authenticated export API
+      const candidateName = (data?.personalInfo?.fullName || data?.personalInfo?.name || fileName)
+        .replace(/[^a-zA-Z0-9_-]/g, "_");
+
+      // 1. For PDF with resume data in browser, render directly via client-side @react-pdf
+      // This eliminates Vercel serverless cold starts, memory limits, and child_process issues
+      if (format === "pdf" && data) {
+        try {
+          const { pdf } = await import("@react-pdf/renderer");
+          const { ResumeDocument } = await import("./resume-document");
+          const doc = <ResumeDocument data={data} templateId={templateId} />;
+          const blob = await pdf(doc).toBlob();
+
+          const downloadUrl = window.URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = downloadUrl;
+          link.download = `${candidateName}_${templateId}.pdf`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(downloadUrl);
+
+          toast.success("Exported PDF successfully!");
+          return;
+        } catch (clientErr) {
+          console.warn("[Client-side PDF render fallback to API]:", clientErr);
+        }
+      }
+
+      // 2. Server-side export API (standard for DOCX, fallback for PDF)
       if (resumeId) {
         const url = `/api/resume/${resumeId}/export?format=${format}&template=${templateId}`;
         const response = await fetch(url);
@@ -69,10 +97,6 @@ export function DownloadResumeButton({
         const downloadUrl = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = downloadUrl;
-
-        // Candidate clean filename
-        const candidateName = (data?.personalInfo?.fullName || data?.personalInfo?.name || fileName)
-          .replace(/[^a-zA-Z0-9_-]/g, "_");
         link.download = `${candidateName}_${templateId}.${format}`;
         document.body.appendChild(link);
         link.click();
