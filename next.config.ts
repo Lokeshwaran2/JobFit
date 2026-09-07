@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
   },
   serverExternalPackages: ["@napi-rs/canvas", "pdf-parse", "mammoth"],
   transpilePackages: ["@react-pdf/renderer"],
+  outputFileTracingIncludes: {
+    "/api/resume/[id]/export": [
+      "./src/lib/export/render-pdf-worker.bundle.cjs",
+    ],
+  },
 
   async headers() {
     return [

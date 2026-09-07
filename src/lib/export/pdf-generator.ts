@@ -18,23 +18,36 @@ async function renderViaWorker(
   templateId?: TemplateId | string | null
 ): Promise<Buffer> {
   const rootDir = process.cwd();
-  const bundlePath = path.resolve(rootDir, "src/lib/export/render-pdf-worker.bundle.cjs");
-  const tsWorkerPath = path.resolve(rootDir, "src/lib/export/render-pdf-worker.ts");
+  const candidateBundlePaths = [
+    path.resolve(rootDir, "src/lib/export/render-pdf-worker.bundle.cjs"),
+    path.resolve(__dirname, "render-pdf-worker.bundle.cjs"),
+    path.resolve(__dirname, "../render-pdf-worker.bundle.cjs"),
+    path.resolve(__dirname, "../../src/lib/export/render-pdf-worker.bundle.cjs"),
+    path.resolve(rootDir, ".next/server/src/lib/export/render-pdf-worker.bundle.cjs"),
+  ];
 
-  let workerScript = bundlePath;
+  let workerScript = candidateBundlePaths.find((p) => fs.existsSync(p));
   let execArgs: string[] = [];
 
-  if (!fs.existsSync(bundlePath)) {
+  if (!workerScript) {
+    const tsWorkerPath = path.resolve(rootDir, "src/lib/export/render-pdf-worker.ts");
     const tsxCli = path.resolve(rootDir, "node_modules/tsx/dist/cli.mjs");
-    if (fs.existsSync(tsxCli)) {
+    if (fs.existsSync(tsxCli) && fs.existsSync(tsWorkerPath)) {
       workerScript = tsxCli;
       execArgs = [tsWorkerPath];
     }
   }
 
+  if (!workerScript) {
+    throw new Error(
+      `PDF worker bundle not found. Checked candidate paths: ${candidateBundlePaths.join(", ")}`
+    );
+  }
+
   return new Promise<Buffer>((resolve, reject) => {
     const child = fork(workerScript, execArgs, {
       stdio: ["pipe", "pipe", "pipe", "ipc"],
+      execPath: process.execPath,
     });
 
     const timeout = setTimeout(() => {
@@ -82,12 +95,6 @@ export async function generateResumePdfBuffer(
 ): Promise<Buffer> {
   const resolvedTemplate = resolveTemplateId(templateId);
 
-  // In Next.js Server Components / Route Handler environment, React internals are
-  // incompatible with @react-pdf/reconciler. Execute in an isolated node process.
-  if (process.env.NEXT_RUNTIME === "nodejs") {
-    return renderViaWorker(data, resolvedTemplate);
-  }
-
   // In standalone Node/test runner (e.g. tsx src/lib/export/__tests__/export.test.ts),
   // renderToBuffer executes in-process directly for maximum speed.
   try {
@@ -97,8 +104,9 @@ export async function generateResumePdfBuffer(
     });
     const buffer = await renderToBuffer(element as any);
     return Buffer.from(buffer);
-  } catch {
-    // If in-process rendering encounters any environment issues, fallback to worker
+  } catch (err: any) {
+    // In Next.js Server Components / Route Handler environment, React RSC internals
+    // cause in-process render to throw. Fall back to isolated self-contained worker.
     return renderViaWorker(data, resolvedTemplate);
   }
 }
