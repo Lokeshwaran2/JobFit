@@ -28,6 +28,9 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { UserAccountNav } from "@/components/user-account-nav";
 import { PricingSection } from "@/components/pricing-section";
+import { StatsBanner } from "@/components/landing/stats-banner";
+import { TestimonialsSection } from "@/components/landing/testimonials-section";
+import { getLiveUsageStats } from "@/lib/stats/get-stats";
 
 export const metadata = {
   title: "ATS Resume Builder | Resume Based on Job Description – JobFit",
@@ -55,9 +58,11 @@ export default async function Home() {
     }
   }
 
+  const liveStats = await getLiveUsageStats();
+
   const newResumeHref = dbUser
     ? ((dbUser.credits > 0 || dbUser.isPro) ? "/builder/new" : "/subscription")
-    : (session?.user ? "/dashboard" : "/register");
+    : (session?.user ? "/dashboard" : "/scan");
 
   const faqSchema = {
     "@context": "https://schema.org",
@@ -68,23 +73,23 @@ export default async function Home() {
         "name": "Is this ATS safe?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "We use standard single-column text layouts and machine-readable vector PDFs designed to avoid common parsing issues like multi-column tables, text boxes, and complex graphics."
+          "text": "We use clean single-column text layouts and machine-readable vector PDFs designed to avoid common parsing issues like multi-column tables, text boxes, and complex graphics."
         }
       },
       {
         "@type": "Question",
-        "name": "What is the Multi-Factor Job Match Score?",
+        "name": "How does the Job Match Score work?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Unlike primitive keyword counters, JobFit evaluates your resume against the target job across key dimensions: Role Alignment, Keyword Coverage, Quantified Impact, Action Verbs, Skill Synonyms, Tools Section, Tech Stack Recency, Core Competencies, and Section Structure."
+          "text": "JobFit analyzes how closely your resume matches the job description requirements. It evaluates keyword overlap, role alignment, action verbs, technical tools, and structural readability to give you evidence-based feedback on where your application is strong and what can be improved."
         }
       },
       {
         "@type": "Question",
-        "name": "How does the GitHub and LinkedIn Profile Audit work?",
+        "name": "How does GitHub and LinkedIn profile scoring work?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Recruiters verify candidates beyond the resume. JobFit audits your public GitHub repositories, commit activity, and tech stack match against the job description, while analyzing your LinkedIn headline and skill endorsements for maximum recruiter discoverability."
+          "text": "Recruiters verify technical candidates on GitHub and LinkedIn. JobFit scans your public GitHub repos, languages, and commit activity to verify technical proof, while auditing your LinkedIn headline and skill endorsements for maximum recruiter discoverability."
         }
       },
       {
@@ -92,7 +97,7 @@ export default async function Home() {
         "name": "What is the Autonomous Skill Learning Engine?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "As you tailor resumes for different jobs, JobFit tracks recurring missing skills. It then generates personalized, level-aware learning paths with verified free official documentation, interactive sandbox exercises, and capstone projects to fill those gaps."
+          "text": "When you apply to multiple jobs, JobFit tracks missing skills that repeatedly appear across job descriptions. It then generates tailored, level-adapted roadmaps with 100% verified free resources (official documentation, interactive sandboxes) and practical capstones to turn weaknesses into strengths."
         }
       },
       {
@@ -100,15 +105,15 @@ export default async function Home() {
         "name": "Is JobFit free?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes, you can try JobFit for free. Every account gets free credits to calculate job match scores, identify missing skills, and audit candidate profiles. For full AI bullet rewrites and unlimited PDF downloads, plans start at ₹99/month."
+          "text": "Yes, you can try JobFit for free. Every account gets free credits to calculate job match scores, identify missing skills, and audit candidate profiles. For full AI bullet rewrites and unlimited PDF downloads, affordable plans start at ₹99/month."
         }
       },
       {
         "@type": "Question",
-        "name": "Can I download the resume as a PDF?",
+        "name": "Can I download the resume?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes! Once optimized in our side-by-side interactive editor, you can download your resume as a clean, machine-readable PDF ready for corporate job portals."
+          "text": "Yes! Once optimized in our side-by-side builder, you can download your resume as a clean, machine-readable PDF formatted for easy applicant tracking system parsing. The \"Job Hunt Mode\" plan allows unlimited downloads."
         }
       }
     ]
@@ -134,6 +139,10 @@ export default async function Home() {
           </div>
 
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
+            <Link href="/scan" className="text-primary font-semibold hover:text-primary/80 transition-colors flex items-center gap-1">
+              <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+              Free Scan
+            </Link>
             <Link href="#steps" className="hover:text-foreground transition-colors">
               How it Works
             </Link>
@@ -294,6 +303,9 @@ export default async function Home() {
             </div>
           </div>
         </section>
+
+        {/* Verified Live Usage Stats Banner */}
+        <StatsBanner stats={liveStats} />
 
         {/* SECTION 1: What is an ATS and Why Resumes Fail (Enhanced with Clean Color Tint Cards) */}
         <section className="container mx-auto max-w-5xl px-4 md:px-0 space-y-8">
@@ -682,6 +694,9 @@ export default async function Home() {
             </div>
           </div>
         </section>
+
+        {/* Candidate Experiences & Testimonials */}
+        <TestimonialsSection />
 
         {/* SECTION 7: Frequently Asked Questions (Polished Modern Accordion Details) */}
         <section className="container mx-auto px-4 md:px-0 max-w-5xl">
