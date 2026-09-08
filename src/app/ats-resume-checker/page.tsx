@@ -47,7 +47,7 @@ export default async function AtsResumeChecker() {
                         </p>
                         <div className="space-x-4">
                             <Button size="lg" asChild>
-                                <Link href="/builder/new">Check My Job Match Score <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                                <Link href="/scan">Check My Job Match Score Free <ArrowRight className="ml-2 h-4 w-4" /></Link>
                             </Button>
                         </div>
                     </div>
@@ -219,7 +219,7 @@ export default async function AtsResumeChecker() {
 
                     <div className="pt-8 text-center">
                         <Button size="lg" asChild className="h-14 px-8 text-lg">
-                            <Link href="/builder/new">Check My Job Match Score</Link>
+                            <Link href="/scan">Check My Job Match Score Free</Link>
                         </Button>
                     </div>
                 </section>

@@ -27,8 +27,51 @@ export const metadata = {
 export default async function JobFitResume() {
     const session = await auth();
 
+    const faqSchema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "What does \"job fit\" mean in recruiting?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Job fit is the degree to which your skills, values, and personality align with the requirements of a specific role and the culture of the hiring company."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How do I know if my resume fits the job?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Use an ATS scanner or Resume Checker like JobFit. If you score above 90%, your resume is well-aligned. A low score indicates you are missing key requirements."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I use the same resume for similar jobs?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "We don't recommend it. Even job titles like \"Product Manager\" can vary wildly between companies (e.g., technical vs. marketing focus). It is always safer to tailor."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is JobFit AI better than a human writer?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "For ATS optimization, yes. Humans might write beautiful prose, but AI knows exactly how algorithms parse data and weight keywords, giving you a technical edge."
+                }
+            }
+        ]
+    };
+
     return (
         <div className="flex min-h-screen flex-col">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+            />
             <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
                 <div className="container mx-auto flex h-14 items-center justify-between px-4">
                     <div className="flex items-center gap-2 font-bold text-xl">

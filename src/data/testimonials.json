@@ -1,0 +1,29 @@
+[
+  {
+    "id": "testimonial-1",
+    "name": "Alex Rivera",
+    "role": "Full-Stack Developer",
+    "targetRole": "Senior Software Engineer",
+    "quote": "Seeing the exact missing skills before sending out my applications was an eye-opener. Turning generic tasks into quantified achievement bullets took my match score from 58% to 92%—and I finally started getting direct recruiter responses.",
+    "beforeScore": 58,
+    "afterScore": 92
+  },
+  {
+    "id": "testimonial-2",
+    "name": "Priya Menon",
+    "role": "Data Analyst",
+    "targetRole": "Analytics Engineer",
+    "quote": "Most resume builders just rearrange your layout. JobFit actually analyzes the target job description line-by-line and shows you keyword deficits in tools and SQL frameworks. Super fast and remarkably thorough.",
+    "beforeScore": 62,
+    "afterScore": 89
+  },
+  {
+    "id": "testimonial-3",
+    "name": "David Keller",
+    "role": "Backend Engineer",
+    "targetRole": "Platform & Cloud Engineer",
+    "quote": "The Google X-Y-Z bullet rewrites made a massive difference in how my project impact reads to hiring managers. The clean single-column PDF also exports without any weird parsing artifacts.",
+    "beforeScore": 51,
+    "afterScore": 95
+  }
+]
